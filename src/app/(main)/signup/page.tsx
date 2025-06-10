@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -5,11 +6,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlusIcon, BriefcaseIcon } from "lucide-react"; // Added BriefcaseIcon for role
+import { UserPlusIcon, BriefcaseIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +27,13 @@ export default function SignupPage() {
     }
     // Placeholder for signup logic
     console.log("Signup attempt:", { fullName, email, password, role });
-    alert("Signup functionality is not yet implemented.");
+    
+    // Save to localStorage (TEMPORARY)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("currentUser", JSON.stringify({ fullName, email, role }));
+      alert("Signup successful! You are now logged in.");
+      router.push("/"); // Redirect to homepage
+    }
   };
 
   return (

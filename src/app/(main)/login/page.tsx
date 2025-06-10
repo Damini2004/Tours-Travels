@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -6,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogInIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,7 +19,31 @@ export default function LoginPage() {
     e.preventDefault();
     // Placeholder for login logic
     console.log("Login attempt:", { email, password });
-    alert("Login functionality is not yet implemented.");
+
+    // TEMPORARY: Simulate login and save to localStorage
+    // In a real app, you would fetch user data from a backend
+    if (typeof window !== "undefined") {
+      // For demonstration, try to find if user signed up before to get their role.
+      // Otherwise, default to "guest".
+      let userRole = "guest";
+      let userName = email.split('@')[0]; // Simple name from email
+      const existingUser = localStorage.getItem("currentUser"); // Check if this email has signed up
+      if(existingUser){
+          try {
+            const parsedUser = JSON.parse(existingUser);
+            if(parsedUser.email === email){
+                userRole = parsedUser.role;
+                userName = parsedUser.fullName || userName;
+            }
+          } catch(err) {
+            console.warn("Error parsing existing user from localStorage", err)
+          }
+      }
+
+      localStorage.setItem("currentUser", JSON.stringify({ fullName: userName, email, role: userRole }));
+      alert("Login successful!");
+      router.push("/"); // Redirect to homepage
+    }
   };
 
   return (
