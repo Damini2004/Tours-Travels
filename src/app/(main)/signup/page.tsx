@@ -26,8 +26,6 @@ export default function SignupPage() {
       alert("Passwords do not match!"); // Keep this alert as it's form validation feedback
       return;
     }
-    // Placeholder for signup logic
-    console.log("Signup attempt:", { fullName, email, password, role });
     
     if (typeof window !== "undefined") {
       const newUser = { fullName, email, role, password }; // In a real app, hash password
@@ -47,9 +45,10 @@ export default function SignupPage() {
       
       // Set current user
       localStorage.setItem("currentUser", JSON.stringify({ fullName, email, role }));
-      // alert("Signup successful! You are now logged in."); // Removed for smoother UX
+      
       const redirectUrl = searchParams.get('redirect') || '/';
       router.push(redirectUrl);
+      router.refresh(); // Force a refresh to update header state
     }
   };
 
