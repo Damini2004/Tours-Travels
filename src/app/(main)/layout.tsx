@@ -9,9 +9,9 @@ export default function MainLayout({
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow">{children}</main>
-      <footer className="bg-muted py-6 text-center text-sm text-muted-foreground">
+      <footer className="bg-muted/50 py-6 text-center text-sm text-muted-foreground">
         <div className="container mx-auto">
-          © {new Date().getFullYear()} Horizon Stays. All rights reserved.
+          © {new Date().getFullYear()} Hotel&Tour. All rights reserved.
         </div>
       </footer>
     </div>

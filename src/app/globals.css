@@ -4,58 +4,38 @@
 
 @layer base {
   :root {
-    --background: 204 88% 94%; /* #E3F2FD */
-    --foreground: 214 84% 34%; /* #0D47A1 */
-    --card: 210 80% 97%; /* #F0F7FD */
-    --card-foreground: 214 84% 34%; /* #0D47A1 */
-    --popover: 210 80% 97%; /* #F0F7FD */
-    --popover-foreground: 214 84% 34%; /* #0D47A1 */
-    --primary: 207 85% 68%; /* #64B5F6 */
-    --primary-foreground: 0 0% 100%; /* #FFFFFF */
-    --secondary: 204 80% 88%; /* #CDEAFC */
-    --secondary-foreground: 214 84% 34%; /* #0D47A1 */
-    --muted: 204 70% 80%; /* #AFCDE7 */
-    --muted-foreground: 214 60% 50%; /* #4A7AB5 */
-    --accent: 33 100% 65%; /* #FFB74D */
-    --accent-foreground: 24 60% 20%; /* #523A1F - Darker orange/brown for text on accent */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 198 93% 85%; /* #B3E5FC */
-    --input: 207 82% 86%; /* #BBDEFB */
-    --ring: 207 85% 68%; /* #64B5F6 */
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
+    --background: 190 15% 10%; /* Very dark desaturated cyan/blue */
+    --foreground: 190 10% 90%; /* Light grayish cyan/blue */
+    --card: 190 15% 15%; /* Slightly lighter than background */
+    --card-foreground: 190 10% 90%;
+    --popover: 190 15% 18%; /* Similar to card, maybe a bit lighter for popovers */
+    --popover-foreground: 190 10% 90%;
+    
+    --primary: 180 70% 50%; /* Bright Teal/Cyan - For main interactive elements */
+    --primary-foreground: 190 15% 8%; /* Very dark text for on-primary elements (high contrast) */
+    
+    --secondary: 190 15% 25%; /* A step lighter for secondary elements or borders */
+    --secondary-foreground: 190 10% 85%; /* Text on secondary elements */
+    
+    --muted: 190 15% 30%; /* For less important elements, dividers */
+    --muted-foreground: 190 10% 65%; /* Text on muted elements, placeholder text */
+    
+    --accent: 180 65% 55%; /* Teal/Cyan - can be same as primary or slightly different shade */
+    --accent-foreground: 190 15% 8%; /* Dark text for on-accent elements */
+    
+    --destructive: 0 70% 55%; /* Standard red for destructive actions */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    
+    --border: 190 15% 22%; /* Borders for cards, inputs */
+    --input: 190 15% 18%; /* Input field background */
+    --ring: 180 70% 55%; /* Focus ring color, often same as primary or accent */
 
-  .dark {
-    --background: 214 30% 15%; /* Dark blue */
-    --foreground: 204 88% 94%; /* Light blue */
-    --card: 214 30% 20%;
-    --card-foreground: 204 88% 94%;
-    --popover: 214 30% 20%;
-    --popover-foreground: 204 88% 94%;
-    --primary: 207 85% 68%; /* #64B5F6 */
-    --primary-foreground: 214 84% 10%; /* Darker blue for text on primary */
-    --secondary: 214 30% 25%;
-    --secondary-foreground: 204 88% 94%;
-    --muted: 214 30% 30%;
-    --muted-foreground: 204 70% 80%;
-    --accent: 33 100% 65%; /* #FFB74D */
-    --accent-foreground: 24 60% 15%; /* Even darker for dark mode accent text */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 214 30% 35%;
-    --input: 214 30% 30%;
-    --ring: 207 85% 68%; /* #64B5F6 */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 180 70% 60%;
+    --chart-2: 190 60% 55%;
+    --chart-3: 200 50% 50%;
+    --chart-4: 170 65% 50%;
+    --chart-5: 210 55% 60%;
+    --radius: 0.5rem;
   }
 }
 
