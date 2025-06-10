@@ -23,7 +23,7 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
-      <section className="text-center mb-12 relative h-[50vh] md:h-[60vh] flex flex-col items-center justify-center rounded-lg overflow-hidden">
+      <section className="text-center mb-12 relative min-h-[65vh] md:min-h-[75vh] flex flex-col items-center rounded-lg overflow-hidden pt-16 md:pt-24">
         <Image 
           src="https://placehold.co/1600x900.png" 
           alt="Tropical beach paradise" 
@@ -34,14 +34,14 @@ export default function HomePage() {
           className="z-0"
         />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <div className="relative z-20 p-6">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold mb-4 text-foreground">
+        <div className="relative z-20 w-full px-4">
+          <h1 className="font-headline text-4xl md:text-6xl font-bold mb-6 text-foreground">
             Hotels & Resorts to dream about
           </h1>
-          <p className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mb-10">
             Find your next stay for your dream vacation. Unforgettable experiences await.
           </p>
-          <div className="mt-8 w-full max-w-3xl mx-auto">
+          <div className="w-full max-w-3xl mx-auto">
              <HotelSearchForm />
           </div>
         </div>
