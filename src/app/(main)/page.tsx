@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AwardIcon, ClockIcon, ShieldCheckIcon, WalletIcon } from "lucide-react";
+import { placeholderHotels } from "@/lib/placeholder-data";
 
 
 export default function HomePage() {
@@ -29,7 +30,7 @@ export default function HomePage() {
           alt="Tropical beach paradise" 
           layout="fill" 
           objectFit="cover"
-          data-ai-hint="tropical beach ocean"
+          data-ai-hint="tropical beach"
           priority
           className="z-0"
         />
@@ -121,10 +122,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-// Minimal placeholder data for hotels if not already available or for quick display
-const placeholderHotels = [
-  { id: 'HT001', name: 'Luxury Beach Resort', location: 'Cancun, Mexico', pricePerNight: 350, thumbnailUrl: 'https://placehold.co/400x300.png?text=Beach+Resort' },
-  { id: 'HT002', name: 'City Center Boutique', location: 'Paris, France', pricePerNight: 220, thumbnailUrl: 'https://placehold.co/400x300.png?text=City+Hotel' },
-  { id: 'HT003', name: 'Mountain View Lodge', location: 'Aspen, USA', pricePerNight: 450, thumbnailUrl: 'https://placehold.co/400x300.png?text=Mountain+Lodge' },
-];

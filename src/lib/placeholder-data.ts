@@ -1,10 +1,11 @@
+
 import type { Flight, Hotel } from './types';
 
 export const placeholderFlights: Flight[] = [
   {
     id: 'FL001',
     airline: 'SkyHigh Airlines',
-    airlineLogoUrl: 'https://placehold.co/40x40.png',
+    airlineLogoUrl: 'https://placehold.co/40x40.png', // data-ai-hint="airline logo" added in components
     flightNumber: 'SH203',
     from: 'New York (JFK)',
     to: 'London (LHR)',
@@ -21,7 +22,7 @@ export const placeholderFlights: Flight[] = [
   {
     id: 'FL002',
     airline: 'Horizon Wings',
-    airlineLogoUrl: 'https://placehold.co/40x40.png',
+    airlineLogoUrl: 'https://placehold.co/40x40.png', // data-ai-hint="airline logo" added in components
     flightNumber: 'HW789',
     from: 'Paris (CDG)',
     to: 'Tokyo (NRT)',
@@ -38,7 +39,7 @@ export const placeholderFlights: Flight[] = [
   {
     id: 'FL003',
     airline: 'Oceanic Air',
-    airlineLogoUrl: 'https://placehold.co/40x40.png',
+    airlineLogoUrl: 'https://placehold.co/40x40.png', // data-ai-hint="airline logo" added in components
     flightNumber: 'OA415',
     from: 'Los Angeles (LAX)',
     to: 'Sydney (SYD)',
@@ -61,8 +62,8 @@ export const placeholderHotels: Hotel[] = [
     location: 'London, UK',
     rating: 5,
     pricePerNight: 250,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
+    thumbnailUrl: 'https://placehold.co/300x200.png', // data-ai-hint="hotel exterior" added in components
+    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'], // data-ai-hint for these are in hotel detail page
     amenities: ['Free Wi-Fi', 'Swimming Pool', 'Gym', 'Restaurant', 'Spa'],
     description: 'Experience luxury at The Grand Plaza, located in the heart of London. Enjoy world-class amenities and breathtaking city views.',
     checkInTime: '15:00',
@@ -78,8 +79,8 @@ export const placeholderHotels: Hotel[] = [
     location: 'Tokyo, Japan',
     rating: 4,
     pricePerNight: 180,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
+    thumbnailUrl: 'https://placehold.co/300x200.png', // data-ai-hint="hotel building" or "modern hotel"
+    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'], // data-ai-hint="hotel room" "japanese garden"
     amenities: ['Free Wi-Fi', 'Onsen (Hot Spring)', 'Traditional Breakfast', 'Garden'],
     description: 'Immerse yourself in Japanese culture at Sakura Inn Tokyo. Featuring traditional tatami rooms and a serene onsen.',
     checkInTime: '16:00',
@@ -95,8 +96,8 @@ export const placeholderHotels: Hotel[] = [
     location: 'Sydney, Australia',
     rating: 4,
     pricePerNight: 220,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
+    thumbnailUrl: 'https://placehold.co/300x200.png', // data-ai-hint="beach resort"
+    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'], // data-ai-hint="resort pool" "ocean view"
     amenities: ['Beach Access', 'Outdoor Pool', 'Restaurant', 'Bar', 'Water Sports'],
     description: 'Relax and unwind at Sunset Beach Resort, offering stunning ocean views and direct access to Sydney\'s famous beaches.',
     checkInTime: '14:00',

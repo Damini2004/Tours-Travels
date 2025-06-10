@@ -138,9 +138,9 @@ export default function FlightDetailPage() {
             </CardContent>
           </Card>
            {flight.airlineLogoUrl && (
-            <Card data-ai-hint="airline logo">
+            <Card>
                 <CardContent className="p-4 flex justify-center items-center">
-                    <Image src={flight.airlineLogoUrl} alt={`${flight.airline} logo`} width={100} height={100} className="rounded-md" />
+                    <Image src={flight.airlineLogoUrl} alt={`${flight.airline} logo`} width={100} height={100} className="rounded-md" data-ai-hint="airline logo"/>
                 </CardContent>
             </Card>
            )}

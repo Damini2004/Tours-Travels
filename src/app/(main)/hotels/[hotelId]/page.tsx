@@ -84,9 +84,16 @@ export default function HotelDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2 space-y-6">
           {hotel.images && hotel.images.length > 0 && (
-            <Card className="overflow-hidden" data-ai-hint="hotel gallery">
+            <Card className="overflow-hidden">
               <div className="relative w-full h-96">
-                <Image src={hotel.images[0]} alt={`${hotel.name} primary image`} layout="fill" objectFit="cover" className="rounded-t-lg" />
+                <Image 
+                  src={hotel.images[0]} 
+                  alt={`${hotel.name} primary image`} 
+                  layout="fill" 
+                  objectFit="cover" 
+                  className="rounded-t-lg" 
+                  data-ai-hint="hotel interior" 
+                />
               </div>
               {/* Could add a small gallery preview here */}
             </Card>
