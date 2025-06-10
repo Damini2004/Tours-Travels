@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlusIcon, BriefcaseIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function SignupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,17 +23,33 @@ export default function SignupPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      alert("Passwords do not match!"); // Keep this alert as it's form validation feedback
       return;
     }
     // Placeholder for signup logic
     console.log("Signup attempt:", { fullName, email, password, role });
     
-    // Save to localStorage (TEMPORARY)
     if (typeof window !== "undefined") {
+      const newUser = { fullName, email, role, password }; // In a real app, hash password
+
+      // Simulate a users database in localStorage
+      let usersDB = [];
+      const existingUsersString = localStorage.getItem("usersDB");
+      if (existingUsersString) {
+        try {
+          usersDB = JSON.parse(existingUsersString);
+        } catch (err) {
+          console.warn("Error parsing usersDB from localStorage", err);
+        }
+      }
+      usersDB.push(newUser);
+      localStorage.setItem("usersDB", JSON.stringify(usersDB));
+      
+      // Set current user
       localStorage.setItem("currentUser", JSON.stringify({ fullName, email, role }));
-      alert("Signup successful! You are now logged in.");
-      router.push("/"); // Redirect to homepage
+      // alert("Signup successful! You are now logged in."); // Removed for smoother UX
+      const redirectUrl = searchParams.get('redirect') || '/';
+      router.push(redirectUrl);
     }
   };
 

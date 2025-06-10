@@ -1,13 +1,58 @@
 
+"use client";
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ListChecksIcon, BriefcaseIcon } from "lucide-react"; // Or TicketIcon, PackageIcon
+import { ListChecksIcon, BriefcaseIcon, Loader2Icon } from "lucide-react"; // Or TicketIcon, PackageIcon
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function MyBookingsPage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("currentUser");
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        router.replace('/login?redirect=/my-bookings');
+      }
+      setIsLoadingAuth(false);
+    }
+  }, [router]);
+
   // In a real app, you would fetch booking data for the logged-in user
   const bookings: any[] = []; // Placeholder for bookings
+
+  if (isLoadingAuth) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Checking authentication...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <Alert variant="destructive">
+          <AlertTitle>Access Denied</AlertTitle>
+          <AlertDescription>
+            You need to be logged in to view your bookings.
+            <Button asChild variant="link" className="px-1">
+              <Link href="/login?redirect=/my-bookings">Login</Link>
+            </Button>
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -1,16 +1,39 @@
+
 "use client";
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSavedItems } from '@/hooks/use-saved-items';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FlightCard } from '@/components/cards/flight-card';
 import { HotelCard } from '@/components/cards/hotel-card';
-import { PlaneIcon, HotelIcon, StarIcon, SearchIcon } from 'lucide-react';
+import { PlaneIcon, HotelIcon, StarIcon, SearchIcon, Loader2Icon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 
+// Temporary import for placeholder data (should be part of a context or fetched if not in savedItems)
+const { placeholderFlights, placeholderHotels } = require('@/lib/placeholder-data');
+
+
 export default function SavedItemsPage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("currentUser");
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        router.replace('/login?redirect=/saved'); // Use replace to not add to history
+      }
+      setIsAuthLoading(false);
+    }
+  }, [router]);
+
   const { 
     savedFlights, 
     savedHotels, 
@@ -20,38 +43,57 @@ export default function SavedItemsPage() {
     addHotelToSaved,
     removeHotelFromSaved,
     isHotelSaved,
-    isLoading 
+    isLoading: isLoadingSavedItems // This is for loading items from localStorage by the hook
   } = useSavedItems();
 
-  const handleToggleFlightSave = (flightId: string) => {
-    const flight = savedFlights.find(f => f.id === flightId); // Should always find if it's saved
-    if (!flight && !isFlightSaved(flightId)) { // If not found and not saved (safety for adding)
-       // This case should ideally not happen if flight data comes from a central source
-       // For now, if we only have ID, we remove. If we had full flight object, we could add.
-       // Placeholder flights are available globally so this might be ok.
-       const placeholderFlight = placeholderFlights.find(f => f.id === flightId);
-       if(placeholderFlight) addFlightToSaved(placeholderFlight);
 
-    } else if (flight && isFlightSaved(flightId)) {
+  const handleToggleFlightSave = (flightId: string) => {
+    const flightIsInSavedList = savedFlights.find(f => f.id === flightId);
+    if (isFlightSaved(flightId) && flightIsInSavedList) {
         removeFlightFromSaved(flightId);
+    } else if (!isFlightSaved(flightId)) {
+       const flightToAdd = placeholderFlights.find((f:any) => f.id === flightId);
+       if(flightToAdd) addFlightToSaved(flightToAdd);
     }
   };
 
   const handleToggleHotelSave = (hotelId: string) => {
-    const hotel = savedHotels.find(h => h.id === hotelId);
-     if (!hotel && !isHotelSaved(hotelId)) {
-       const placeholderHotel = placeholderHotels.find(h => h.id === hotelId);
-       if(placeholderHotel) addHotelToSaved(placeholderHotel);
-    } else if (hotel && isHotelSaved(hotelId)) {
+    const hotelIsInSavedList = savedHotels.find(h => h.id === hotelId);
+    if (isHotelSaved(hotelId) && hotelIsInSavedList) {
         removeHotelFromSaved(hotelId);
+    } else if(!isHotelSaved(hotelId)) {
+       const hotelToAdd = placeholderHotels.find((h:any) => h.id === hotelId);
+       if(hotelToAdd) addHotelToSaved(hotelToAdd);
     }
   };
+  
+  if (isAuthLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Checking authentication...</p>
+      </div>
+    );
+  }
 
-  // Temporary import for placeholder data (should be part of a context or fetched)
-  const { placeholderFlights, placeholderHotels } = require('@/lib/placeholder-data');
+  if (!isAuthenticated) {
+     // Should have been redirected, but as a fallback:
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <Alert variant="destructive">
+          <AlertTitle>Access Denied</AlertTitle>
+          <AlertDescription>
+            You need to be logged in to view your saved items.
+            <Button asChild variant="link" className="px-1">
+              <Link href="/login?redirect=/saved">Login</Link>
+            </Button>
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
-
-  if (isLoading) {
+  if (isLoadingSavedItems) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 text-center">
@@ -61,8 +103,8 @@ export default function SavedItemsPage() {
         </div>
         <Tabs defaultValue="flights" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="flights"><PlaneIcon className="mr-2 h-4 w-4" />Flights ({savedFlights.length})</TabsTrigger>
-                <TabsTrigger value="hotels"><HotelIcon className="mr-2 h-4 w-4" />Hotels ({savedHotels.length})</TabsTrigger>
+                <TabsTrigger value="flights"><PlaneIcon className="mr-2 h-4 w-4" />Flights</TabsTrigger>
+                <TabsTrigger value="hotels"><HotelIcon className="mr-2 h-4 w-4" />Hotels</TabsTrigger>
             </TabsList>
             <TabsContent value="flights">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
