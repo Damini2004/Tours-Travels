@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { PlaneIcon, HotelIcon, CarIcon, SailboatIcon, LogInIcon, UserPlusIcon } from 'lucide-react'; // Assuming CarIcon and SailboatIcon for Tours/Car Rental
+import { PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
 
 export function Header() {
   return (
     <header className="bg-background text-foreground shadow-md backdrop-blur-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          {/* <MountainIcon className="h-6 w-6 text-accent" /> Removed icon as per image */}
           <span className="text-xl font-headline font-semibold text-primary">Hotel&Tour</span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
@@ -16,12 +15,6 @@ export function Header() {
           </Button>
           <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
             <Link href="/flights/search" prefetch={false}><PlaneIcon className="mr-2 h-4 w-4" />Flights</Link>
-          </Button>
-          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-            <Link href="/tours" prefetch={false}><SailboatIcon className="mr-2 h-4 w-4" />Tours</Link>
-          </Button>
-          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-            <Link href="/car-rental" prefetch={false}><CarIcon className="mr-2 h-4 w-4" />Car Rental</Link>
           </Button>
         </nav>
         <div className="flex items-center gap-2">

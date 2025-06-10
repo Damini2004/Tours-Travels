@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlusIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UserPlusIcon, BriefcaseIcon } from "lucide-react"; // Added BriefcaseIcon for role
 import Link from "next/link";
 import { useState } from "react";
 
@@ -13,6 +14,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("guest"); // Default role
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function SignupPage() {
       return;
     }
     // Placeholder for signup logic
-    console.log("Signup attempt:", { fullName, email, password });
+    console.log("Signup attempt:", { fullName, email, password, role });
     alert("Signup functionality is not yet implemented.");
   };
 
@@ -31,7 +33,7 @@ export default function SignupPage() {
         <CardHeader className="text-center">
           <UserPlusIcon className="mx-auto h-10 w-10 text-primary mb-2" />
           <CardTitle className="font-headline text-2xl">Create Your Account</CardTitle>
-          <CardDescription>Join Hotel&Tour to find amazing stays.</CardDescription>
+          <CardDescription>Join Hotel&Tour to find amazing stays or list your property.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -78,6 +80,19 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required 
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Sign up as</Label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger id="role">
+                  <BriefcaseIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="guest">Guest</SelectItem>
+                  <SelectItem value="hotel_owner">Hotel Owner</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
               Sign Up
