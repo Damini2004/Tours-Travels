@@ -18,52 +18,43 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder for login logic
-    console.log("Login attempt:", { email, password });
-
+    
     if (typeof window !== "undefined") {
-      let userRole = "guest"; // Default role
-      let userName = email.split('@')[0]; 
-      const existingUsersString = localStorage.getItem("usersDB"); // Simulate a user database
+      const existingUsersString = localStorage.getItem("usersDB");
+      let usersDB: any[] = [];
       let userFound = false;
+      let currentUserDetails = null;
 
       if (existingUsersString) {
         try {
-          const usersDB = JSON.parse(existingUsersString);
-          const foundUser = usersDB.find((user: any) => user.email === email);
-          if (foundUser) {
-            // In a real app, you would also verify the password here
-            userRole = foundUser.role;
-            userName = foundUser.fullName || userName;
-            userFound = true;
-          }
+          usersDB = JSON.parse(existingUsersString);
         } catch (err) {
           console.warn("Error parsing usersDB from localStorage", err);
+          // Proceed with empty usersDB if parsing fails
         }
       }
-      
-      // If user wasn't in our "DB", check if they previously logged in directly
-      // This part is more for continuity if they used old login before DB simulation
-      if (!userFound) {
-         const legacyUserString = localStorage.getItem("currentUser");
-         if (legacyUserString) {
-            try {
-                const legacyUser = JSON.parse(legacyUserString);
-                if (legacyUser.email === email) {
-                    userRole = legacyUser.role || "guest";
-                    userName = legacyUser.fullName || userName;
-                }
-            } catch (error) {
-                //
-            }
-         }
+
+      const foundUser = usersDB.find(
+        (user: any) => user.email === email && user.password === password // Password check (unsafe for production)
+      );
+
+      if (foundUser) {
+        currentUserDetails = { 
+          fullName: foundUser.fullName, 
+          email: foundUser.email, 
+          role: foundUser.role 
+        };
+        userFound = true;
       }
 
-
-      localStorage.setItem("currentUser", JSON.stringify({ fullName: userName, email, role: userRole }));
-      // alert("Login successful!"); // Removed for smoother UX
-      const redirectUrl = searchParams.get('redirect') || '/';
-      router.push(redirectUrl); 
+      if (userFound && currentUserDetails) {
+        localStorage.setItem("currentUser", JSON.stringify(currentUserDetails));
+        const redirectUrl = searchParams.get('redirect') || '/';
+        router.push(redirectUrl);
+        router.refresh(); // Force a refresh to update header state
+      } else {
+        alert("Invalid email or password. Please sign up if you don't have an account.");
+      }
     }
   };
 
