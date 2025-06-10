@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useParams } from 'next/navigation';
@@ -73,7 +74,7 @@ export default function HotelDetailPage() {
             </div>
             <div className="flex items-center mt-1">
                 {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className={`h-6 w-6 ${i < hotel.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50'}`} />
+                <StarIcon key={i} className={`h-6 w-6 ${i < hotel.rating ? 'text-accent fill-accent' : 'text-muted-foreground/50'}`} />
                 ))}
                 <span className="ml-2 text-sm text-muted-foreground">({hotel.rating}.0)</span>
             </div>
@@ -109,7 +110,7 @@ export default function HotelDetailPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                   {hotel.amenities.map(amenity => (
                     <div key={amenity} className="flex items-center">
-                        <CheckCircleIcon className="mr-2 h-4 w-4 text-green-500 shrink-0" />
+                        <CheckCircleIcon className="mr-2 h-4 w-4 text-primary shrink-0" />
                         <span>{amenity}</span>
                     </div>
                   ))}

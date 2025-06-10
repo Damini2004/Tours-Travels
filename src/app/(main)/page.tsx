@@ -1,3 +1,4 @@
+
 import { HotelSearchForm } from "@/components/forms/hotel-search-form";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,10 +35,10 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <div className="relative z-20 p-6">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold mb-4 text-white">
+          <h1 className="font-headline text-4xl md:text-6xl font-bold mb-4 text-foreground">
             Hotels & Resorts to dream about
           </h1>
-          <p className="text-lg md:text-xl text-neutral-200 max-w-2xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mb-8">
             Find your next stay for your dream vacation. Unforgettable experiences await.
           </p>
           <div className="mt-8 w-full max-w-3xl mx-auto">
@@ -107,9 +108,9 @@ export default function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-4 w-full">
-                <h3 className="font-headline text-2xl font-semibold text-white mb-1">{dest.name}</h3>
-                <p className="text-sm text-neutral-300 mb-3">{dest.description}</p>
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-card-foreground" asChild>
+                <h3 className="font-headline text-2xl font-semibold text-foreground mb-1">{dest.name}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{dest.description}</p>
+                <Button variant="outline" className="border-foreground text-foreground hover:bg-foreground hover:text-background" asChild>
                     <Link href={`/hotels/search?location=${encodeURIComponent(dest.name)}`}>Explore</Link>
                 </Button>
               </div>

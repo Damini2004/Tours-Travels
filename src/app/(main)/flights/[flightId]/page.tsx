@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useParams } from 'next/navigation';
@@ -108,7 +109,7 @@ export default function FlightDetailPage() {
             <CardContent>
               {flight.amenities && flight.amenities.length > 0 ? (
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  {flight.amenities.map(amenity => <li key={amenity}><CheckCircleIcon className="inline mr-2 h-4 w-4 text-green-500" />{amenity}</li>)}
+                  {flight.amenities.map(amenity => <li key={amenity}><CheckCircleIcon className="inline mr-2 h-4 w-4 text-primary" />{amenity}</li>)}
                 </ul>
               ) : (
                 <p className="text-sm text-muted-foreground">No specific amenities listed for this flight.</p>

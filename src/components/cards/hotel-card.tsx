@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -33,7 +34,7 @@ export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
             <CardTitle className="font-headline text-lg">{hotel.name}</CardTitle>
             <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className={`h-4 w-4 ${i < hotel.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} />
+                    <StarIcon key={i} className={`h-4 w-4 ${i < hotel.rating ? 'text-accent fill-accent' : 'text-muted-foreground'}`} />
                 ))}
             </div>
         </div>

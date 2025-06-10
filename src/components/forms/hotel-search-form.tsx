@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -41,10 +42,10 @@ export function HotelSearchForm() {
     return (
         <Card className="w-full max-w-3xl shadow-lg bg-card/80 backdrop-blur-sm p-6 md:p-8 rounded-lg">
             <CardHeader className="p-0 mb-6">
-                <CardTitle className="font-headline text-2xl md:text-3xl flex items-center text-white">
+                <CardTitle className="font-headline text-2xl md:text-3xl flex items-center text-foreground">
                     <HotelBuildingIcon className="mr-3 h-8 w-8" />Find Your Perfect Stay
                 </CardTitle>
-                <CardDescription className="text-neutral-300">Search for hotels, resorts, and more.</CardDescription>
+                <CardDescription className="text-muted-foreground">Search for hotels, resorts, and more.</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
                 <div className="space-y-4 animate-pulse">
@@ -64,15 +65,15 @@ export function HotelSearchForm() {
   return (
     <Card className="w-full max-w-3xl shadow-lg bg-card/80 backdrop-blur-sm p-6 md:p-8 rounded-lg">
       <CardHeader className="p-0 mb-6">
-        <CardTitle className="font-headline text-2xl md:text-3xl flex items-center text-white">
+        <CardTitle className="font-headline text-2xl md:text-3xl flex items-center text-foreground">
             <HotelBuildingIcon className="mr-3 h-8 w-8" />Find Your Perfect Stay
         </CardTitle>
-        <CardDescription className="text-neutral-300">Search for hotels, resorts, and more.</CardDescription>
+        <CardDescription className="text-muted-foreground">Search for hotels, resorts, and more.</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="location" className="text-neutral-200">Where are you going?</Label>
+            <Label htmlFor="location" className="text-foreground">Where are you going?</Label>
             <div className="relative">
                 <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
@@ -88,7 +89,7 @@ export function HotelSearchForm() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="checkin-date" className="text-neutral-200">Check-in</Label>
+              <Label htmlFor="checkin-date" className="text-foreground">Check-in</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -111,7 +112,7 @@ export function HotelSearchForm() {
               </Popover>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="checkout-date" className="text-neutral-200">Check-out</Label>
+              <Label htmlFor="checkout-date" className="text-foreground">Check-out</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -133,7 +134,7 @@ export function HotelSearchForm() {
               </Popover>
             </div>
              <div className="space-y-2">
-              <Label htmlFor="guests" className="text-neutral-200">Guests</Label>
+              <Label htmlFor="guests" className="text-foreground">Guests</Label>
                <Select value={guests} onValueChange={setGuests}>
                 <SelectTrigger id="guests" className="bg-background/70 border-border text-foreground hover:bg-background focus:bg-background">
                   <UsersIcon className="mr-2 h-4 w-4 text-muted-foreground" />
