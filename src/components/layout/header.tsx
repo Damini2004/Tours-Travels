@@ -1,6 +1,7 @@
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
+import { PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon, HeartIcon, ListChecksIcon } from 'lucide-react';
 
 export function Header() {
   return (
@@ -15,6 +16,12 @@ export function Header() {
           </Button>
           <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
             <Link href="/flights/search" prefetch={false}><PlaneIcon className="mr-2 h-4 w-4" />Flights</Link>
+          </Button>
+          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
+            <Link href="/saved" prefetch={false}><HeartIcon className="mr-2 h-4 w-4" />Saved</Link>
+          </Button>
+          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
+            <Link href="/my-bookings" prefetch={false}><ListChecksIcon className="mr-2 h-4 w-4" />My Bookings</Link>
           </Button>
         </nav>
         <div className="flex items-center gap-2">
