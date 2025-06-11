@@ -35,7 +35,7 @@ export default function SuperAdminLayout({
           if (user.role === 'super_admin') {
             setIsAuthorized(true);
           } else {
-            // Not a super admin, redirect to home or show access denied
+            // Not a super admin, redirect to home
             router.replace('/'); 
           }
         } catch (e) {
