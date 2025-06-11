@@ -152,7 +152,7 @@ export default function RegisterHotelPage() {
                     </li>
                   ))}
                 </ul>
-              </Alert>
+              </div>
             )}
           </div>
         </CardContent>

@@ -4,7 +4,7 @@
  */
 
 import {genkit} from 'genkit';
-import {googleAI} from 'genkit/plugins/googleai'; // Default plugin, can be configured
+import {googleAI} from '@genkit-ai/googleai'; // Default plugin, can be configured
 
 // Initialize Genkit.
 // You can configure plugins, logging, and other settings here.
