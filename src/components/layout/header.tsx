@@ -2,8 +2,8 @@
 "use client";
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -25,6 +25,7 @@ interface CurrentUser {
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -32,47 +33,58 @@ export function Header() {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (!isClient) return; 
-
-    const loadUser = () => {
+  const loadUser = useCallback(() => {
+    if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("currentUser");
       if (storedUser) {
         try {
-          setCurrentUser(JSON.parse(storedUser));
+          const userObj = JSON.parse(storedUser);
+          setCurrentUser(userObj);
         } catch (e) {
-          console.error("Failed to parse currentUser from localStorage", e);
-          localStorage.removeItem("currentUser"); 
+          console.error("Header: Failed to parse currentUser from localStorage", e);
+          localStorage.removeItem("currentUser");
           setCurrentUser(null);
         }
       } else {
         setCurrentUser(null);
       }
-    };
+    }
+  }, []);
 
-    loadUser(); 
+  useEffect(() => {
+    if (!isClient) return;
+
+    loadUser(); // Initial load and on pathname change
 
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "currentUser") {
-        loadUser();
+        loadUser(); // Reload user if localStorage changes in another tab
       }
     };
+
+    const handleAuthChange = () => {
+        loadUser(); // Reload user on custom authChange event
+    };
+
     window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('authChange', handleAuthChange);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authChange', handleAuthChange);
     };
 
-  }, [isClient, router]); 
+  }, [isClient, pathname, loadUser]);
 
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("currentUser");
+      window.dispatchEvent(new CustomEvent('authChange')); // Dispatch event for consistency if needed elsewhere
     }
-    setCurrentUser(null);
+    setCurrentUser(null); // Direct state update for immediate UI change
     router.push('/'); 
-    router.refresh(); // Ensure header updates immediately
+    router.refresh(); 
   };
 
   if (!isClient) {
@@ -208,7 +220,6 @@ export function Header() {
             </>
           )}
         </div>
-        {/* Mobile menu could be added here */}
       </div>
     </header>
   );

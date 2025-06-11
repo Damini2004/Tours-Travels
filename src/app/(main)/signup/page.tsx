@@ -20,7 +20,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("guest"); // Default role
+  const [role, setRole] = useState("guest"); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +49,7 @@ export default function SignupPage() {
       localStorage.setItem("usersDB", JSON.stringify(usersDB));
       
       localStorage.setItem("currentUser", JSON.stringify({ fullName, email, role }));
+      window.dispatchEvent(new CustomEvent('authChange')); // Dispatch event
       
       const redirectUrl = searchParams.get('redirect') || '/';
       router.push(redirectUrl);
@@ -61,7 +62,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[calc(100vh-128px)]"> {/* Adjust min-height */}
+    <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[calc(100vh-128px)]">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <UserPlusIcon className="mx-auto h-10 w-10 text-primary mb-2" />

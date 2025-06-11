@@ -33,6 +33,7 @@ export default function LoginPage() {
           role: "super_admin"
         };
         localStorage.setItem("currentUser", JSON.stringify(superAdminDetails));
+        window.dispatchEvent(new CustomEvent('authChange')); // Dispatch event
         const redirectUrl = searchParams.get('redirect') || '/';
         router.push(redirectUrl);
         router.refresh();
@@ -40,10 +41,9 @@ export default function LoginPage() {
           title: "Login Successful",
           description: `Welcome back, Super Admin!`,
         });
-        return; // Important: exit after super admin login
+        return; 
       }
 
-      // If not super admin, check regular users in localStorage
       const existingUsersString = localStorage.getItem("usersDB");
       let usersDB: any[] = [];
       let userFound = false;
@@ -72,6 +72,7 @@ export default function LoginPage() {
 
       if (userFound && currentUserDetails) {
         localStorage.setItem("currentUser", JSON.stringify(currentUserDetails));
+        window.dispatchEvent(new CustomEvent('authChange')); // Dispatch event
         const redirectUrl = searchParams.get('redirect') || '/';
         router.push(redirectUrl);
         router.refresh(); 
@@ -90,7 +91,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[calc(100vh-128px)]"> {/* Adjust min-height based on header/footer */}
+    <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[calc(100vh-128px)]">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <LogInIcon className="mx-auto h-10 w-10 text-primary mb-2" />
