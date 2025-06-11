@@ -1,26 +1,25 @@
+
 'use server';
 /**
  * @fileOverview A Genkit flow to fetch hotel data using the SerpApi tool.
  *
  * - fetchHotelDataViaSerpapi - The flow function.
- * - FetchHotelDataInputSchema - The Zod schema for the flow's input.
- * - FetchHotelDataOutputSchema - The Zod schema for the flow's output.
  * - FetchHotelDataInput - TypeScript type for the flow's input.
  * - FetchHotelDataOutput - TypeScript type for the flow's output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {searchHotelsTool, HotelSearchInput, HotelSearchResult} from '@/ai/tools/search-hotels-tool';
+import {searchHotelsTool, type HotelSearchInput, type HotelSearchResult} from '@/ai/tools/search-hotels-tool';
 
-export const FetchHotelDataInputSchema = z.object({
+const FetchHotelDataInputSchema = z.object({
   query: z.string().describe('The search query for the hotel (e.g., "Hotel Name, City").'),
   location: z.string().optional().describe('Optional location to narrow down the search (e.g., "London, United Kingdom").'),
 });
 export type FetchHotelDataInput = z.infer<typeof FetchHotelDataInputSchema>;
 
 // The output will be an array of hotel results from the tool
-export const FetchHotelDataOutputSchema = z.array(z.object({
+const FetchHotelDataOutputSchema = z.array(z.object({
     title: z.string().optional(),
     address: z.string().optional(),
     phone: z.string().optional(),
@@ -60,3 +59,4 @@ const fetchHotelDataFlow = ai.defineFlow(
 export async function fetchHotelDataViaSerpapi(input: FetchHotelDataInput): Promise<FetchHotelDataOutput> {
   return fetchHotelDataFlow(input);
 }
+
