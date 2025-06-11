@@ -25,7 +25,7 @@ export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
             alt={hotel.name} 
             layout="fill" 
             objectFit="cover" 
-            data-ai-hint="hotel exterior"
+            data-ai-hint={hotel.thumbnailHint || "hotel exterior"}
           />
         </div>
       )}

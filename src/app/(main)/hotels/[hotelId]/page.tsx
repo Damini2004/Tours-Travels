@@ -102,7 +102,7 @@ export default function HotelDetailPage() {
                   layout="fill" 
                   objectFit="cover" 
                   className="rounded-t-lg" 
-                  data-ai-hint="hotel interior" 
+                  data-ai-hint={hotel.imageHints?.[0] || "hotel interior"} 
                 />
               </div>
               {/* Could add a small gallery preview here */}

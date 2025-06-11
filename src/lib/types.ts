@@ -1,3 +1,4 @@
+
 export interface Flight {
   id: string;
   airline: string;
@@ -24,7 +25,9 @@ export interface Hotel {
   rating: number; // 1-5
   pricePerNight: number;
   thumbnailUrl?: string;
+  thumbnailHint?: string; // Hint for the thumbnail image
   images?: string[];
+  imageHints?: string[]; // Hints for the corresponding images in the images array
   amenities: string[];
   description?: string;
   checkInTime?: string;

@@ -62,7 +62,7 @@ export default function HomePage() {
                     alt={hotel.name} 
                     layout="fill" 
                     objectFit="cover" 
-                    data-ai-hint="hotel exterior"
+                    data-ai-hint={hotel.thumbnailHint || "hotel exterior"}
                   />
                 </div>
               )}
