@@ -1,22 +1,68 @@
 
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UsersIcon, EditIcon, Trash2Icon, SearchIcon, BadgeCheckIcon, UserCogIcon } from "lucide-react";
+import { UserCogIcon, EditIcon, Trash2Icon, SearchIcon, Loader2Icon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-// Placeholder user data
-const placeholderUsers = [
-  { id: "usr001", fullName: "Alice Smith", email: "alice@example.com", role: "guest", joinedDate: "2024-01-15" },
-  { id: "usr002", fullName: "Bob Johnson", email: "bob@example.com", role: "hotel_owner", joinedDate: "2024-02-20" },
-  { id: "usr003", fullName: "Charlie Brown", email: "charlie@example.com", role: "guest", joinedDate: "2024-03-10" },
-  { id: "usr004", fullName: "Diana Prince", email: "diana@example.com", role: "super_admin", joinedDate: "2023-12-01" },
-];
+interface DisplayUser {
+  id: string;
+  fullName: string;
+  email: string;
+  role: string;
+}
 
 export default function ManageUsersPage() {
+  const [users, setUsers] = useState<DisplayUser[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUsersString = localStorage.getItem("usersDB");
+      let loadedUsers: DisplayUser[] = [];
+      if (storedUsersString) {
+        try {
+          const rawUsers = JSON.parse(storedUsersString);
+          if (Array.isArray(rawUsers)) {
+            loadedUsers = rawUsers.map((user: any, index: number) => ({
+              id: user.email || `user-${index}`, // Use email as ID, fallback to index
+              fullName: user.fullName || 'N/A',
+              email: user.email || 'N/A',
+              role: user.role || 'guest',
+            }));
+          }
+        } catch (error) {
+          console.error("Error parsing usersDB from localStorage:", error);
+        }
+      }
+      // Add Super Admin if not in localStorage (as it's from .env)
+      const superAdminEmail = process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL;
+      if (superAdminEmail && !loadedUsers.find(u => u.email === superAdminEmail)) {
+        loadedUsers.unshift({
+          id: superAdminEmail,
+          fullName: "Super Admin",
+          email: superAdminEmail,
+          role: "super_admin"
+        });
+      }
+      setUsers(loadedUsers);
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-muted-foreground">Loading users...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -30,16 +76,16 @@ export default function ManageUsersPage() {
         <CardHeader>
           <CardTitle>User List</CardTitle>
           <CardDescription>
-            Showing {placeholderUsers.length} registered users. 
-            {/* Add search/filter inputs here in a real app */}
+            Showing {users.length} registered user(s).
+            {/* TODO: Add search/filter inputs here */}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {placeholderUsers.length === 0 ? (
+          {users.length === 0 ? (
             <Alert>
               <SearchIcon className="h-4 w-4" />
               <AlertTitle>No Users Found</AlertTitle>
-              <AlertDescription>There are no users matching your criteria. Or maybe the platform is brand new!</AlertDescription>
+              <AlertDescription>There are no registered users on the platform yet.</AlertDescription>
             </Alert>
           ) : (
             <Table>
@@ -48,27 +94,28 @@ export default function ManageUsersPage() {
                   <TableHead>Full Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead>Joined Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {placeholderUsers.map((user) => (
+                {users.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.fullName}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <Badge variant={user.role === 'super_admin' ? 'default' : user.role === 'hotel_owner' ? 'secondary' : 'outline'}>
+                      <Badge variant={user.role === 'super_admin' ? 'default' : user.role === 'hotel_owner' ? 'secondary' : 'outline'}
+                             className={user.role === 'super_admin' ? 'border-primary text-primary font-semibold' : ''}
+                      >
                         {user.role.replace('_', ' ')}
                       </Badge>
                     </TableCell>
-                    <TableCell>{user.joinedDate}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" className="mr-2">
+                      <Button variant="ghost" size="icon" className="mr-2" disabled={user.role === 'super_admin' && user.email === process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL}>
                         <EditIcon className="h-4 w-4" />
                         <span className="sr-only">Edit User</span>
                       </Button>
-                      {user.role !== 'super_admin' && ( // Prevent deleting super admin for safety
+                      {/* Prevent deleting the main super admin from .env for safety */}
+                      {!(user.role === 'super_admin' && user.email === process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL) && (
                         <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                           <Trash2Icon className="h-4 w-4" />
                           <span className="sr-only">Delete User</span>
