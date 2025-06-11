@@ -7,6 +7,7 @@ import { Loader2Icon, ShieldAlertIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Header } from '@/components/layout/header'; // Assuming super admin might want a consistent header
 
 interface CurrentUser {
   fullName: string;
@@ -78,5 +79,15 @@ export default function SuperAdminLayout({
   }
 
   // User is authorized as super_admin
-  return <div className="min-h-screen flex flex-col">{children}</div>;
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header /> {/* Render the main header */}
+      <main className="flex-grow">{children}</main>
+      <footer className="bg-muted/50 py-6 text-center text-sm text-muted-foreground">
+        <div className="container mx-auto">
+          Super Admin Panel - © {new Date().getFullYear()} Hotel&Tour
+        </div>
+      </footer>
+    </div>
+  );
 }
