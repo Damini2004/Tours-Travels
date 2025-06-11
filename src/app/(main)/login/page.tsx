@@ -22,6 +22,28 @@ export default function LoginPage() {
     e.preventDefault();
     
     if (typeof window !== "undefined") {
+      // Check for Super Admin first
+      const superAdminEmail = process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL;
+      const superAdminPassword = process.env.NEXT_PUBLIC_SUPER_ADMIN_PASSWORD;
+
+      if (email === superAdminEmail && password === superAdminPassword) {
+        const superAdminDetails = {
+          fullName: "Super Admin",
+          email: email,
+          role: "super_admin"
+        };
+        localStorage.setItem("currentUser", JSON.stringify(superAdminDetails));
+        const redirectUrl = searchParams.get('redirect') || '/';
+        router.push(redirectUrl);
+        router.refresh();
+        toast({
+          title: "Login Successful",
+          description: `Welcome back, Super Admin!`,
+        });
+        return; // Important: exit after super admin login
+      }
+
+      // If not super admin, check regular users in localStorage
       const existingUsersString = localStorage.getItem("usersDB");
       let usersDB: any[] = [];
       let userFound = false;
@@ -32,7 +54,6 @@ export default function LoginPage() {
           usersDB = JSON.parse(existingUsersString);
         } catch (err) {
           console.warn("Error parsing usersDB from localStorage", err);
-          // Proceed with empty usersDB if parsing fails
         }
       }
 
