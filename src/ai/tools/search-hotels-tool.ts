@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Genkit tool for searching hotel information using SerpApi.
@@ -10,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {getJson} from 'serpapi'; // Use getJson for Google Hotels
+import {getJson} from 'google-search-results-nodejs'; // Use getJson for Google Hotels
 
 const HotelSearchInputSchema = z.object({
   query: z.string().describe('The search query for the hotel (e.g., "Hotel Name, City").'),
@@ -126,3 +127,4 @@ export const searchHotelsTool = ai.defineTool(
     }
   }
 );
+
