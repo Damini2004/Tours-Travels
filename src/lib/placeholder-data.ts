@@ -62,10 +62,13 @@ export const placeholderHotels: Hotel[] = [
     location: 'London, UK',
     rating: 5,
     pricePerNight: 250,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
-    thumbnailHint: 'luxury hotel facade',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
-    imageHints: ['elegant hotel lobby', 'modern suite interior'],
+    thumbnailUrl: 'https://cdn.pixabay.com/photo/2017/08/02/10/09/london-2570498_1280.jpg',
+    thumbnailHint: 'london hotel exterior',
+    images: [
+        'https://cdn.pixabay.com/photo/2014/08/11/21/39/wall-416060_1280.jpg',
+        'https://cdn.pixabay.com/photo/2016/12/04/19/20/london-1882046_1280.jpg'
+    ],
+    imageHints: ['luxury hotel suite', 'london city night'],
     amenities: ['Free Wi-Fi', 'Swimming Pool', 'Gym', 'Restaurant', 'Spa'],
     description: 'Experience luxury at The Grand Plaza, located in the heart of London. Enjoy world-class amenities and breathtaking city views.',
     checkInTime: '15:00',
@@ -81,10 +84,13 @@ export const placeholderHotels: Hotel[] = [
     location: 'Tokyo, Japan',
     rating: 4,
     pricePerNight: 180,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
-    thumbnailHint: 'traditional japanese inn',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
-    imageHints: ['serene japanese garden', 'tatami room zen'],
+    thumbnailUrl: 'https://cdn.pixabay.com/photo/2016/11/18/14/09/japanese-house-1834925_1280.jpg',
+    thumbnailHint: 'japanese inn garden',
+    images: [
+        'https://cdn.pixabay.com/photo/2016/03/05/18/54/japanese-house-1238002_1280.jpg',
+        'https://cdn.pixabay.com/photo/2016/10/18/10/58/japan-1749764_1280.jpg'
+    ],
+    imageHints: ['tatami room interior', 'kyoto temple autumn'],
     amenities: ['Free Wi-Fi', 'Onsen (Hot Spring)', 'Traditional Breakfast', 'Garden'],
     description: 'Immerse yourself in Japanese culture at Sakura Inn Tokyo. Featuring traditional tatami rooms and a serene onsen.',
     checkInTime: '16:00',
@@ -100,10 +106,13 @@ export const placeholderHotels: Hotel[] = [
     location: 'Sydney, Australia',
     rating: 4,
     pricePerNight: 220,
-    thumbnailUrl: 'https://placehold.co/300x200.png',
+    thumbnailUrl: 'https://cdn.pixabay.com/photo/2015/03/09/18/34/beach-665971_1280.jpg',
     thumbnailHint: 'tropical beach resort',
-    images: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
-    imageHints: ['infinity pool ocean', 'beachfront bungalow sunset'],
+    images: [
+        'https://cdn.pixabay.com/photo/2017/01/20/00/30/maldives-1993704_1280.jpg',
+        'https://cdn.pixabay.com/photo/2018/01/28/22/19/sunset-3114992_1280.jpg'
+    ],
+    imageHints: ['luxury villa ocean', 'beach sunset chairs'],
     amenities: ['Beach Access', 'Outdoor Pool', 'Restaurant', 'Bar', 'Water Sports'],
     description: 'Relax and unwind at Sunset Beach Resort, offering stunning ocean views and direct access to Sydney\'s famous beaches.',
     checkInTime: '14:00',
@@ -114,3 +123,4 @@ export const placeholderHotels: Hotel[] = [
     ]
   },
 ];
+
