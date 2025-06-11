@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon, HeartIcon, ListChecksIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListOrdered, DollarSign
+  PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon, HeartIcon, ListChecksIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon
 } from 'lucide-react';
 
 interface CurrentUser {
@@ -33,7 +33,7 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (!isClient) return; // Only run on the client
+    if (!isClient) return; 
 
     const loadUser = () => {
       const storedUser = localStorage.getItem("currentUser");
@@ -42,7 +42,7 @@ export function Header() {
           setCurrentUser(JSON.parse(storedUser));
         } catch (e) {
           console.error("Failed to parse currentUser from localStorage", e);
-          localStorage.removeItem("currentUser"); // Clear corrupted item
+          localStorage.removeItem("currentUser"); 
           setCurrentUser(null);
         }
       } else {
@@ -50,9 +50,8 @@ export function Header() {
       }
     };
 
-    loadUser(); // Initial load
+    loadUser(); 
 
-    // Listen to storage changes that might occur in other tabs or from direct manipulation.
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "currentUser") {
         loadUser();
@@ -60,19 +59,11 @@ export function Header() {
     };
     window.addEventListener('storage', handleStorageChange);
     
-    // Re-check on route change, useful if login/signup doesn't cause a full page reload
-    // but Next.js router navigates.
-    // The `router` object itself is stable, so direct dependency might not always re-trigger.
-    // However, `loadUser` being called on mount and storage events should cover most cases.
-    // For explicit re-check on navigation, one might need to tap into router.events if available,
-    // or rely on the fact that navigation often re-mounts components or causes effects to re-run.
-    // For this simple localStorage setup, the initial load and storage event listener are key.
-
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
 
-  }, [isClient, router]); // router dependency helps re-evaluate if navigation pattern triggers it
+  }, [isClient, router]); 
 
 
   const handleLogout = () => {
@@ -81,10 +72,10 @@ export function Header() {
     }
     setCurrentUser(null);
     router.push('/'); 
+    router.refresh(); // Ensure header updates immediately
   };
 
   if (!isClient) {
-    // Render a placeholder or null during SSR/pre-hydration to avoid mismatch
     return (
       <header className="bg-background text-foreground shadow-md backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
@@ -152,6 +143,35 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+
+          {currentUser?.role === 'super_admin' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:bg-muted/50">
+                  <ShieldCheckIcon className="mr-2 h-4 w-4" /> Super Admin
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Admin Panel</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/super-admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Overview</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/super-admin/manage-users"><UsersIcon className="mr-2 h-4 w-4" />Manage Users</Link>
+                </DropdownMenuItem>
+                 <DropdownMenuItem asChild>
+                  <Link href="/super-admin/approve-hotels"><FileCheckIcon className="mr-2 h-4 w-4" />Approve Hotels</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/super-admin/remove-listings"><Trash2Icon className="mr-2 h-4 w-4" />Remove Listings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/super-admin/revenue-reports"><LineChartIcon className="mr-2 h-4 w-4" />Revenue Reports</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </nav>
         <div className="flex items-center gap-2">
           {currentUser ? (
@@ -166,7 +186,7 @@ export function Header() {
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{currentUser.fullName}</p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {currentUser.email} ({currentUser.role})
+                      {currentUser.email} ({currentUser.role.replace('_', ' ')})
                     </p>
                   </div>
                 </DropdownMenuLabel>
