@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, Trash2Icon, LineChartIcon, DollarSignIcon, ListChecks } from "lucide-react";
+import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, Trash2Icon, LineChartIcon, DollarSignIcon, ListChecks, ShieldCheckIcon } from "lucide-react";
 
 export default function SuperAdminDashboardPage() {
   // Placeholder data
@@ -14,11 +14,18 @@ export default function SuperAdminDashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-          <LayoutDashboard className="mr-3 h-8 w-8 text-primary" /> Super Admin Dashboard
+      <div className="mb-8 p-4 bg-primary/10 rounded-lg border border-primary">
+        <h1 className="font-headline text-2xl md:text-3xl font-bold flex items-center text-primary">
+          <ShieldCheckIcon className="mr-3 h-8 w-8" /> SUPER ADMIN PLATFORM OVERVIEW
         </h1>
-        <p className="text-muted-foreground">Platform overview and key metrics.</p>
+        <p className="text-primary/90 font-medium mt-1">This is the main dashboard for Super Administrators.</p>
+      </div>
+
+      <div className="mb-8">
+        <h2 className="font-headline text-2xl md:text-3xl font-bold flex items-center">
+          <LayoutDashboard className="mr-3 h-7 w-7 text-primary" /> Key Metrics
+        </h2>
+        <p className="text-muted-foreground">Platform overview and key statistics.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
