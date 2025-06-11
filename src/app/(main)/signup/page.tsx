@@ -10,10 +10,12 @@ import { UserPlusIcon, BriefcaseIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +25,17 @@ export default function SignupPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match!"); // Keep this alert as it's form validation feedback
+      toast({
+        variant: "destructive",
+        title: "Signup Error",
+        description: "Passwords do not match!",
+      });
       return;
     }
     
     if (typeof window !== "undefined") {
-      const newUser = { fullName, email, role, password }; // In a real app, hash password
+      const newUser = { fullName, email, role, password }; 
 
-      // Simulate a users database in localStorage
       let usersDB = [];
       const existingUsersString = localStorage.getItem("usersDB");
       if (existingUsersString) {
@@ -43,12 +48,15 @@ export default function SignupPage() {
       usersDB.push(newUser);
       localStorage.setItem("usersDB", JSON.stringify(usersDB));
       
-      // Set current user
       localStorage.setItem("currentUser", JSON.stringify({ fullName, email, role }));
       
       const redirectUrl = searchParams.get('redirect') || '/';
       router.push(redirectUrl);
-      router.refresh(); // Force a refresh to update header state
+      router.refresh(); 
+      toast({
+        title: "Signup Successful!",
+        description: `Welcome, ${fullName}! Your account has been created.`,
+      });
     }
   };
 

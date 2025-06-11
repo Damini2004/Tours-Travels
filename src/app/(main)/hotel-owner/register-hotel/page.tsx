@@ -12,6 +12,7 @@ import type { FetchHotelDataInput, FetchHotelDataOutput } from "@/ai/flows/fetch
 // Server Action import
 import { fetchHotelDataViaSerpapi } from "@/ai/flows/fetch-hotel-data-via-serpapi-flow";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 
 export default function RegisterHotelPage() {
@@ -19,6 +20,7 @@ export default function RegisterHotelPage() {
   const [serpApiResults, setSerpApiResults] = useState<FetchHotelDataOutput>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   // Form state
   const [hotelName, setHotelName] = useState("");
@@ -32,6 +34,11 @@ export default function RegisterHotelPage() {
   const handleSerpApiSearch = async () => {
     if (!serpApiQuery.trim()) {
       setSearchError("Please enter a hotel name or keyword to search.");
+      toast({
+        variant: "destructive",
+        title: "Search Error",
+        description: "Please enter a hotel name or keyword.",
+      });
       return;
     }
     setIsSearching(true);
@@ -39,14 +46,29 @@ export default function RegisterHotelPage() {
     setSerpApiResults([]);
     try {
       const input: FetchHotelDataInput = { query: serpApiQuery };
-      const results = await fetchHotelDataViaSerpapi(input); // Calling the server action
+      const results = await fetchHotelDataViaSerpapi(input); 
       setSerpApiResults(results);
       if (results.length === 0) {
         setSearchError("No results found. Try a different search term.");
+        toast({
+          variant: "default",
+          title: "Search Complete",
+          description: "No results found. Try a different search term.",
+        });
+      } else {
+        toast({
+          title: "Search Successful",
+          description: `${results.length} hotel(s) found.`,
+        });
       }
     } catch (error) {
       console.error("SerpApi search error:", error);
       setSearchError("Failed to fetch hotel data. Please ensure your SerpApi key is correctly configured.");
+      toast({
+        variant: "destructive",
+        title: "Search Failed",
+        description: "Could not fetch hotel data. Check your SerpApi key and try again.",
+      });
     } finally {
       setIsSearching(false);
     }
@@ -55,17 +77,29 @@ export default function RegisterHotelPage() {
   const handleUseHotelData = (hotelData: FetchHotelDataOutput[0]) => {
     setHotelName(hotelData.title || "");
     setLocation(hotelData.address || "");
-    // You can pre-fill other fields here if available and desired
-    // setDescription(hotelData.description || ""); 
+    toast({
+        title: "Data Applied",
+        description: `Details for ${hotelData.title || "selected hotel"} pre-filled.`,
+    })
   };
 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder for form submission logic
     const formData = { hotelName, location, description, amenities, checkInTime, checkOutTime };
     console.log("Form Data:", formData);
-    alert("Hotel registration form submitted (placeholder).");
+    // In a real app, you'd send this to your backend
+    toast({
+        title: "Hotel Registration Submitted!",
+        description: `${hotelName} details have been submitted for review.`,
+    });
+    // Optionally reset form fields here
+    setHotelName("");
+    setLocation("");
+    setDescription("");
+    setAmenities("");
+    setCheckInTime("");
+    setCheckOutTime("");
   };
 
   return (
@@ -96,7 +130,7 @@ export default function RegisterHotelPage() {
                 Search
               </Button>
             </div>
-            {searchError && (
+            {searchError && !isSearching && ( // Only show if not actively searching
               <Alert variant="destructive">
                 <AlertTitle>Search Error</AlertTitle>
                 <AlertDescription>{searchError}</AlertDescription>

@@ -9,10 +9,12 @@ import { LogInIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,7 +37,7 @@ export default function LoginPage() {
       }
 
       const foundUser = usersDB.find(
-        (user: any) => user.email === email && user.password === password // Password check (unsafe for production)
+        (user: any) => user.email === email && user.password === password 
       );
 
       if (foundUser) {
@@ -51,9 +53,17 @@ export default function LoginPage() {
         localStorage.setItem("currentUser", JSON.stringify(currentUserDetails));
         const redirectUrl = searchParams.get('redirect') || '/';
         router.push(redirectUrl);
-        router.refresh(); // Force a refresh to update header state
+        router.refresh(); 
+        toast({
+          title: "Login Successful",
+          description: `Welcome back, ${currentUserDetails.fullName}!`,
+        });
       } else {
-        alert("Invalid email or password. Please sign up if you don't have an account.");
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Invalid email or password. Please try again or sign up.",
+        });
       }
     }
   };

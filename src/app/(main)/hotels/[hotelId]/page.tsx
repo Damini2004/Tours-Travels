@@ -13,11 +13,13 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { HotelIcon as HotelBuildingIcon, MapPinIcon, StarIcon, CheckCircleIcon, XCircleIcon, BedDoubleIcon, CalendarDaysIcon, HeartIcon } from 'lucide-react';
 import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 export default function HotelDetailPage() {
   const params = useParams();
   const hotelId = params.hotelId as string;
   const { addHotelToSaved, removeHotelFromSaved, isHotelSaved, isLoading } = useSavedItems();
+  const { toast } = useToast();
   
   // In a real app, fetch hotel by ID
   const hotel = placeholderHotels.find((h) => h.id === hotelId);
@@ -26,8 +28,16 @@ export default function HotelDetailPage() {
     if (!hotel) return;
     if (isHotelSaved(hotel.id)) {
       removeHotelFromSaved(hotel.id);
+      toast({
+        title: "Hotel Unsaved",
+        description: `${hotel.name} removed from your saved items.`,
+      });
     } else {
       addHotelToSaved(hotel);
+      toast({
+        title: "Hotel Saved!",
+        description: `${hotel.name} added to your saved items.`,
+      });
     }
   };
 

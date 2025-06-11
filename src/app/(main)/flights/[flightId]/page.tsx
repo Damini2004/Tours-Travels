@@ -14,11 +14,13 @@ import { PlaneIcon, CalendarDaysIcon, ClockIcon, UsersIcon, CheckCircleIcon, XCi
 import { format } from 'date-fns';
 import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 export default function FlightDetailPage() {
   const params = useParams();
   const flightId = params.flightId as string;
   const { savedFlights, addFlightToSaved, removeFlightFromSaved, isFlightSaved, isLoading } = useSavedItems();
+  const { toast } = useToast();
 
   // In a real app, fetch flight by ID
   const flight = placeholderFlights.find((f) => f.id === flightId);
@@ -27,8 +29,16 @@ export default function FlightDetailPage() {
     if (!flight) return;
     if (isFlightSaved(flight.id)) {
       removeFlightFromSaved(flight.id);
+      toast({
+        title: "Flight Unsaved",
+        description: `${flight.airline} - ${flight.flightNumber} removed from your saved items.`,
+      });
     } else {
       addFlightToSaved(flight);
+      toast({
+        title: "Flight Saved!",
+        description: `${flight.airline} - ${flight.flightNumber} added to your saved items.`,
+      });
     }
   };
   

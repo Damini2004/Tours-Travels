@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 // Temporary import for placeholder data (should be part of a context or fetched if not in savedItems)
 const { placeholderFlights, placeholderHotels } = require('@/lib/placeholder-data');
@@ -19,6 +20,7 @@ const { placeholderFlights, placeholderHotels } = require('@/lib/placeholder-dat
 
 export default function SavedItemsPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
@@ -28,7 +30,7 @@ export default function SavedItemsPage() {
       if (user) {
         setIsAuthenticated(true);
       } else {
-        router.replace('/login?redirect=/saved'); // Use replace to not add to history
+        router.replace('/login?redirect=/saved'); 
       }
       setIsAuthLoading(false);
     }
@@ -43,7 +45,7 @@ export default function SavedItemsPage() {
     addHotelToSaved,
     removeHotelFromSaved,
     isHotelSaved,
-    isLoading: isLoadingSavedItems // This is for loading items from localStorage by the hook
+    isLoading: isLoadingSavedItems 
   } = useSavedItems();
 
 
@@ -51,9 +53,19 @@ export default function SavedItemsPage() {
     const flightIsInSavedList = savedFlights.find(f => f.id === flightId);
     if (isFlightSaved(flightId) && flightIsInSavedList) {
         removeFlightFromSaved(flightId);
+        toast({
+            title: "Flight Unsaved",
+            description: `${flightIsInSavedList.airline} - ${flightIsInSavedList.flightNumber} removed.`,
+        });
     } else if (!isFlightSaved(flightId)) {
        const flightToAdd = placeholderFlights.find((f:any) => f.id === flightId);
-       if(flightToAdd) addFlightToSaved(flightToAdd);
+       if(flightToAdd) {
+            addFlightToSaved(flightToAdd);
+            toast({
+                title: "Flight Saved!",
+                description: `${flightToAdd.airline} - ${flightToAdd.flightNumber} added to saved items.`,
+            });
+       }
     }
   };
 
@@ -61,9 +73,19 @@ export default function SavedItemsPage() {
     const hotelIsInSavedList = savedHotels.find(h => h.id === hotelId);
     if (isHotelSaved(hotelId) && hotelIsInSavedList) {
         removeHotelFromSaved(hotelId);
+        toast({
+            title: "Hotel Unsaved",
+            description: `${hotelIsInSavedList.name} removed from saved items.`,
+        });
     } else if(!isHotelSaved(hotelId)) {
        const hotelToAdd = placeholderHotels.find((h:any) => h.id === hotelId);
-       if(hotelToAdd) addHotelToSaved(hotelToAdd);
+       if(hotelToAdd) {
+            addHotelToSaved(hotelToAdd);
+            toast({
+                title: "Hotel Saved!",
+                description: `${hotelToAdd.name} added to saved items.`,
+            });
+       }
     }
   };
   
@@ -77,7 +99,6 @@ export default function SavedItemsPage() {
   }
 
   if (!isAuthenticated) {
-     // Should have been redirected, but as a fallback:
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <Alert variant="destructive">
