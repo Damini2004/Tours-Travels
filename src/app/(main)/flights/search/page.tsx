@@ -504,11 +504,11 @@ function FlightSearchClientInternal() {
   if (currentFlightsToDisplay.length === 0 && !loading) {
     return (
       <div className="flex flex-col flex-1">
-        <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-2 shadow-md sticky top-0 z-30">
-            <div className="max-w-screen-xl mx-auto px-4 space-y-2.5">
+        <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-1 shadow-md sticky top-0 z-30">
+            <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-1 items-stretch">
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="tripTypeHeader" className="text-xs text-primary-foreground opacity-80 block mb-0.5">TRIP TYPE</Label>
                         <Select value={formIsRoundTrip ? "roundTrip" : "oneWay"} onValueChange={(value) => setFormIsRoundTrip(value === "roundTrip")}>
                             <SelectTrigger id="tripTypeHeader" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium">
@@ -520,7 +520,7 @@ function FlightSearchClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="formOriginHeader" className="text-xs text-primary-foreground opacity-80 block mb-0.5">FROM</Label>
                         <Select value={formOrigin} onValueChange={setFormOrigin}>
                             <SelectTrigger id="formOriginHeader" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
@@ -538,7 +538,7 @@ function FlightSearchClientInternal() {
                             <ArrowRightLeft className="w-3.5 h-3.5" />
                         </Button>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="formDestinationHeader" className="text-xs text-primary-foreground opacity-80 block mb-0.5">TO</Label>
                          <Select value={formDestination} onValueChange={setFormDestination}>
                             <SelectTrigger id="formDestinationHeader" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
@@ -551,7 +551,7 @@ function FlightSearchClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">DEPART</Label>
                         <Popover>
                             <PopoverTrigger asChild>
@@ -573,7 +573,7 @@ function FlightSearchClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className={cn("rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1", !formIsRoundTrip && "opacity-50")}>
+                    <div className={cn("rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5", !formIsRoundTrip && "opacity-50")}>
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">RETURN</Label>
                         <Popover>
                             <PopoverTrigger asChild disabled={!formIsRoundTrip}>
@@ -595,7 +595,7 @@ function FlightSearchClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS & CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
@@ -643,30 +643,13 @@ function FlightSearchClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-slate-200 hover:bg-slate-300 text-primary font-bold rounded-lg h-full text-center leading-tight px-2.5 py-1 text-sm lg:px-2.5 lg:py-1"
+                        className="bg-slate-200 hover:bg-slate-300 text-primary font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
                     >
                         SEARCH
                     </Button>
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-primary-foreground/20">
-                    <div className="flex items-center gap-x-2 gap-y-2 text-xs flex-wrap">
-                        <span className="font-semibold text-primary-foreground/80 mr-2">Fare Type:</span>
-                        <RadioGroup defaultValue="regular" className="flex gap-x-1 gap-y-1 flex-wrap">
-                            {["Regular", "Student", "Senior Citizen", "Armed Forces", "Doctor and Nurses"].map(type => (
-                                 <div key={type} className="flex items-center">
-                                    <RadioGroupItem value={type.toLowerCase().replace(/\s+/g, '')} id={`header-fare-${type}`} className="peer hidden" />
-                                    <Label 
-                                        htmlFor={`header-fare-${type}`} 
-                                        className="px-2.5 py-1 text-xs rounded-md cursor-pointer transition-colors bg-white/10 hover:bg-white/20 peer-data-[state=checked]:bg-accent peer-data-[state=checked]:text-accent-foreground text-primary-foreground/90"
-                                    >
-                                        {type}
-                                    </Label>
-                                </div>
-                            ))}
-                        </RadioGroup>
-                    </div>
-                </div>
+              {/* Fare Type Section Removed */}
             </div>
         </header>
         <div className="flex flex-col items-center justify-center flex-1 p-4 text-center">
@@ -682,11 +665,11 @@ function FlightSearchClientInternal() {
 
   return (
     <div className="flex flex-col flex-1">
-      <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-2 shadow-md sticky top-0 z-30">
-            <div className="max-w-screen-xl mx-auto px-4 space-y-2.5">
+      <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-1 shadow-md sticky top-0 z-30">
+            <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-1 items-stretch">
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="tripTypeHeaderForm" className="text-xs text-primary-foreground opacity-80 block mb-0.5">TRIP TYPE</Label>
                         <Select value={formIsRoundTrip ? "roundTrip" : "oneWay"} onValueChange={(value) => setFormIsRoundTrip(value === "roundTrip")}>
                             <SelectTrigger id="tripTypeHeaderForm" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium">
@@ -698,7 +681,7 @@ function FlightSearchClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="formOriginHeaderForm" className="text-xs text-primary-foreground opacity-80 block mb-0.5">FROM</Label>
                         <Select value={formOrigin} onValueChange={setFormOrigin}>
                             <SelectTrigger id="formOriginHeaderForm" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
@@ -716,7 +699,7 @@ function FlightSearchClientInternal() {
                             <ArrowRightLeft className="w-3.5 h-3.5" />
                         </Button>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label htmlFor="formDestinationHeaderForm" className="text-xs text-primary-foreground opacity-80 block mb-0.5">TO</Label>
                          <Select value={formDestination} onValueChange={setFormDestination}>
                             <SelectTrigger id="formDestinationHeaderForm" className="h-auto text-sm bg-transparent border-0 text-primary-foreground focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
@@ -729,7 +712,7 @@ function FlightSearchClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">DEPART</Label>
                         <Popover>
                             <PopoverTrigger asChild>
@@ -751,7 +734,7 @@ function FlightSearchClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className={cn("rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1", !formIsRoundTrip && "opacity-50")}>
+                    <div className={cn("rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5", !formIsRoundTrip && "opacity-50")}>
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">RETURN</Label>
                         <Popover>
                             <PopoverTrigger asChild disabled={!formIsRoundTrip}>
@@ -773,7 +756,7 @@ function FlightSearchClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1.5 lg:px-1.5 lg:py-1">
+                    <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
                         <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS & CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
@@ -821,30 +804,13 @@ function FlightSearchClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-slate-200 hover:bg-slate-300 text-primary font-bold rounded-lg h-full text-center leading-tight px-2.5 py-1 text-sm lg:px-2.5 lg:py-1"
+                        className="bg-slate-200 hover:bg-slate-300 text-primary font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
                     >
                         SEARCH
                     </Button>
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-primary-foreground/20">
-                    <div className="flex items-center gap-x-2 gap-y-2 text-xs flex-wrap">
-                        <span className="font-semibold text-primary-foreground/80 mr-2">Fare Type:</span>
-                        <RadioGroup defaultValue="regular" className="flex gap-x-1 gap-y-1 flex-wrap">
-                            {["Regular", "Student", "Senior Citizen", "Armed Forces", "Doctor and Nurses"].map(type => (
-                                 <div key={type} className="flex items-center">
-                                    <RadioGroupItem value={type.toLowerCase().replace(/\s+/g, '')} id={`header-fare-type-${type}`} className="peer hidden" />
-                                    <Label 
-                                        htmlFor={`header-fare-type-${type}`} 
-                                        className="px-2.5 py-1 text-xs rounded-md cursor-pointer transition-colors bg-white/10 hover:bg-white/20 peer-data-[state=checked]:bg-accent peer-data-[state=checked]:text-accent-foreground text-primary-foreground/90"
-                                    >
-                                        {type}
-                                    </Label>
-                                </div>
-                            ))}
-                        </RadioGroup>
-                    </div>
-                </div>
+             {/* Fare Type Section Removed */}
             </div>
       </header>
       <div className="max-w-screen-xl mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
@@ -1243,4 +1209,5 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
-make this same as it is in my flight search page
+
+See the code do the changes that you want, remove the fare type section too
