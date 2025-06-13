@@ -1,4 +1,6 @@
+
 import { Header } from '@/components/layout/header';
+import Footer from '@/components/layout/Footer'; // Import the new Footer
 
 export default function MainLayout({
   children,
@@ -9,11 +11,7 @@ export default function MainLayout({
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow">{children}</main>
-      <footer className="bg-muted/50 py-6 text-center text-sm text-muted-foreground">
-        <div className="container mx-auto">
-          © {new Date().getFullYear()} Hotel&Tour. All rights reserved.
-        </div>
-      </footer>
+      <Footer /> {/* Use the new Footer component */}
     </div>
   );
 }

@@ -52,6 +52,12 @@ const nextConfig: NextConfig = {
         hostname: 'encrypted-tbn0.gstatic.com', // For InfiniteCarousel images
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org', // For Google logo in Footer
+        port: '',
+        pathname: '/**',
       }
     ],
   },
