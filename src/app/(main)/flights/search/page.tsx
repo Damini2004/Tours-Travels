@@ -245,7 +245,7 @@ function FlightSearchClientInternal() {
     if (queryNonStop === "true") {
       setStopFilters(prev => ({ ...prev, "0": true, "1": false, "2+": false }));
       if (flights.length > 0 && activeSortTab !== "nonStopFirst") setActiveSortTab("nonStopFirst");
-    } else {
+    } else { // Handles queryNonStop === "false" or undefined
       setStopFilters(prev => ({ ...prev, "0": true, "1": true, "2+": true }));
     }
   }, [queryNonStop, flights.length, activeSortTab]);
@@ -1191,6 +1191,7 @@ function FlightSearchClientInternal() {
     </div>
   );
 }
+
 
 export default function FlightSearchClient() {
   return (
