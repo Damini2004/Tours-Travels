@@ -14,6 +14,7 @@ export default {
         body: ['PT Sans', 'sans-serif'],
         headline: ['Poppins', 'sans-serif'],
         code: ['monospace'],
+        orbitron: ['Orbitron', 'sans-serif'], // Added Orbitron
       },
       colors: {
         // Theme colors (can be overridden by globals.css)
@@ -94,10 +95,25 @@ export default {
             height: '0',
           },
         },
+        fadeInUp: { // For Carousel content
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        runningTime: { // For Carousel time bar
+          from: { width: '0%' },
+          to: { width: '100%' },
+        },
+        float: { // For Carousel arrows
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fadeInUp': 'fadeInUp 1s ease forwards', // For Carousel
+        'animate': 'runningTime 5s linear forwards', // CHanged: link 'animate' class to runningTime keyframes with 5s duration
+        'float': 'float 3s ease-in-out infinite', // For Carousel
       },
     },
   },
@@ -106,5 +122,3 @@ export default {
     require('tailwind-scrollbar-hide')
   ],
 } satisfies Config;
-
-    
