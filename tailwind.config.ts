@@ -14,7 +14,7 @@ export default {
         body: ['PT Sans', 'sans-serif'],
         headline: ['Poppins', 'sans-serif'],
         code: ['monospace'],
-        orbitron: ['Orbitron', 'sans-serif'], // Added Orbitron
+        orbitron: ['Orbitron', 'sans-serif'], 
       },
       colors: {
         // Theme colors (can be overridden by globals.css)
@@ -68,10 +68,6 @@ export default {
           border: 'hsl(var(--border))',
           ring: 'hsl(var(--ring))',
         },
-        // Specific colors from the new header design
-        // These might override theme if used directly, e.g. text-[#1a1a1a]
-        // It's generally better to map these to theme variables if possible,
-        // but for a direct replacement of a specific design, sometimes direct hex is used.
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -95,25 +91,12 @@ export default {
             height: '0',
           },
         },
-        fadeInUp: { // For Carousel content
-          '0%': { opacity: '0', transform: 'translateY(30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        runningTime: { // For Carousel time bar
-          from: { width: '0%' },
-          to: { width: '100%' },
-        },
-        float: { // For Carousel arrows
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
+        // Removed old carousel keyframes: fadeInUp, runningTime, float
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fadeInUp': 'fadeInUp 1s ease forwards', // For Carousel
-        'animate': 'runningTime 5s linear forwards', // CHanged: link 'animate' class to runningTime keyframes with 5s duration
-        'float': 'float 3s ease-in-out infinite', // For Carousel
+        // Removed old carousel animations
       },
     },
   },
@@ -122,3 +105,5 @@ export default {
     require('tailwind-scrollbar-hide')
   ],
 } satisfies Config;
+
+    
