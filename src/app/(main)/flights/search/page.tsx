@@ -221,10 +221,10 @@ function FlightSearchClientInternal() {
       const validPrices = flights
         .map(f => parseFloat(f.price.total))
         .filter(p => !isNaN(p));
-      if (validPrices.length === 0) return 1; // Default if no valid prices
+      if (validPrices.length === 0) return 1; 
       const maxP = Math.ceil(Math.max(...validPrices));
       const minP = Math.floor(Math.min(...validPrices));
-      return maxP > minP ? maxP : minP + 1; // Ensure max > min
+      return maxP > minP ? maxP : minP + 1; 
   }, [flights]);
   
   const [priceRange, setPriceRange] = useState<[number, number]>([initialMinPrice, initialMaxPrice]);
@@ -287,7 +287,7 @@ function FlightSearchClientInternal() {
         if (validPrices.length > 0) {
             const minVal = Math.floor(Math.min(...validPrices));
             let maxVal = Math.ceil(Math.max(...validPrices));
-            if (maxVal <= minVal) maxVal = minVal + 1; // Ensure max > min
+            if (maxVal <= minVal) maxVal = minVal + 1; 
             setPriceRange([minVal, maxVal]);
         } else {
             setPriceRange([0,1]); 
@@ -431,8 +431,8 @@ function FlightSearchClientInternal() {
     setActiveSortTab(tabKey);
     if (tabKey === "cheapest") setSortOption("price");
     else if (tabKey === "nonStopFirst") setSortOption("nonStopFirst");
-    else if (tabKey === "youMayPrefer") setSortOption("duration"); // Placeholder, actual logic might be more complex
-    else if (tabKey === "otherSort") setSortOption("departure"); // Placeholder
+    else if (tabKey === "youMayPrefer") setSortOption("duration"); 
+    else if (tabKey === "otherSort") setSortOption("departure"); 
   };
 
   const handleSelectFlight = (flightId: string, itineraryIdx: number) => {
@@ -649,7 +649,6 @@ function FlightSearchClientInternal() {
                     </Button>
                 </div>
               </div>
-              {/* Fare Type Section Removed */}
             </div>
         </header>
         <div className="flex flex-col items-center justify-center flex-1 p-4 text-center">
@@ -810,7 +809,6 @@ function FlightSearchClientInternal() {
                     </Button>
                 </div>
               </div>
-             {/* Fare Type Section Removed */}
             </div>
       </header>
       <div className="max-w-screen-xl mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
@@ -831,7 +829,7 @@ function FlightSearchClientInternal() {
                         <div className="flex items-center justify-between p-1.5 bg-primary/10 rounded-md text-xs text-primary border border-primary/20">
                             <span>Non Stop</span>
                             <Button variant="ghost" size="icon" className="w-5 h-5" onClick={() => {
-                                setStopFilters({ "0": true, "1": true, "2+": true }); // Reset to show all
+                                setStopFilters({ "0": true, "1": true, "2+": true }); 
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
                                 router.push(`${pathname}?${currentParams.toString()}`);
@@ -1210,4 +1208,4 @@ export default function FlightSearchClient() {
   );
 }
 
-See the code do the changes that you want, remove the fare type section too
+add this in the current file the exact same code in src/app/(main)/flights/search/page.tsx no more changes
