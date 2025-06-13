@@ -1,8 +1,7 @@
 
-"use client"; // Added "use client"
+"use client"; 
 
 import React, { useState, useEffect, Suspense, useMemo, useRef } from "react";
-// Changed from react-router-dom to next/navigation
 import { useSearchParams, useRouter, usePathname } from "next/navigation"; 
 import { format, parseISO, isValid, addDays } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { Plane, ChevronDown, ChevronUp, Filter, Clock, MapPin, AlertCircle, Zap,
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import type { FlightOffer, FlightOffersResponse } from "@/lib/types"; // Ensure these types are in lib/types
+import type { FlightOffer, FlightOffersResponse } from "@/lib/types"; 
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,13 +20,29 @@ import Image from "next/image";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; // Assuming Input is not used directly in this new file, but keeping for completeness if it was.
+import { Input } from "@/components/ui/input"; 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
 const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
 const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
+
+// Helper function defined at module scope
+const parseDuration = (durationStr: string): number => {
+    const timePart = durationStr?.replace("PT", "") || "";
+    let hours = 0, minutes = 0;
+    if (timePart.includes("H")) {
+    const parts = timePart.split("H");
+    hours = parseInt(parts[0]) || 0;
+    if (parts[1]) {
+        minutes = parseInt(parts[1].replace("M", "")) || 0;
+    }
+    } else if (timePart.includes("M")) {
+    minutes = parseInt(timePart.replace("M", "")) || 0;
+    }
+    return hours * 60 + minutes;
+};
 
 const getAccessToken = async (): Promise<string> => {
   const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
@@ -116,9 +131,9 @@ const formatDateForDisplay = (dateString?: string): string => {
 };
 
 function FlightSearchClientInternal() {
-  const searchParams = useSearchParams(); // from next/navigation
-  const router = useRouter(); // from next/navigation
-  const pathname = usePathname(); // from next/navigation
+  const searchParams = useSearchParams(); 
+  const router = useRouter(); 
+  const pathname = usePathname(); 
   const headerRef = useRef<HTMLElement>(null);
 
   const [flights, setFlights] = useState<FlightOffer[]>([]);
@@ -195,8 +210,23 @@ function FlightSearchClientInternal() {
     return () => resizeObserver.disconnect();
   }, []);
 
-  const initialMinPrice = useMemo(() => flights.length > 0 ? Math.floor(Math.min(...flights.map(f => parseFloat(f.price.total)))) : 0, [flights]);
-  const initialMaxPrice = useMemo(() => flights.length > 0 ? Math.ceil(Math.max(...flights.map(f => parseFloat(f.price.total)))) : 50000, [flights]);
+  const initialMinPrice = useMemo(() => {
+      const validPrices = flights
+        .map(f => parseFloat(f.price.total))
+        .filter(p => !isNaN(p));
+      return validPrices.length > 0 ? Math.floor(Math.min(...validPrices)) : 0;
+  }, [flights]);
+
+  const initialMaxPrice = useMemo(() => {
+      const validPrices = flights
+        .map(f => parseFloat(f.price.total))
+        .filter(p => !isNaN(p));
+      if (validPrices.length === 0) return 1; // Default if no valid prices
+      const maxP = Math.ceil(Math.max(...validPrices));
+      const minP = Math.floor(Math.min(...validPrices));
+      return maxP > minP ? maxP : minP + 1; // Ensure max > min
+  }, [flights]);
+  
   const [priceRange, setPriceRange] = useState<[number, number]>([initialMinPrice, initialMaxPrice]);
 
   useEffect(() => {
@@ -250,12 +280,17 @@ function FlightSearchClientInternal() {
         const token = await getAccessToken();
         const response = await getFlightOffers(token, apiQuery);
         
-        if (response.data.length > 0) {
-            const minVal = Math.floor(Math.min(...response.data.map(f => parseFloat(f.price.total))));
-            const maxVal = Math.ceil(Math.max(...response.data.map(f => parseFloat(f.price.total))));
+        const validPrices = response.data
+            .map(f => parseFloat(f.price.total))
+            .filter(p => !isNaN(p));
+
+        if (validPrices.length > 0) {
+            const minVal = Math.floor(Math.min(...validPrices));
+            let maxVal = Math.ceil(Math.max(...validPrices));
+            if (maxVal <= minVal) maxVal = minVal + 1; // Ensure max > min
             setPriceRange([minVal, maxVal]);
         } else {
-             setPriceRange([0,1]); // Set a small valid range if no flights
+            setPriceRange([0,1]); 
         }
         setFlights(response.data);
       } catch (err) {
@@ -266,20 +301,21 @@ function FlightSearchClientInternal() {
     };
 
     fetchFlights();
-  }, [queryOrigin, queryDestination, queryDepartureDate, queryReturnDate, queryAdults, queryChildren, queryInfants, queryTravelClass, queryNonStop, formIsRoundTrip, formReturnDate]); // Dependencies from user code
+  }, [queryOrigin, queryDestination, queryDepartureDate, queryReturnDate, queryAdults, queryChildren, queryInfants, queryTravelClass, queryNonStop, formIsRoundTrip, formReturnDate]); 
 
   useEffect(() => {
     let tempFiltered = [...flights];
 
-    if (flights.length > 0) {
+    if (flights.length > 0 && priceRange[1] >= priceRange[0]) {
         tempFiltered = tempFiltered.filter(flight => {
             const price = parseFloat(flight.price.total);
+            if (isNaN(price)) return false; 
             return price >= priceRange[0] && price <= priceRange[1];
         });
     }
     
     const activeStopFiltersEntries = Object.entries(stopFilters).filter(([_, val]) => val).map(([key, _]) => key);
-    if (activeStopFiltersEntries.length > 0 && activeStopFiltersEntries.length < 3) { // Only filter if not all stop options are true
+    if (activeStopFiltersEntries.length > 0 && activeStopFiltersEntries.length < 3) { 
         tempFiltered = tempFiltered.filter((flight) => {
             const stops = flight.itineraries[0].segments.length - 1;
             if (stopFilters["0"] && stops === 0) return true;
@@ -289,23 +325,15 @@ function FlightSearchClientInternal() {
         });
     }
 
-    const parseDuration = (durationStr: string) => {
-        const timePart = durationStr?.replace("PT", "") || "";
-        let hours = 0, minutes = 0;
-        if (timePart.includes("H")) {
-        const parts = timePart.split("H");
-        hours = parseInt(parts[0]) || 0;
-        if (parts[1]) {
-            minutes = parseInt(parts[1].replace("M", "")) || 0;
-        }
-        } else if (timePart.includes("M")) {
-        minutes = parseInt(timePart.replace("M", "")) || 0;
-        }
-        return hours * 60 + minutes;
-    };
-
     if (sortOption === "price") {
-      tempFiltered.sort((a, b) => parseFloat(a.price.total) - parseFloat(b.price.total));
+      tempFiltered.sort((a, b) => {
+          const priceA = parseFloat(a.price.total);
+          const priceB = parseFloat(b.price.total);
+          if (isNaN(priceA) && isNaN(priceB)) return 0;
+          if (isNaN(priceA)) return 1;
+          if (isNaN(priceB)) return -1;
+          return priceA - priceB;
+      });
     } else if (sortOption === "duration") {
       tempFiltered.sort((a, b) => {
         return parseDuration(a.itineraries[0].duration) - parseDuration(b.itineraries[0].duration);
@@ -322,7 +350,13 @@ function FlightSearchClientInternal() {
         const stopsB = b.itineraries[0].segments.length - 1;
         if (stopsA === 0 && stopsB !== 0) return -1;
         if (stopsA !== 0 && stopsB === 0) return 1;
-        return parseFloat(a.price.total) - parseFloat(b.price.total);
+        
+        const priceA = parseFloat(a.price.total);
+        const priceB = parseFloat(b.price.total);
+        if (isNaN(priceA) && isNaN(priceB)) return 0;
+        if (isNaN(priceA)) return 1;
+        if (isNaN(priceB)) return -1;
+        return priceA - priceB;
       });
     }
 
@@ -335,12 +369,14 @@ function FlightSearchClientInternal() {
   };
 
   const handleHeaderSearch = () => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
     params.set("originLocationCode", formOrigin.toUpperCase());
     params.set("destinationLocationCode", formDestination.toUpperCase());
     params.set("departureDate", formDepartureDate);
     if (formIsRoundTrip && formReturnDate) {
       params.set("returnDate", formReturnDate);
+    } else {
+      params.delete("returnDate");
     }
     params.set("adults", formAdults);
     params.set("children", formChildren);
@@ -350,15 +386,15 @@ function FlightSearchClientInternal() {
     const nonStopFilterApplied = stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"];
     if (nonStopFilterApplied) {
         params.set("nonStop", "true");
+    } else {
+        params.delete("nonStop");
     }
-    // Corrected navigation path
     router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleStopFilterChange = (stopKey: string) => {
     setStopFilters((prev) => {
       const newFilters = { ...prev, [stopKey]: !prev[stopKey] };
-      // Update URL if "nonStop" changes
       const currentParams = new URLSearchParams(searchParams.toString());
       const nonStopApplied = newFilters["0"] && !newFilters["1"] && !newFilters["2+"];
       if (nonStopApplied) {
@@ -373,16 +409,21 @@ function FlightSearchClientInternal() {
   
   const clearAllFilters = () => {
     setStopFilters({ "0": true, "1": true, "2+": true });
-    if (flights.length > 0) {
-        const minP = Math.floor(Math.min(...flights.map(f => parseFloat(f.price.total))));
-        const maxP = Math.ceil(Math.max(...flights.map(f => parseFloat(f.price.total))));
+    
+    const validPrices = flights
+        .map(f => parseFloat(f.price.total))
+        .filter(p => !isNaN(p));
+
+    if (validPrices.length > 0) {
+        const minP = Math.floor(Math.min(...validPrices));
+        let maxP = Math.ceil(Math.max(...validPrices));
+        if (maxP <= minP) maxP = minP +1;
         setPriceRange([minP, maxP]);
     } else {
         setPriceRange([0, 1]);
     }
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.delete("nonStop");
-    // Corrected navigation path
     router.push(`${pathname}?${currentParams.toString()}`);
   };
 
@@ -390,22 +431,20 @@ function FlightSearchClientInternal() {
     setActiveSortTab(tabKey);
     if (tabKey === "cheapest") setSortOption("price");
     else if (tabKey === "nonStopFirst") setSortOption("nonStopFirst");
-    else if (tabKey === "youMayPrefer") setSortOption("duration"); // Assuming "You May Prefer" sorts by duration
-    else if (tabKey === "otherSort") setSortOption("departure"); // Assuming "Other Sort" uses departure time
+    else if (tabKey === "youMayPrefer") setSortOption("duration"); 
+    else if (tabKey === "otherSort") setSortOption("departure"); 
   };
 
   const handleSelectFlight = (flightId: string, itineraryIdx: number) => {
     if (queryIsRoundTrip && itineraryIdx === 0 && !selectedOutbound) {
       setSelectedOutbound(flightId);
-      // Potentially scroll to top or show message
     } else {
-      // This is a placeholder for booking logic
       const selectedFlight = flights.find(f => f.id === flightId);
       if (selectedFlight) {
         const numAdults = parseInt(queryAdults);
         const pricePerAdult = numAdults > 0 ? (parseFloat(selectedFlight.price.total) / numAdults).toFixed(2) : parseFloat(selectedFlight.price.total).toFixed(2);
         alert(`Proceeding to book flight ${flightId} (Price: ₹${pricePerAdult}${numAdults > 0 ? ' per adult' : ''})`);
-        setSelectedOutbound(null); // Reset for next round trip search
+        setSelectedOutbound(null); 
       }
     }
   };
@@ -450,7 +489,7 @@ function FlightSearchClientInternal() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
         <Button
-            onClick={handleHeaderSearch} // Use the page's own search handler
+            onClick={handleHeaderSearch} 
             variant="outline"
             className="mt-8"
           >
@@ -811,7 +850,7 @@ function FlightSearchClientInternal() {
       <div className="max-w-screen-xl mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
         <aside 
           className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky self-start h-[calc(100vh-var(--header-actual-height,180px)-3rem)] overflow-y-auto pr-2"
-          style={{ top: `calc(${headerHeight}px + 1.5rem)` }} // Uses the dynamic headerHeight
+          style={{ top: `calc(${headerHeight}px + 1.5rem)` }} 
         > 
           <div className="bg-card border rounded-lg p-4 shadow-sm">
             <Collapsible open={isAppliedFiltersOpen} onOpenChange={setIsAppliedFiltersOpen} defaultOpen className="mb-4">
@@ -822,20 +861,17 @@ function FlightSearchClientInternal() {
                     <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-accent" onClick={clearAllFilters}>Clear All</Button>
                 </div>
                 <CollapsibleContent className="space-y-2 animate-slide-down">
-                    {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && ( // Only show if ONLY non-stop is selected
+                    {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && ( 
                         <div className="flex items-center justify-between p-1.5 bg-primary/10 rounded-md text-xs text-primary border border-primary/20">
                             <span>Non Stop</span>
                             <Button variant="ghost" size="icon" className="w-5 h-5" onClick={() => {
-                                // This should effectively "uncheck" non-stop by reverting to default or clearing the nonStop param
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
                                 router.push(`${pathname}?${currentParams.toString()}`);
-                                // Also reset local stopFilters state if needed to allow other selections
                                 setStopFilters({ "0": true, "1": true, "2+": true }); 
                             }}><X className="w-3 h-3"/></Button>
                         </div>
                     )}
-                    {/* TODO: Add display for other active filters like price range, airlines etc. */}
                 </CollapsibleContent>
             </Collapsible>
             <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
@@ -867,7 +903,6 @@ function FlightSearchClientInternal() {
                     {isDepartureAirportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
-                    {/* Placeholder for actual airport filters */}
                     <div className="flex items-center gap-2.5">
                         <Checkbox id="dep-airport-1" className="border-muted-foreground data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"/>
                         <label htmlFor="dep-airport-1" className="text-sm font-medium text-foreground hover:text-accent transition-colors cursor-pointer">Hindon Airport (DZKm)</label>
@@ -887,8 +922,8 @@ function FlightSearchClientInternal() {
               <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
                  <Slider
                     value={priceRange}
-                    min={initialMinPrice > 0 ? initialMinPrice : 0} // Ensure min is not negative
-                    max={initialMaxPrice > initialMinPrice ? initialMaxPrice : (initialMinPrice > 0 ? initialMinPrice + 100 : 1)} // Ensure max > min
+                    min={initialMinPrice}
+                    max={initialMaxPrice}
                     step={100}
                     onValueChange={(value) => setPriceRange(value as [number, number])} 
                     className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
@@ -902,7 +937,6 @@ function FlightSearchClientInternal() {
             </Collapsible>
           </div>
         </aside>
-        {/* Mobile Filters Sheet */}
         <div className="lg:hidden mb-4">
           <Sheet>
             <SheetTrigger asChild>
@@ -949,8 +983,8 @@ function FlightSearchClientInternal() {
                   <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
                      <Slider
                         value={priceRange}
-                        min={initialMinPrice > 0 ? initialMinPrice : 0}
-                        max={initialMaxPrice > initialMinPrice ? initialMaxPrice : (initialMinPrice > 0 ? initialMinPrice + 100 : 1)}
+                        min={initialMinPrice}
+                        max={initialMaxPrice}
                         step={100}
                         onValueChange={(value) => setPriceRange(value as [number, number])}
                         className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
@@ -1049,7 +1083,6 @@ function FlightSearchClientInternal() {
                               <div>
                                   <div className="text-sm font-semibold text-foreground">
                                       {itinerary.segments[0].carrierCode} Airlines 
-                                      {/* Placeholder for actual airline name if available in dictionaries */}
                                   </div>
                                   <div className="text-xxs text-muted-foreground">
                                       {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
@@ -1167,7 +1200,6 @@ function FlightSearchClientInternal() {
                                 </Collapsible>
                            </div>
                         </div>
-                        {/* Example discount banner */}
                         <div className="mt-2 text-center">
                             <p className="text-xs text-green-600 bg-green-50 p-1.5 rounded-md">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
@@ -1187,7 +1219,6 @@ function FlightSearchClientInternal() {
         </p>
         <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
       </footer>
-      {/* CSS Variable for header height */}
       <style jsx global>{`
         :root {
           --header-actual-height: ${headerHeight}px;
@@ -1212,3 +1243,5 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
+
+```
