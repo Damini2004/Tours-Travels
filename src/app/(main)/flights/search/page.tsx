@@ -1243,5 +1243,3 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
-
-```
