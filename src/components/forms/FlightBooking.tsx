@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Changed from useNavigate
 import { Plane, Building, Home as HomeIcon, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import Image from "next/image"; // Added for service icons if paths are used
 
 interface Location { city: string; code: string; airport: string; }
 interface PassengerCounts { adults: number; children: number; infants: number; }
@@ -27,8 +27,8 @@ const services = [
 const popularCities: Location[] = [
   { city: "Mumbai", code: "BOM", airport: "Chhatrapati Shivaji International Airport" },
   { city: "New Delhi", code: "DEL", airport: "Indira Gandhi International Airport" },
-  { city: "Bangkok", code: "BKK", airport: "Suvarnabhumi Airport" },
-  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru" },
+  { city: "Bangkok", code: "BKK", airport: "Suvarnabhumi Airport" }, // Updated airport name
+  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru" }, // Updated airport name
   { city: "Pune", code: "PNQ", airport: "Pune Airport" },
   { city: "Chennai", code: "MAA", airport: "Chennai International Airport" },
   { city: "Kolkata", code: "CCU", airport: "Netaji Subhas Chandra Bose International Airport" },
@@ -44,7 +44,7 @@ const fareTypes = [
   { id: "DoctorNurses", label: "Doctors/Nurses", description: "Up to ₹600 off" },
 ];
 
-const defaultPrice = 6000;
+const defaultPrice = 6000; // Used if specific date price isn't found
 const mockPrices: Record<string, number> = {
   "2025-06-01": 7790, "2025-06-02": 8270, "2025-06-03": 6952, "2025-06-04": 6373, "2025-06-05": 6952,
   "2025-06-06": 6373, "2025-06-07": 7790, "2025-06-08": 6373, "2025-06-09": 6365, "2025-06-10": 6263,
@@ -60,8 +60,8 @@ export function FlightBooking() {
   const initialDepartureDate = new Date("2025-06-03");
   const [state, setState] = useState({
     tripType: "oneWay" as "oneWay" | "roundTrip" | "multiCity",
-    from: popularCities.find(c => c.code === "DEL") || popularCities[1],
-    to: popularCities.find(c => c.code === "BLR") || popularCities[3],
+    from: popularCities.find(c => c.code === "DEL") || popularCities[1], // Default From
+    to: popularCities.find(c => c.code === "BLR") || popularCities[3],   // Default To
     departure: initialDepartureDate,
     return: undefined as Date | undefined,
     travellers: 1,
@@ -76,17 +76,19 @@ export function FlightBooking() {
     fromSearch: "",
     toSearch: "",
     passengers: { adults: 1, children: 0, infants: 0 } as PassengerCounts,
-    currentMonth: new Date(initialDepartureDate.getFullYear(), initialDepartureDate.getMonth(), 1),
+    currentMonth: new Date(initialDepartureDate.getFullYear(), initialDepartureDate.getMonth(), 1), // For calendar display
   });
 
-  const router = useRouter();
+  const router = useRouter(); // Changed from useNavigate
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+    // Ensure departure date is not in the past
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0,0,0,0); // Normalize to start of day
     if (state.departure < today) {
+        // Set to next valid day if current departure is in past
         const nextValidDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         updateState({
             departure: nextValidDate,
@@ -94,7 +96,7 @@ export function FlightBooking() {
         });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Run once on mount
 
 
   const updateState = (updates: Partial<typeof state>) => setState((prev) => ({ ...prev, ...updates }));
@@ -108,6 +110,7 @@ export function FlightBooking() {
     if (date) {
         const updates: Partial<typeof state> = { [type]: date, [`${type}Open`]: false };
         if (type === "departure") {
+            // When departure date changes, update currentMonth for calendar and reset return date if invalid
             updates.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
             if (state.return && date > state.return) {
                 updates.return = undefined;
@@ -147,7 +150,7 @@ export function FlightBooking() {
       children: state.passengers.children.toString(),
       infants: state.passengers.infants.toString(),
       travelClass: mapClass(state.travelClass),
-      nonStop: state.zeroCancel.toString(),
+      nonStop: state.zeroCancel.toString(), // Assuming zeroCancel maps to nonStop
     });
 
     if (state.tripType === "roundTrip" && state.return) {
@@ -156,7 +159,7 @@ export function FlightBooking() {
 
     router.push(`/flights/search?${params.toString()}`);
   };
-
+  
   const handleMonthChange = (direction: "prev" | "next") => {
     const newMonth = new Date(state.currentMonth);
     if (direction === "prev") {
@@ -164,33 +167,47 @@ export function FlightBooking() {
     } else {
         newMonth.setMonth(state.currentMonth.getMonth() + 1);
     }
+    
+    // Prevent navigating to months before today for departure or before selected departure for return
     const today = new Date();
     const firstDayOfCurrentDisplayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // Logic to prevent navigating to past months more carefully
     if ((state.departureOpen || (state.tripType === "roundTrip" && state.returnOpen && !state.departure)) && newMonth < firstDayOfCurrentDisplayMonth) {
+        return; // Don't allow navigating calendar to months before current real-world month for initial selection
+    }
+    // For return date, don't allow navigating before the month of the selected departure date
+    if (state.returnOpen && state.departure) {
+      const firstDayOfDepartureMonth = new Date(state.departure.getFullYear(), state.departure.getMonth(), 1);
+      if (newMonth < firstDayOfDepartureMonth) {
         return;
+      }
     }
     updateState({ currentMonth: newMonth });
   };
 
 
   if (!isClient) {
+    // Basic skeleton or null to prevent SSR issues with Popover/Calendar
     return (
-        <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
-            <div className="bg-gray-200 h-16"></div>
-            <div className="p-6 lg:p-8 space-y-6">
-                <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="h-16 bg-gray-200 rounded"></div>
-                    <div className="h-16 bg-gray-200 rounded"></div>
-                    <div className="h-16 bg-gray-200 rounded"></div>
-                    <div className="h-16 bg-gray-200 rounded"></div>
-                </div>
-                <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-                <div className="flex gap-2">
-                    {[1,2,3,4].map(i => <div key={i} className="h-16 bg-gray-200 rounded w-24"></div>)}
-                </div>
-                <div className="flex justify-center mt-6">
-                    <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div>
+        <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-4 sm:p-6 md:-top-16">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+                <div className="bg-gray-200 h-16"></div>
+                <div className="p-6 lg:p-8 space-y-6">
+                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="h-16 bg-gray-200 rounded"></div>
+                        <div className="h-16 bg-gray-200 rounded"></div>
+                        <div className="h-16 bg-gray-200 rounded"></div>
+                        <div className="h-16 bg-gray-200 rounded"></div>
+                    </div>
+                    <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+                    <div className="flex gap-2">
+                        {[1,2,3,4].map(i => <div key={i} className="h-16 bg-gray-200 rounded w-24"></div>)}
+                    </div>
+                    <div className="flex justify-center mt-6">
+                        <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -290,30 +307,37 @@ export function FlightBooking() {
             selected={state[type]}
             onSelect={(date) => handleDate(date, type)}
             month={state.currentMonth}
-            onMonthChange={(month) => updateState({ currentMonth: month })}
+            onMonthChange={(month) => updateState({ currentMonth: month })} // Allow DayPicker to manage month changes
             disabled={(date) => {
                 const today = new Date();
-                today.setHours(0,0,0,0);
+                today.setHours(0,0,0,0); // Normalize to start of day
                 if (type === "departure") return date < today;
                 if (type === "return" && state.departure) return date < state.departure;
-                if (type === "return" && !state.departure) return date < today;
+                if (type === "return" && !state.departure) return date < today; // If departure not set, disable past days
                 return false;
             }}
             components={{
               Day: ({ date, displayMonth }) => {
-                if (state.currentMonth && displayMonth.getMonth() !== state.currentMonth.getMonth()) {
+                // Only render days for the current displayMonth to avoid overflow issues with custom rendering
+                 if (state.currentMonth && displayMonth.getMonth() !== state.currentMonth.getMonth()) {
+                     // Render an empty placeholder for days not in the current month to maintain grid structure
                      return <div className="p-1.5 w-10 h-10 flex flex-col items-center justify-center"></div>;
-                }
+                 }
+
                 const price = getPrice(date);
                 const isSelected = state[type] && format(state[type]!, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                const isDisabled = (type === "departure" && date < today) || (type === "return" && state.departure && date < state.departure) || (type === "return" && !state.departure && date < today);
+                
+                const today = new Date(); today.setHours(0,0,0,0);
+                let isDisabled = false;
+                if (type === "departure") isDisabled = date < today;
+                else if (type === "return") {
+                    isDisabled = state.departure ? date < state.departure : date < today;
+                }
 
                 return (
                   <button
                     className={cn(
-                      "relative p-1.5 rounded w-10 h-10 flex flex-col items-center justify-center",
+                      "relative p-1.5 rounded w-10 h-10 flex flex-col items-center justify-center", // Adjusted padding and size
                       !isDisabled && "hover:bg-gray-100",
                       isSelected && !isDisabled && "bg-orange-500 text-white hover:bg-orange-600",
                       isDisabled && "text-gray-400 cursor-not-allowed"
@@ -346,7 +370,8 @@ export function FlightBooking() {
   );
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-4 sm:p-6 md:-top-16">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-4">
           <div className="flex overflow-x-auto scrollbar-hide space-x-4">
             {services.map((s, i) => {
@@ -355,18 +380,19 @@ export function FlightBooking() {
                 <button
                   key={i}
                   className={cn(
-                    "px-4 py-2 transition-all rounded-md",
+                    "px-4 py-2 transition-all rounded-md", // Added rounded-md for better appearance
                     s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]"
                   )}
-                  disabled={!s.active}
+                  disabled={!s.active} // Only current active tab is "Flights"
                 >
                   <div className="flex items-center space-x-1.5">
                     <div className="relative">
-                      {s.iconPath ? (
-                          <Image src={s.iconPath} alt={s.label} width={20} height={20} className="filter brightness-0 invert" data-ai-hint="travel icon" />
-                      ) : (
+                      {/* Using LucideIcon directly if available, else fallback to Image path */}
+                      {IconComponent ? (
                           <IconComponent className="w-5 h-5" />
-                      )}
+                      ) : s.iconPath ? (
+                          <Image src={s.iconPath} alt={s.label} width={20} height={20} className="filter brightness-0 invert" data-ai-hint="travel icon type" />
+                      ) : null}
                       {s.hasNew && (
                         <span className="absolute -top-1.5 -right-1.5 bg-pink-500 text-white text-[10px] px-1 py-0.5 rounded-full leading-none">
                           new
@@ -392,15 +418,16 @@ export function FlightBooking() {
                       value={type}
                       checked={state.tripType === type}
                       onChange={(e) => updateState({ tripType: e.target.value as typeof state.tripType })}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-400"
+                      className="w-4 h-4 text-orange-500 focus:ring-orange-400" // Updated color for consistency
                     />
                     <span className="ml-1.5 text-sm font-medium text-gray-700">{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
                   </label>
                 ))}
               </div>
+              {/* <div className="text-sm text-gray-600">Book Flights</div> Removed this as it's implicit */}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="md:col-span-2 flex items-center gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> {/* Changed from sm:grid-cols-2 */}
+              <div className="md:col-span-2 flex items-center gap-2"> {/* Changed from sm:col-span-2 */}
                 <LocationPopover type="from" />
                 <Button variant="ghost" size="sm" onClick={handleSwap} className="p-2 hover:bg-blue-50 rounded-full h-10 w-10 sm:h-12 sm:w-12 shrink-0">
                   <ArrowLeftRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
@@ -408,7 +435,7 @@ export function FlightBooking() {
                 <LocationPopover type="to" />
               </div>
               <DatePopover type="departure" />
-              {state.tripType === "roundTrip" ? <DatePopover type="return" /> : <div className="hidden lg:block"></div>}
+              {state.tripType === "roundTrip" ? <DatePopover type="return" /> : <div className="hidden lg:block"></div>} {/* Ensure placeholder takes space */}
 
               <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                 <PopoverTrigger asChild>
@@ -426,13 +453,13 @@ export function FlightBooking() {
                 <PopoverContent className="w-72 p-0">
                   <div className="p-4 space-y-4">
                     {[
-                        {key: "adults", label: "ADULTS (12y +)", options: [1, 2, 3, 4, 5, 6, 7, 8, 9]},
-                        {key: "children", label: "CHILDREN (2y - 12y)", options: [0, 1, 2, 3, 4, 5, 6]},
-                        {key: "infants", label: "INFANTS (below 2y)", options: [0, 1, 2, 3, 4]}
+                        {key: "adults", label: "ADULTS (12y +)", options: [1, 2, 3, 4, 5, 6, 7, 8, 9]}, // Max 9 adults
+                        {key: "children", label: "CHILDREN (2y - 12y)", options: [0, 1, 2, 3, 4, 5, 6]}, // Max 6 children
+                        {key: "infants", label: "INFANTS (below 2y)", options: [0, 1, 2, 3, 4]}    // Max 4 infants
                     ].map((item) => (
                       <div key={item.key} className="space-y-2">
                         <div className="font-semibold text-sm text-gray-700">{item.label}</div>
-                        <ScrollArea className="h-14">
+                        <ScrollArea className="h-14"> {/* Ensure scrollable if many options */}
                             <div className="flex gap-2 flex-wrap pb-2">
                             {item.options.map((num) => (
                                 <button
@@ -448,7 +475,7 @@ export function FlightBooking() {
                                 className={cn(
                                     "w-8 h-8 rounded text-xs font-medium border",
                                     state.passengers[item.key as keyof PassengerCounts] === num
-                                    ? "bg-orange-500 text-white border-orange-500"
+                                    ? "bg-orange-500 text-white border-orange-500" // Orange for selected
                                     : "bg-gray-100 hover:bg-gray-200 border-gray-200"
                                 )}
                                 >
@@ -467,7 +494,7 @@ export function FlightBooking() {
                             key={c}
                             onClick={() => updateState({ travelClass: c })}
                             className={cn(
-                              "px-3 py-1.5 rounded text-xs font-medium border",
+                              "px-3 py-1.5 rounded text-xs font-medium border", // py-1.5 for a bit more height
                               state.travelClass === c ? "bg-orange-500 text-white border-orange-500" : "bg-gray-100 hover:bg-gray-200 border-gray-200"
                             )}
                           >
@@ -479,7 +506,7 @@ export function FlightBooking() {
                     <div className="flex justify-end pt-2">
                       <Button
                         onClick={applyTravellers}
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-1.5 rounded-full text-sm"
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-1.5 rounded-full text-sm" // Orange button
                         disabled={totalPassengers() === 0}
                       >
                         Apply
@@ -492,14 +519,15 @@ export function FlightBooking() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-medium text-sm text-gray-700">Select a Fare Type:</span>
+                {/* <span className="bg-green-500 text-white text-xs px-1 py-0.5 rounded">Save</span> Optional save tag */}
               </div>
-              <ScrollArea className="pb-2">
-                <div className="flex gap-2 w-max">
+              <ScrollArea className="pb-2"> {/* Added pb-2 to prevent scrollbar cutting off content */}
+                <div className="flex gap-2 w-max"> {/* Use w-max to allow content to define width for scroll */}
                     {fareTypes.map((f) => (
                     <label
                         key={f.id}
                         className={cn(
-                        "border rounded-lg p-2.5 cursor-pointer min-w-[120px] flex-shrink-0",
+                        "border rounded-lg p-2.5 cursor-pointer min-w-[120px] flex-shrink-0", // Added flex-shrink-0
                         state.fareType === f.id ? "border-orange-500 bg-orange-50 text-orange-700 ring-1 ring-orange-500" : "border-gray-200 hover:border-gray-300"
                         )}
                     >
@@ -509,7 +537,7 @@ export function FlightBooking() {
                         value={f.id}
                         checked={state.fareType === f.id}
                         onChange={(e) => updateState({ fareType: e.target.value })}
-                        className="w-3.5 h-3.5 text-orange-500 focus:ring-orange-400 mb-1"
+                        className="w-3.5 h-3.5 text-orange-500 focus:ring-orange-400 mb-1" // Orange radio
                         />
                         <div className="text-sm font-semibold">{f.label}</div>
                         <div className="text-xs text-gray-500">{f.description}</div>
@@ -518,10 +546,10 @@ export function FlightBooking() {
                 </div>
               </ScrollArea>
             </div>
-            <div className="flex justify-center pt-2 sm:pt-4">
+            <div className="flex justify-center pt-2 sm:pt-4"> {/* Adjusted top padding */}
               <Button
                 onClick={search}
-                className="w-full sm:w-auto sm:min-w-[280px] h-12 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="w-full sm:w-auto sm:min-w-[280px] h-12 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-shadow" // Orange gradient button
               >
                 Search Flights
               </Button>
@@ -529,7 +557,6 @@ export function FlightBooking() {
           </div>
         </div>
       </div>
+    </div>
   );
 };
-
-    
