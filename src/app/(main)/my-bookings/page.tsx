@@ -3,9 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ListChecksIcon, BriefcaseIcon, Loader2Icon, HotelIcon, CalendarDaysIcon, UsersIcon, DollarSignIcon } from "lucide-react";
+import { ListChecksIcon, BriefcaseIcon, Loader2Icon, HotelIcon, CalendarDaysIcon, UsersIcon, DollarSignIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { Booking } from '@/lib/types';
@@ -77,10 +77,18 @@ export default function MyBookingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 text-center">
-        <BriefcaseIcon className="mx-auto h-12 w-12 text-primary mb-2" />
-        <h1 className="font-headline text-3xl md:text-4xl font-bold">My Bookings</h1>
-        <p className="text-muted-foreground">View and manage your hotel reservations.</p>
+      <div className="mb-8 flex flex-col sm:flex-row justify-between items-center">
+        <div className="text-center sm:text-left mb-4 sm:mb-0">
+            <BriefcaseIcon className="mx-auto sm:mx-0 h-12 w-12 text-primary mb-2" />
+            <h1 className="font-headline text-3xl md:text-4xl font-bold">My Bookings</h1>
+            <p className="text-muted-foreground">View and manage your hotel reservations.</p>
+        </div>
+        <Button asChild size="lg">
+            <Link href="/hotels/search">
+                <SearchIcon className="mr-2 h-5 w-5" />
+                Find More Hotels
+            </Link>
+        </Button>
       </div>
 
       {myBookings.length === 0 ? (
@@ -102,11 +110,12 @@ export default function MyBookingsPage() {
                     Find your next adventure and book your stay.
                 </AlertDescription>
             </Alert>
-            <div className="mt-6 flex justify-center gap-4">
+            {/* Button already present above, this specific one can be removed if redundant */}
+            {/* <div className="mt-6 flex justify-center gap-4">
                 <Button asChild>
                     <Link href="/hotels/search">Find Hotels</Link>
                 </Button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       ) : (
@@ -136,7 +145,12 @@ export default function MyBookingsPage() {
                 <p className="text-xs text-muted-foreground pt-1">Booked on: {format(new Date(booking.bookedAt), 'MMM d, yyyy, HH:mm')}</p>
                 <p className="text-xs text-muted-foreground">Booking ID: {booking.id}</p>
               </CardContent>
-              {/* Add CardFooter for actions like "Cancel Booking" or "View Hotel" if needed */}
+              <CardFooter>
+                <Button variant="outline" size="sm" asChild>
+                    <Link href={`/hotels/${booking.hotelId}`}>View Hotel</Link>
+                </Button>
+                {/* Add more actions if needed, e.g., Cancel Booking */}
+              </CardFooter>
             </Card>
           ))}
         </div>
