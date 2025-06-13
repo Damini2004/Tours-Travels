@@ -1,6 +1,7 @@
 
 import HeroSection from "@/components/hero/HeroSection";
-import { HotelSearchForm } from "@/components/forms/hotel-search-form";
+// HotelSearchForm import removed as the section is being removed
+// import { HotelSearchForm } from "@/components/forms/hotel-search-form";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
@@ -11,22 +12,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       
-      <section className="py-12 md:py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10 md:mb-12">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold text-foreground flex items-center justify-center">
-              <HotelIcon className="mr-3 h-8 w-8 text-primary" />
-              Find Your Perfect Stay
-            </h2>
-            <p className="text-muted-foreground mt-2 text-lg">
-              Search for hotels, resorts, and more for your next adventure.
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <HotelSearchForm />
-          </div>
-        </div>
-      </section>
+      {/* The "Find Your Perfect Stay" section below has been removed. */}
       
       <Separator className="my-8 md:my-12" />
 
