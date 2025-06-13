@@ -2,10 +2,9 @@
 "use client"; // Added "use client" as react-icons and event handlers likely need client-side rendering
 
 import React from 'react';
-import { Header } from "@/components/layout/header"; // Corrected import
-import Footer from '@/components/layout/Footer'; // Corrected import
+// Header and Footer imports removed as they are handled by MainLayout
 import PopularArticles from './PopularArticles'; // Assumed local component
-import { FaPhoneAlt, FaSearch, FaUser } from "react-icons/fa";
+// react-icons imports removed as they are not used in the current page content
 import ExclusiveOffer from "./ExclusiveOffer"; // Assumed local component
 
 const articles = [
@@ -57,7 +56,7 @@ const bottomArticles = [
 export default function InspirationPage() {
   return (
     <>
-      <Header />
+      {/* Header component removed from here */}
 
       <div className='bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]' >
         <div className=" text-white font-sans p-8 max-w-7xl mx-auto">
@@ -121,7 +120,7 @@ export default function InspirationPage() {
         <PopularArticles />
         <ExclusiveOffer /> 
       </div>
-      <Footer />
+      {/* Footer component removed from here */}
     </>
   );
 }
