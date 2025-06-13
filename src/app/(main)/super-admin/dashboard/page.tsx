@@ -3,19 +3,21 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, Trash2Icon, LineChartIcon, DollarSignIcon, ListChecks, ShieldCheckIcon, Loader2 } from "lucide-react";
+import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, LineChartIcon, DollarSignIcon, ListChecks, ShieldCheckIcon, Loader2, BriefcaseIcon } from "lucide-react";
 import { useState, useEffect, useCallback } from 'react';
-import type { Hotel } from '@/lib/types';
+import type { Hotel, Booking } from '@/lib/types';
 import { getHotels } from '@/lib/hotel-data';
+
+const BOOKINGS_DB_KEY = 'appBookingsDB';
 
 export default function SuperAdminDashboardPage() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [totalListings, setTotalListings] = useState(0);
+  const [totalBookings, setTotalBookings] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Placeholder for revenue, would come from a backend in a real app
-  const monthlyRevenue = 25000; 
+  const monthlyRevenue = 25000; // Placeholder
 
   const loadDashboardData = useCallback(() => {
     setIsLoading(true);
@@ -23,19 +25,26 @@ export default function SuperAdminDashboardPage() {
     const approvedHotels = allHotels.filter(h => h.isApproved);
     const hotelsPendingApproval = allHotels.filter(h => !h.isApproved);
 
-    setTotalListings(approvedHotels.length); // For now, listings are just approved hotels
+    setTotalListings(approvedHotels.length);
     setPendingApprovals(hotelsPendingApproval.length);
 
-    // User count (from localStorage, including super admin)
     if (typeof window !== "undefined") {
         const usersDBString = localStorage.getItem("usersDB");
         let users = usersDBString ? JSON.parse(usersDBString) : [];
-        // Add super admin if defined via env and not in usersDB
         const superAdminEmail = process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL;
         if (superAdminEmail && !users.find((u: any) => u.email === superAdminEmail)) {
             users.push({ email: superAdminEmail, role: "super_admin"});
         }
         setTotalUsers(users.length);
+
+        const bookingsDBString = localStorage.getItem(BOOKINGS_DB_KEY);
+        let bookings: Booking[] = [];
+        if (bookingsDBString) {
+            try {
+                bookings = JSON.parse(bookingsDBString);
+            } catch (e) { console.error("Error parsing bookings for SA dashboard", e); }
+        }
+        setTotalBookings(bookings.length);
     }
     setIsLoading(false);
   }, []);
@@ -91,7 +100,7 @@ export default function SuperAdminDashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Approved Listings</CardTitle>
+            <CardTitle className="text-sm font-medium">Approved Listings</CardTitle>
             <ListChecks className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -99,6 +108,19 @@ export default function SuperAdminDashboardPage() {
             <p className="text-xs text-muted-foreground">Live hotels on platform</p>
           </CardContent>
         </Card>
+         <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
+            <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalBookings}</div>
+            <p className="text-xs text-muted-foreground">Across all hotels</p>
+          </CardContent>
+        </Card>
+      </div>
+      
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Monthly Revenue (Placeholder)</CardTitle>
@@ -109,13 +131,15 @@ export default function SuperAdminDashboardPage() {
             <p className="text-xs text-muted-foreground">Estimated current month</p>
           </CardContent>
         </Card>
-      </div>
+       </div>
+
 
       <Alert>
         <LineChartIcon className="h-4 w-4" />
         <AlertTitle>Advanced Analytics Placeholder</AlertTitle>
         <AlertDescription>
           Detailed charts for user growth, booking trends, and revenue streams will be displayed here.
+          A view for all bookings could be added under a separate "Manage Bookings" tab for Super Admin.
         </AlertDescription>
       </Alert>
     </div>
