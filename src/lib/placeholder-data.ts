@@ -76,7 +76,9 @@ export const placeholderHotels: Hotel[] = [
     roomTypes: [
       { name: 'Standard Room', price: 250, features: ['Queen Bed', 'City View'] },
       { name: 'Deluxe Suite', price: 400, features: ['King Bed', 'Balcony', 'Jacuzzi'] },
-    ]
+    ],
+    ownerEmail: 'super.admin@example.com', // Or a generic super admin email
+    isApproved: true,
   },
   {
     id: 'HT002',
@@ -98,7 +100,9 @@ export const placeholderHotels: Hotel[] = [
      roomTypes: [
       { name: 'Tatami Room', price: 180, features: ['Futon Beds', 'Garden View'] },
       { name: 'Western Style Room', price: 220, features: ['Twin Beds', 'City View'] },
-    ]
+    ],
+    ownerEmail: 'bob@example.com', // Assuming bob@example.com is a hotel owner
+    isApproved: true,
   },
   {
     id: 'HT003',
@@ -120,7 +124,8 @@ export const placeholderHotels: Hotel[] = [
     roomTypes: [
       { name: 'Ocean View Room', price: 220, features: ['King Bed', 'Balcony'] },
       { name: 'Family Bungalow', price: 350, features: ['2 Bedrooms', 'Kitchenette'] },
-    ]
+    ],
+    ownerEmail: 'super.admin@example.com',
+    isApproved: true,
   },
 ];
-

@@ -1,28 +1,80 @@
 
 "use client";
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { placeholderHotels } from '@/lib/placeholder-data';
 import type { Hotel } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { HotelIcon as HotelBuildingIcon, MapPinIcon, StarIcon, CheckCircleIcon, XCircleIcon, BedDoubleIcon, CalendarDaysIcon, HeartIcon } from 'lucide-react';
+import { HotelIcon as HotelBuildingIcon, MapPinIcon, StarIcon, CheckCircleIcon, XCircleIcon, BedDoubleIcon, CalendarDaysIcon, HeartIcon, Loader2, ShieldAlertIcon } from 'lucide-react';
 import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect, useCallback } from 'react';
+import { getHotelById } from '@/lib/hotel-data';
+
+interface CurrentUser {
+  fullName: string;
+  email: string;
+  role: string;
+}
 
 export default function HotelDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const hotelId = params.hotelId as string;
-  const { addHotelToSaved, removeHotelFromSaved, isHotelSaved, isLoading } = useSavedItems();
+  const { addHotelToSaved, removeHotelFromSaved, isHotelSaved, isLoading: isLoadingSaved } = useSavedItems();
   const { toast } = useToast();
   
-  // In a real app, fetch hotel by ID
-  const hotel = placeholderHotels.find((h) => h.id === hotelId);
+  const [hotel, setHotel] = useState<Hotel | null | undefined>(undefined); // undefined for loading, null for not found
+  const [isLoadingHotel, setIsLoadingHotel] = useState(true);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [isAuthorizedToView, setIsAuthorizedToView] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedUser) {
+        try {
+          setCurrentUser(JSON.parse(storedUser));
+        } catch (e) { console.error("Failed to parse current user", e); }
+      }
+    }
+  }, []);
+
+  const fetchHotelDetails = useCallback(() => {
+    if (hotelId) {
+      setIsLoadingHotel(true);
+      const foundHotel = getHotelById(hotelId);
+      setHotel(foundHotel);
+      setIsLoadingHotel(false);
+    }
+  }, [hotelId]);
+
+  useEffect(() => {
+    fetchHotelDetails();
+  }, [fetchHotelDetails]);
+
+  useEffect(() => {
+    if (hotel === null || !hotel) { // If hotel not found or still undefined
+        setIsAuthorizedToView(false);
+        return;
+    }
+    if (hotel.isApproved) {
+        setIsAuthorizedToView(true);
+    } else if (currentUser) {
+        if (currentUser.role === 'super_admin' || currentUser.email === hotel.ownerEmail) {
+            setIsAuthorizedToView(true);
+        } else {
+            setIsAuthorizedToView(false);
+        }
+    } else {
+        setIsAuthorizedToView(false); // Not approved and no user logged in
+    }
+  }, [hotel, currentUser]);
+
 
   const handleToggleSave = () => {
     if (!hotel) return;
@@ -41,7 +93,7 @@ export default function HotelDetailPage() {
     }
   };
 
-  if (isLoading && !hotel) {
+  if (isLoadingHotel || isLoadingSaved) {
      return (
       <div className="container mx-auto px-4 py-8">
         <Skeleton className="h-12 w-3/4 mb-4" />
@@ -60,17 +112,41 @@ export default function HotelDetailPage() {
     )
   }
 
-  if (!hotel) {
+  if (hotel === null) { // Explicitly checking for null (not found by getHotelById)
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert variant="destructive">
           <XCircleIcon className="h-4 w-4" />
           <AlertTitle>Hotel Not Found</AlertTitle>
-          <AlertDescription>The hotel you are looking for does not exist or has been removed.</AlertDescription>
+          <AlertDescription>The hotel you are looking for (ID: {hotelId}) does not exist or has been removed.</AlertDescription>
         </Alert>
       </div>
     );
   }
+  
+  if (!isAuthorizedToView) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Alert variant="destructive">
+          <ShieldAlertIcon className="h-4 w-4" />
+          <AlertTitle>Access Denied or Hotel Not Available</AlertTitle>
+          <AlertDescription>
+            This hotel is currently not approved for public viewing, or you do not have permission to view it.
+            {!hotel?.isApproved && currentUser?.role === 'hotel_owner' && currentUser?.email === hotel?.ownerEmail && (
+                <span className="block mt-2 text-sm">Your hotel '{hotel.name}' is still pending Super Admin approval.</span>
+            )}
+          </AlertDescription>
+           <Button onClick={() => router.back()} className="mt-4">Go Back</Button>
+        </Alert>
+      </div>
+    );
+  }
+  
+  // Hotel exists and user is authorized to view
+  if (!hotel) { // Should not happen if isAuthorizedToView is true, but as a fallback
+      return <div className="container mx-auto px-4 py-8"><Loader2 className="h-8 w-8 animate-spin"/></div>
+  }
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -81,6 +157,9 @@ export default function HotelDetailPage() {
                 <p className="text-lg text-muted-foreground flex items-center">
                     <MapPinIcon className="mr-2 h-5 w-5" /> {hotel.location}
                 </p>
+                {!hotel.isApproved && (
+                    <Badge variant="destructive" className="mt-1">Pending Approval</Badge>
+                )}
             </div>
             <div className="flex items-center mt-1">
                 {[...Array(5)].map((_, i) => (
@@ -105,7 +184,6 @@ export default function HotelDetailPage() {
                   data-ai-hint={hotel.imageHints?.[0] || "hotel interior"} 
                 />
               </div>
-              {/* Could add a small gallery preview here */}
             </Card>
           )}
 
@@ -174,12 +252,16 @@ export default function HotelDetailPage() {
                   <p className="text-sm flex items-center"><CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Check-in: {hotel.checkInTime || 'N/A'}</p>
                   <p className="text-sm flex items-center"><CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Check-out: {hotel.checkOutTime || 'N/A'}</p>
               </div>
-              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">Check Availability</Button>
+              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                {/* This button will be updated for booking logic later */}
+                Check Availability / Book
+              </Button>
                <Button 
                 variant="outline" 
                 size="lg" 
                 className="w-full mt-2"
                 onClick={handleToggleSave}
+                disabled={isLoadingSaved}
               >
                 <HeartIcon className={`mr-2 h-5 w-5 ${isHotelSaved(hotel.id) ? 'fill-accent text-accent' : ''}`} />
                 {isHotelSaved(hotel.id) ? 'Saved' : 'Save Hotel'}

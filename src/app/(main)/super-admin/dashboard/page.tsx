@@ -3,14 +3,54 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, Trash2Icon, LineChartIcon, DollarSignIcon, ListChecks, ShieldCheckIcon } from "lucide-react";
+import { LayoutDashboard, UsersIcon, HotelIcon as HotelBuildingIcon, FileCheckIcon, Trash2Icon, LineChartIcon, DollarSignIcon, ListChecks, ShieldCheckIcon, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback } from 'react';
+import type { Hotel } from '@/lib/types';
+import { getHotels } from '@/lib/hotel-data';
 
 export default function SuperAdminDashboardPage() {
-  // Placeholder data
-  const totalUsers = 150;
-  const pendingApprovals = 5;
-  const totalListings = 75; // Hotels + Flights
-  const monthlyRevenue = 25000;
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [pendingApprovals, setPendingApprovals] = useState(0);
+  const [totalListings, setTotalListings] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Placeholder for revenue, would come from a backend in a real app
+  const monthlyRevenue = 25000; 
+
+  const loadDashboardData = useCallback(() => {
+    setIsLoading(true);
+    const allHotels = getHotels();
+    const approvedHotels = allHotels.filter(h => h.isApproved);
+    const hotelsPendingApproval = allHotels.filter(h => !h.isApproved);
+
+    setTotalListings(approvedHotels.length); // For now, listings are just approved hotels
+    setPendingApprovals(hotelsPendingApproval.length);
+
+    // User count (from localStorage, including super admin)
+    if (typeof window !== "undefined") {
+        const usersDBString = localStorage.getItem("usersDB");
+        let users = usersDBString ? JSON.parse(usersDBString) : [];
+        // Add super admin if defined via env and not in usersDB
+        const superAdminEmail = process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL;
+        if (superAdminEmail && !users.find((u: any) => u.email === superAdminEmail)) {
+            users.push({ email: superAdminEmail, role: "super_admin"});
+        }
+        setTotalUsers(users.length);
+    }
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -41,7 +81,7 @@ export default function SuperAdminDashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
+            <CardTitle className="text-sm font-medium">Pending Hotel Approvals</CardTitle>
             <FileCheckIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -51,17 +91,17 @@ export default function SuperAdminDashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Listings</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Approved Listings</CardTitle>
             <ListChecks className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalListings}</div>
-            <p className="text-xs text-muted-foreground">Active hotels & flights</p>
+            <p className="text-xs text-muted-foreground">Live hotels on platform</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">Monthly Revenue (Placeholder)</CardTitle>
             <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>

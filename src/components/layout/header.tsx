@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Menu, Phone, Heart, ChevronDown, Search as SearchIcon, LogInIcon, UserPlusIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListChecksIcon, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon } from 'lucide-react';
+import { Menu, Phone, Heart, ChevronDown, Search as SearchIcon, LogInIcon, UserPlusIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListChecksIcon, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon, HotelIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -24,8 +24,8 @@ interface CurrentUser {
 
 const navItems = [
   { label: 'Home', to: '/' },
-  { label: 'Hotels', to: '/hotels/search' }, // Adjusted to existing search page
-  { label: 'Flights', to: '/flights/search' }, // Adjusted to existing search page
+  { label: 'Hotels', to: '/hotels/search' }, 
+  { label: 'Flights', to: '/flights/search' }, 
   { label: 'Tours & Cruises', to: '/tours' },
   { label: 'Ultra Lux', to: '/ultra-lux' },
   { label: 'Inspiration', to: '/inspiration' },
@@ -103,6 +103,7 @@ export function Header() {
 
   const superAdminLinks = currentUser?.role === 'super_admin' ? [
     { label: 'Overview', to: '/super-admin/dashboard', icon: LayoutDashboard },
+    { label: 'Manage Platform Hotels', to: '/super-admin/manage-platform-hotels', icon: HotelIcon },
     { label: 'Manage Users', to: '/super-admin/manage-users', icon: UsersIcon },
     { label: 'Approve Hotels', to: '/super-admin/approve-hotels', icon: FileCheckIcon },
     { label: 'Remove Listings', to: '/super-admin/remove-listings', icon: Trash2Icon },
@@ -207,7 +208,8 @@ export function Header() {
                     {hotelOwnerLinks.map(link => (
                          <DropdownMenuItem key={link.to} asChild className="cursor-pointer hover:bg-gray-100">
                             <Link href={link.to} className="flex items-center w-full px-3 py-2 text-[#1a1a1a]">
-                                <link.icon className="mr-2 h-4 w-4" />{link.label}
+                                {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+                                {link.label}
                             </Link>
                         </DropdownMenuItem>
                     ))}
@@ -220,7 +222,8 @@ export function Header() {
                      {superAdminLinks.map(link => (
                          <DropdownMenuItem key={link.to} asChild className="cursor-pointer hover:bg-gray-100">
                             <Link href={link.to} className="flex items-center w-full px-3 py-2 text-[#1a1a1a]">
-                                <link.icon className="mr-2 h-4 w-4" />{link.label}
+                                {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+                                {link.label}
                             </Link>
                         </DropdownMenuItem>
                     ))}
@@ -256,7 +259,7 @@ export function Header() {
                     <LogInIcon className="h-5 w-5" />
                 </Button>
             )}
-             {isClient && currentUser && ( // Placeholder for user icon if needed, though sidebar handles auth
+             {isClient && currentUser && ( 
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0" onClick={() => setSidebarOpen(true)}>
                    <UserCircle className="h-6 w-6 text-[#1a1a1a]" />
                 </Button>

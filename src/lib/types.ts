@@ -33,6 +33,8 @@ export interface Hotel {
   checkInTime?: string;
   checkOutTime?: string;
   roomTypes?: { name: string; price: number; features: string[] }[];
+  ownerEmail?: string; // Email of the Hotel Owner
+  isApproved?: boolean; // Approval status by Super Admin
 }
 
 export interface SavedItemContextType {
@@ -44,6 +46,21 @@ export interface SavedItemContextType {
   addHotelToSaved: (hotel: Hotel) => void;
   removeHotelFromSaved: (hotelId: string) => void;
   isHotelSaved: (hotelId: string) => boolean;
+}
+
+export interface Booking {
+  id: string; // Unique booking ID, e.g., timestamp or UUID
+  userId: string; // Email of the user who booked
+  hotelId: string;
+  hotelName: string;
+  hotelLocation: string;
+  hotelOwnerEmail?: string;
+  checkInDate: string; // ISO Date string
+  checkOutDate: string; // ISO Date string
+  guests: number;
+  totalPrice: number;
+  bookedAt: string; // ISO DateTime string
+  status: 'Confirmed' | 'Pending' | 'Cancelled';
 }
 
 // --- Amadeus API Types (Simplified) ---
