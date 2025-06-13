@@ -431,8 +431,8 @@ function FlightSearchClientInternal() {
     setActiveSortTab(tabKey);
     if (tabKey === "cheapest") setSortOption("price");
     else if (tabKey === "nonStopFirst") setSortOption("nonStopFirst");
-    else if (tabKey === "youMayPrefer") setSortOption("duration"); 
-    else if (tabKey === "otherSort") setSortOption("departure"); 
+    else if (tabKey === "youMayPrefer") setSortOption("duration"); // Placeholder, actual logic might be more complex
+    else if (tabKey === "otherSort") setSortOption("departure"); // Placeholder
   };
 
   const handleSelectFlight = (flightId: string, itineraryIdx: number) => {
@@ -850,7 +850,7 @@ function FlightSearchClientInternal() {
       <div className="max-w-screen-xl mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
         <aside 
           className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky self-start h-[calc(100vh-var(--header-actual-height,180px)-3rem)] overflow-y-auto pr-2"
-          style={{ top: `calc(${headerHeight}px + 1.5rem)` }} 
+          style={{ top: `calc(${headerHeight}px + 1.5rem)` }}
         > 
           <div className="bg-card border rounded-lg p-4 shadow-sm">
             <Collapsible open={isAppliedFiltersOpen} onOpenChange={setIsAppliedFiltersOpen} defaultOpen className="mb-4">
@@ -861,14 +861,14 @@ function FlightSearchClientInternal() {
                     <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-accent" onClick={clearAllFilters}>Clear All</Button>
                 </div>
                 <CollapsibleContent className="space-y-2 animate-slide-down">
-                    {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && ( 
+                    {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && (
                         <div className="flex items-center justify-between p-1.5 bg-primary/10 rounded-md text-xs text-primary border border-primary/20">
                             <span>Non Stop</span>
                             <Button variant="ghost" size="icon" className="w-5 h-5" onClick={() => {
+                                setStopFilters({ "0": true, "1": true, "2+": true }); // Reset to show all
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
                                 router.push(`${pathname}?${currentParams.toString()}`);
-                                setStopFilters({ "0": true, "1": true, "2+": true }); 
                             }}><X className="w-3 h-3"/></Button>
                         </div>
                     )}
@@ -1243,3 +1243,4 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
+make this same as it is in my flight search page
