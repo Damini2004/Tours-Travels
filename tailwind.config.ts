@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -5,7 +6,7 @@ export default {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}', // This will cover (super-admin) too
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}', 
   ],
   theme: {
     extend: {
@@ -15,6 +16,7 @@ export default {
         code: ['monospace'],
       },
       colors: {
+        // Theme colors (can be overridden by globals.css)
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -65,6 +67,10 @@ export default {
           border: 'hsl(var(--border))',
           ring: 'hsl(var(--ring))',
         },
+        // Specific colors from the new header design
+        // These might override theme if used directly, e.g. text-[#1a1a1a]
+        // It's generally better to map these to theme variables if possible,
+        // but for a direct replacement of a specific design, sometimes direct hex is used.
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -97,3 +103,4 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
+

@@ -2,8 +2,9 @@
 "use client";
 
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Menu, Phone, Heart, ChevronDown, Search as SearchIcon, LogInIcon, UserPlusIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListChecksIcon, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,18 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
-import {
-  PlaneIcon, HotelIcon, LogInIcon, UserPlusIcon, HeartIcon, ListChecksIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon, MenuIcon
-} from 'lucide-react';
+import { Sidebar } from './Sidebar'; // New Sidebar component
 
 interface CurrentUser {
   fullName: string;
@@ -32,12 +22,22 @@ interface CurrentUser {
   role: string;
 }
 
+const navItems = [
+  { label: 'Home', to: '/' },
+  { label: 'Hotels', to: '/hotels/search' }, // Adjusted to existing search page
+  { label: 'Flights', to: '/flights/search' }, // Adjusted to existing search page
+  { label: 'Tours & Cruises', to: '/tours' },
+  { label: 'Ultra Lux', to: '/ultra-lux' },
+  { label: 'Inspiration', to: '/inspiration' },
+];
+
 export function Header() {
-  const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -63,246 +63,224 @@ export function Header() {
 
   useEffect(() => {
     if (!isClient) return;
-
-    loadUser(); 
-
+    loadUser();
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === "currentUser") {
-        loadUser(); 
-      }
+      if (event.key === "currentUser") loadUser();
     };
-
-    const handleAuthChange = () => {
-        loadUser(); 
-    };
-
+    const handleAuthChange = () => loadUser();
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('authChange', handleAuthChange);
-    
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('authChange', handleAuthChange);
     };
-
   }, [isClient, pathname, loadUser]);
-
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("currentUser");
-      window.dispatchEvent(new CustomEvent('authChange')); 
+      window.dispatchEvent(new CustomEvent('authChange'));
     }
-    setCurrentUser(null); 
-    setIsMobileMenuOpen(false); // Close mobile menu on logout
-    router.push('/'); 
-    router.refresh(); 
+    setCurrentUser(null);
+    setSidebarOpen(false);
+    router.push('/');
+    router.refresh();
   };
 
-  const NavLinkButton = ({ href, children, icon: Icon }: { href: string; children: React.ReactNode; icon?: React.ElementType }) => (
-    <Button variant="ghost" asChild className="w-full justify-start text-base py-3" onClick={() => setIsMobileMenuOpen(false)}>
-      <Link href={href}>
-        {Icon && <Icon className="mr-3 h-5 w-5" />}
-        {children}
-      </Link>
-    </Button>
-  );
+  const commonNavLinks = navItems;
+  const userSpecificLinks = currentUser ? [
+    { label: 'Saved', to: '/saved', icon: Heart },
+    { label: 'My Bookings', to: '/my-bookings', icon: ListChecksIcon },
+  ] : [];
+  
+  const hotelOwnerLinks = currentUser?.role === 'hotel_owner' ? [
+    { label: 'Analytics', to: '/hotel-owner/dashboard', icon: LayoutDashboard },
+    { label: 'Register Hotel', to: '/hotel-owner/register-hotel', icon: HotelIcon },
+    { label: 'My Hotels', to: '/hotel-owner/my-hotels', icon: ListChecksIcon },
+    { label: 'Manage Bookings', to: '/hotel-owner/manage-bookings', icon: ListOrdered },
+    { label: 'Earnings', to: '/hotel-owner/earnings', icon: DollarSign },
+  ] : [];
 
+  const superAdminLinks = currentUser?.role === 'super_admin' ? [
+    { label: 'Overview', to: '/super-admin/dashboard', icon: LayoutDashboard },
+    { label: 'Manage Users', to: '/super-admin/manage-users', icon: UsersIcon },
+    { label: 'Approve Hotels', to: '/super-admin/approve-hotels', icon: FileCheckIcon },
+    { label: 'Remove Listings', to: '/super-admin/remove-listings', icon: Trash2Icon },
+    { label: 'Revenue Reports', to: '/super-admin/revenue-reports', icon: LineChartIcon },
+  ] : [];
 
-  if (!isClient) {
-    return (
-      <header className="bg-background/80 text-foreground shadow-md backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-          <Link href="/" className="flex items-center gap-2" prefetch={false}>
-            <span className="text-xl font-headline font-semibold text-primary">Hotel&Tour</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <div className="h-9 w-20 rounded-md bg-muted animate-pulse" />
-            <div className="h-9 w-24 rounded-md bg-muted animate-pulse" />
-          </div>
-        </div>
-      </header>
-    );
-  }
 
   return (
-    <header className="bg-background/80 text-foreground shadow-md backdrop-blur-md sticky top-0 z-50">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" prefetch={false} onClick={() => setIsMobileMenuOpen(false)}>
-          <span className="text-xl font-headline font-semibold text-primary">Hotel&Tour</span>
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 md:flex">
-          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-            <Link href="/hotels/search" prefetch={false}><HotelIcon className="mr-2 h-4 w-4" />Hotels</Link>
-          </Button>
-          <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-            <Link href="/flights/search" prefetch={false}><PlaneIcon className="mr-2 h-4 w-4" />Flights</Link>
-          </Button>
-          {currentUser && (
-            <>
-              <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-                <Link href="/saved" prefetch={false}><HeartIcon className="mr-2 h-4 w-4" />Saved</Link>
-              </Button>
-              <Button variant="ghost" className="text-foreground hover:bg-muted/50" asChild>
-                <Link href="/my-bookings" prefetch={false}><ListChecksIcon className="mr-2 h-4 w-4" />My Bookings</Link>
-              </Button>
-            </>
-          )}
+    <div className="relative border-b border-gray-200 text-[#1a1a1a] bg-white">
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)}
+        navItems={commonNavLinks}
+        currentUser={currentUser}
+        userSpecificLinks={userSpecificLinks}
+        hotelOwnerLinks={hotelOwnerLinks}
+        superAdminLinks={superAdminLinks}
+        onLogout={handleLogout}
+      />
 
-          {currentUser?.role === 'hotel_owner' && (
-            <DropdownMenu>
+      {sidebarOpen && isClient && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div className="flex justify-between items-center text-sm px-4 py-1 text-[#555]">
+        <div className="flex gap-4">
+          <span>Google 4.7/5</span>
+          <span>·</span>
+          <span>Trustpilot 4.8/5</span>
+        </div>
+        <div className="flex items-center gap-1 cursor-pointer">
+          <span>Contact us 7 days</span>
+          <Phone className="text-xs" />
+          <span className="font-medium">+91 803 783 5334</span>
+          <ChevronDown className="text-base" />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+            <Menu className="text-2xl text-[#1a1a1a] cursor-pointer" />
+          </button>
+          <Link href="/" className="text-2xl font-bold tracking-tight">
+            <span className="text-black">LUXURY</span>
+            <span className="text-black font-extrabold">ESCAPES</span>
+          </Link>
+        </div>
+
+        <div className="flex-1 max-w-2xl mx-6 hidden md:flex items-center bg-[#f2f2f2] rounded-md px-4 py-2">
+          <SearchIcon className="text-gray-500 w-5 h-5 mr-2" />
+          <input
+            type="text"
+            placeholder="Search our exclusive travel offers"
+            className="bg-transparent w-full focus:outline-none text-sm placeholder:text-[#333]"
+          />
+        </div>
+
+        <div className="items-center gap-3 text-sm hidden md:flex">
+          <div className="flex items-center gap-1 cursor-pointer">
+            <span role="img" aria-label="flag">🇮🇳</span>
+            <span>INR</span>
+            <ChevronDown className="text-base" />
+          </div>
+          <Link href="/saved" className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#005aa7]" aria-label="Trip Plans">
+            <Heart className="text-lg" />
+            <span className="hidden lg:inline">Trip Plans</span>
+          </Link>
+
+          {isClient && currentUser ? (
+             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground hover:bg-muted/50">
-                  <BriefcaseIcon className="mr-2 h-4 w-4" /> Hotel Owner
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
+                   <UserCircle className="h-7 w-7 text-[#1a1a1a]" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Owner Dashboard</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/hotel-owner/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Analytics</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/hotel-owner/register-hotel"><HotelIcon className="mr-2 h-4 w-4" />Register Hotel</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/hotel-owner/my-hotels"><ListChecksIcon className="mr-2 h-4 w-4" />My Hotels</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/hotel-owner/manage-bookings"><ListOrdered className="mr-2 h-4 w-4" />Manage Bookings</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/hotel-owner/earnings"><DollarSign className="mr-2 h-4 w-4" />Earnings</Link></DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-
-          {currentUser?.role === 'super_admin' && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-foreground hover:bg-muted/50">
-                  <ShieldCheckIcon className="mr-2 h-4 w-4" /> Super Admin
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Admin Panel</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/super-admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Overview</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/super-admin/manage-users"><UsersIcon className="mr-2 h-4 w-4" />Manage Users</Link></DropdownMenuItem>
-                 <DropdownMenuItem asChild><Link href="/super-admin/approve-hotels"><FileCheckIcon className="mr-2 h-4 w-4" />Approve Hotels</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/super-admin/remove-listings"><Trash2Icon className="mr-2 h-4 w-4" />Remove Listings</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/super-admin/revenue-reports"><LineChartIcon className="mr-2 h-4 w-4" />Revenue Reports</Link></DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </nav>
-
-        {/* Desktop Auth Section */}
-        <div className="hidden md:flex items-center gap-2">
-          {currentUser ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                   <UserCircle className="h-6 w-6" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
+              <DropdownMenuContent className="w-60 bg-white border-gray-200 shadow-lg" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal px-3 py-2">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{currentUser.fullName}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {currentUser.email} ({currentUser.role.replace('_', ' ')})
+                    <p className="text-sm font-medium leading-none text-[#1a1a1a]">{currentUser.fullName}</p>
+                    <p className="text-xs leading-none text-[#555]">
+                      {currentUser.email}
+                    </p>
+                     <p className="text-xs leading-none text-[#555] capitalize pt-1">
+                      Role: {currentUser.role.replace('_', ' ')}
                     </p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuSeparator className="bg-gray-200"/>
+                <DropdownMenuItem asChild className="cursor-pointer hover:bg-gray-100">
+                    <Link href="/my-bookings" className="flex items-center w-full px-3 py-2 text-[#1a1a1a]">
+                        <ListChecksIcon className="mr-2 h-4 w-4" />My Bookings
+                    </Link>
+                </DropdownMenuItem>
+                {currentUser.role === 'hotel_owner' && (
+                  <>
+                    <DropdownMenuSeparator className="bg-gray-200"/>
+                    <DropdownMenuLabel className="px-3 py-2 text-xs text-[#555]">Hotel Owner</DropdownMenuLabel>
+                    {hotelOwnerLinks.map(link => (
+                         <DropdownMenuItem key={link.to} asChild className="cursor-pointer hover:bg-gray-100">
+                            <Link href={link.to} className="flex items-center w-full px-3 py-2 text-[#1a1a1a]">
+                                <link.icon className="mr-2 h-4 w-4" />{link.label}
+                            </Link>
+                        </DropdownMenuItem>
+                    ))}
+                  </>
+                )}
+                {currentUser.role === 'super_admin' && (
+                  <>
+                    <DropdownMenuSeparator className="bg-gray-200"/>
+                     <DropdownMenuLabel className="px-3 py-2 text-xs text-[#555]">Super Admin</DropdownMenuLabel>
+                     {superAdminLinks.map(link => (
+                         <DropdownMenuItem key={link.to} asChild className="cursor-pointer hover:bg-gray-100">
+                            <Link href={link.to} className="flex items-center w-full px-3 py-2 text-[#1a1a1a]">
+                                <link.icon className="mr-2 h-4 w-4" />{link.label}
+                            </Link>
+                        </DropdownMenuItem>
+                    ))}
+                  </>
+                )}
+                <DropdownMenuSeparator className="bg-gray-200"/>
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer hover:bg-gray-100 flex items-center px-3 py-2 text-red-600">
                   <LogOutIcon className="mr-2 h-4 w-4" />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          ) : isClient ? (
+            <>
+              <Button onClick={() => router.push('/login')} variant="outline" className="border-[#1a1a1a] text-[#1a1a1a] px-4 py-1.5 rounded-md hover:bg-gray-100 text-sm h-auto">
+                Log in
+              </Button>
+              <Button onClick={() => router.push('/signup')} className="bg-[#1a1a1a] text-white px-4 py-1.5 rounded-md hover:bg-[#333] text-sm h-auto">
+                Sign Up
+              </Button>
+            </>
           ) : (
             <>
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
-                <Link href="/login" prefetch={false}><LogInIcon className="mr-2 h-4 w-4" />Log In</Link>
-              </Button>
-              <Button variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-                <Link href="/signup" prefetch={false}><UserPlusIcon className="mr-2 h-4 w-4" />Sign Up</Link>
-              </Button>
+              <div className="h-8 w-16 rounded-md bg-gray-200 animate-pulse" />
+              <div className="h-8 w-20 rounded-md bg-gray-200 animate-pulse" />
             </>
           )}
         </div>
-
-        {/* Mobile Menu Trigger */}
-        <div className="md:hidden">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MenuIcon className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] p-0 pt-4 flex flex-col">
-              <SheetHeader className="px-4 pb-2 border-b">
-                <SheetTitle className="text-left">
-                    <Link href="/" className="text-xl font-headline font-semibold text-primary" onClick={() => setIsMobileMenuOpen(false)}>Hotel&Tour</Link>
-                </SheetTitle>
-              </SheetHeader>
-              <div className="flex-grow overflow-y-auto p-4 space-y-1">
-                <NavLinkButton href="/hotels/search" icon={HotelIcon}>Hotels</NavLinkButton>
-                <NavLinkButton href="/flights/search" icon={PlaneIcon}>Flights</NavLinkButton>
-
-                {currentUser && (
-                  <>
-                    <NavLinkButton href="/saved" icon={HeartIcon}>Saved</NavLinkButton>
-                    <NavLinkButton href="/my-bookings" icon={ListChecksIcon}>My Bookings</NavLinkButton>
-                    
-                    <Separator className="my-3" />
-                    <div className="px-2 py-1.5">
-                        <p className="text-sm font-medium leading-none">{currentUser.fullName}</p>
-                        <p className="text-xs leading-none text-muted-foreground mt-1">
-                          {currentUser.email}
-                        </p>
-                         <p className="text-xs leading-none text-muted-foreground mt-1 capitalize">
-                          Role: {currentUser.role.replace('_', ' ')}
-                        </p>
-                    </div>
-
-                    {currentUser.role === 'hotel_owner' && (
-                      <>
-                        <Separator className="my-3" />
-                        <p className="px-2 pt-2 pb-1 text-sm font-semibold text-muted-foreground">Hotel Owner</p>
-                        <NavLinkButton href="/hotel-owner/dashboard" icon={LayoutDashboard}>Analytics</NavLinkButton>
-                        <NavLinkButton href="/hotel-owner/register-hotel" icon={HotelIcon}>Register Hotel</NavLinkButton>
-                        <NavLinkButton href="/hotel-owner/my-hotels" icon={ListChecksIcon}>My Hotels</NavLinkButton>
-                        <NavLinkButton href="/hotel-owner/manage-bookings" icon={ListOrdered}>Manage Bookings</NavLinkButton>
-                        <NavLinkButton href="/hotel-owner/earnings" icon={DollarSign}>Earnings</NavLinkButton>
-                      </>
-                    )}
-
-                    {currentUser.role === 'super_admin' && (
-                      <>
-                        <Separator className="my-3" />
-                        <p className="px-2 pt-2 pb-1 text-sm font-semibold text-muted-foreground">Super Admin</p>
-                        <NavLinkButton href="/super-admin/dashboard" icon={LayoutDashboard}>Overview</NavLinkButton>
-                        <NavLinkButton href="/super-admin/manage-users" icon={UsersIcon}>Manage Users</NavLinkButton>
-                        <NavLinkButton href="/super-admin/approve-hotels" icon={FileCheckIcon}>Approve Hotels</NavLinkButton>
-                        <NavLinkButton href="/super-admin/remove-listings" icon={Trash2Icon}>Remove Listings</NavLinkButton>
-                        <NavLinkButton href="/super-admin/revenue-reports" icon={LineChartIcon}>Revenue Reports</NavLinkButton>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-              <div className="p-4 border-t mt-auto space-y-2">
-                {currentUser ? (
-                    <Button variant="outline" className="w-full justify-start text-base py-3" onClick={handleLogout}>
-                        <LogOutIcon className="mr-3 h-5 w-5" />Log out
-                    </Button>
-                ) : (
-                    <>
-                        <NavLinkButton href="/login" icon={LogInIcon}>Log In</NavLinkButton>
-                        <NavLinkButton href="/signup" icon={UserPlusIcon}>Sign Up</NavLinkButton>
-                    </>
-                )}
-              </div>
-            </SheetContent>
-          </Sheet>
+         {/* Mobile Auth Trigger (only if no user, otherwise handled by sidebar) */}
+        <div className="md:hidden flex items-center">
+            {isClient && !currentUser && (
+                <Button onClick={() => router.push('/login')} variant="ghost" size="sm" className="text-[#1a1a1a] p-1">
+                    <LogInIcon className="h-5 w-5" />
+                </Button>
+            )}
+             {isClient && currentUser && ( // Placeholder for user icon if needed, though sidebar handles auth
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0" onClick={() => setSidebarOpen(true)}>
+                   <UserCircle className="h-6 w-6 text-[#1a1a1a]" />
+                </Button>
+            )}
         </div>
+
       </div>
-    </header>
+
+      <nav className="hidden md:flex items-center justify-center gap-x-6 py-2.5 border-t border-gray-200">
+        {navItems.map((item) => {
+          const isActive = pathname === item.to || (item.to !== '/' && pathname.startsWith(item.to));
+          return (
+            <Link
+              key={item.label}
+              href={item.to}
+              className={`text-sm font-medium px-2 py-1 rounded-sm transition-colors ${
+                isActive ? 'text-[#005aa7] border-b-2 border-[#005aa7]' : 'text-[#1a1a1a] hover:text-[#005aa7]'
+              }`}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
