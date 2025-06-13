@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { Plane, Building, HomeIcon as Home, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plane, Building, Home as HomeIcon, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,11 +17,11 @@ interface Location { city: string; code: string; airport: string; }
 interface PassengerCounts { adults: number; children: number; infants: number; }
 
 const services = [
-  { iconPath: '/image.png', LucideIcon: Plane, label: "Flights", active: true, hasNew: false },
-  { iconPath: '/image2.png', LucideIcon: Building, label: "Hotels", active: false, hasNew: false },
-  { iconPath: '/image3.png', LucideIcon: Home, label: "Homestays", active: false, hasNew: false },
-  { iconPath: '/image4.png', LucideIcon: Palmtree, label: "Packages", active: false, hasNew: false },
-  { iconPath: '/image5.png', LucideIcon: Car, label: "Cabs", active: false, hasNew: false },
+  { id: 'flights', LucideIcon: Plane, label: "Flights", active: true, hasNew: false, iconPath: "/image.png" },
+  { id: 'hotels', LucideIcon: Building, label: "Hotels", active: false, hasNew: false, iconPath: "/image2.png" },
+  { id: 'homestays', LucideIcon: HomeIcon, label: "Homestays", active: false, hasNew: false, iconPath: "/image3.png" },
+  { id: 'packages', LucideIcon: Palmtree, label: "Holiday", active: false, hasNew: false, iconPath: "/image4.png" },
+  { id: 'trains', LucideIcon: Car, label: "Trains", active: false, hasNew: false, iconPath: "/image5.png" },
 ];
 
 const popularCities: Location[] = [
@@ -57,16 +57,17 @@ const mockPrices: Record<string, number> = {
 
 
 export function FlightBooking() {
+  const initialDepartureDate = new Date("2025-06-03");
   const [state, setState] = useState({
     tripType: "oneWay" as "oneWay" | "roundTrip" | "multiCity",
-    from: popularCities[1], 
-    to: popularCities[3],   
-    departure: new Date(new Date().getFullYear(), new Date().getMonth() +1, 3), 
+    from: popularCities.find(c => c.code === "DEL") || popularCities[1],
+    to: popularCities.find(c => c.code === "BLR") || popularCities[3],
+    departure: initialDepartureDate,
     return: undefined as Date | undefined,
     travellers: 1,
     travelClass: "Economy",
     fareType: "Regular",
-    zeroCancel: false, 
+    zeroCancel: false,
     fromOpen: false,
     toOpen: false,
     departureOpen: false,
@@ -75,10 +76,10 @@ export function FlightBooking() {
     fromSearch: "",
     toSearch: "",
     passengers: { adults: 1, children: 0, infants: 0 } as PassengerCounts,
-    currentMonth: new Date(new Date().getFullYear(), new Date().getMonth() +1, 1),
+    currentMonth: new Date(initialDepartureDate.getFullYear(), initialDepartureDate.getMonth(), 1),
   });
 
-  const router = useRouter(); 
+  const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -86,10 +87,11 @@ export function FlightBooking() {
     const today = new Date();
     today.setHours(0,0,0,0);
     if (state.departure < today) {
-        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 3);
-        updateState({ departure: nextMonth, currentMonth: new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1) });
-    } else {
-        updateState({ currentMonth: new Date(state.departure.getFullYear(), state.departure.getMonth(), 1) });
+        const nextValidDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        updateState({
+            departure: nextValidDate,
+            currentMonth: new Date(nextValidDate.getFullYear(), nextValidDate.getMonth(), 1)
+        });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -105,11 +107,11 @@ export function FlightBooking() {
   const handleDate = (date: Date | undefined, type: "departure" | "return") => {
     if (date) {
         const updates: Partial<typeof state> = { [type]: date, [`${type}Open`]: false };
-        if (type === "departure" && state.return && date > state.return) {
-            updates.return = undefined; 
-        }
         if (type === "departure") {
-          updates.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+            updates.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+            if (state.return && date > state.return) {
+                updates.return = undefined;
+            }
         }
         updateState(updates);
     }
@@ -145,26 +147,26 @@ export function FlightBooking() {
       children: state.passengers.children.toString(),
       infants: state.passengers.infants.toString(),
       travelClass: mapClass(state.travelClass),
-      nonStop: state.zeroCancel.toString(), 
+      nonStop: state.zeroCancel.toString(),
     });
 
     if (state.tripType === "roundTrip" && state.return) {
       params.append("returnDate", format(state.return, "yyyy-MM-dd"));
     }
-    
+
     router.push(`/flights/search?${params.toString()}`);
   };
-  
-  const handleMonthChange = (type: "prev" | "next") => {
+
+  const handleMonthChange = (direction: "prev" | "next") => {
     const newMonth = new Date(state.currentMonth);
-    if (type === "prev") {
+    if (direction === "prev") {
         newMonth.setMonth(state.currentMonth.getMonth() - 1);
     } else {
         newMonth.setMonth(state.currentMonth.getMonth() + 1);
     }
     const today = new Date();
-    today.setHours(0,0,0,0); 
-    if (newMonth < new Date(today.getFullYear(), today.getMonth(), 1) && (!state.return || state.departureOpen)) {
+    const firstDayOfCurrentDisplayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    if ((state.departureOpen || (state.tripType === "roundTrip" && state.returnOpen && !state.departure)) && newMonth < firstDayOfCurrentDisplayMonth) {
         return;
     }
     updateState({ currentMonth: newMonth });
@@ -172,25 +174,23 @@ export function FlightBooking() {
 
 
   if (!isClient) {
-    return ( 
-        <div className="w-full max-w-5xl mx-auto p-2 sm:p-4">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
-                <div className="bg-gray-200 h-16"></div>
-                <div className="p-6 lg:p-8 space-y-6">
-                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="h-16 bg-gray-200 rounded"></div>
-                        <div className="h-16 bg-gray-200 rounded"></div>
-                        <div className="h-16 bg-gray-200 rounded"></div>
-                        <div className="h-16 bg-gray-200 rounded"></div>
-                    </div>
-                    <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-                    <div className="flex gap-2">
-                        {[1,2,3,4].map(i => <div key={i} className="h-16 bg-gray-200 rounded w-24"></div>)}
-                    </div>
-                    <div className="flex justify-center mt-6">
-                        <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div>
-                    </div>
+    return (
+        <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+            <div className="bg-gray-200 h-16"></div>
+            <div className="p-6 lg:p-8 space-y-6">
+                <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="h-16 bg-gray-200 rounded"></div>
+                    <div className="h-16 bg-gray-200 rounded"></div>
+                    <div className="h-16 bg-gray-200 rounded"></div>
+                    <div className="h-16 bg-gray-200 rounded"></div>
+                </div>
+                <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+                <div className="flex gap-2">
+                    {[1,2,3,4].map(i => <div key={i} className="h-16 bg-gray-200 rounded w-24"></div>)}
+                </div>
+                <div className="flex justify-center mt-6">
+                    <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div>
                 </div>
             </div>
         </div>
@@ -262,7 +262,7 @@ export function FlightBooking() {
               ) : (
                 <>
                   <div className="font-bold text-sm sm:text-base">
-                    {format(state[type]!, "d MMM yy")}
+                    {format(state[type]!, "d MMMM yyyy")}
                   </div>
                   <div className="text-xs text-gray-600">{format(state[type]!, "EEEE")}</div>
                 </>
@@ -295,19 +295,20 @@ export function FlightBooking() {
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 if (type === "departure") return date < today;
-                if (type === "return") return date < state.departure || date < today;
+                if (type === "return" && state.departure) return date < state.departure;
+                if (type === "return" && !state.departure) return date < today;
                 return false;
             }}
             components={{
               Day: ({ date, displayMonth }) => {
-                if (displayMonth.getMonth() !== state.currentMonth.getMonth()) {
-                    return <div className="p-2 w-10 h-10"></div>; 
+                if (state.currentMonth && displayMonth.getMonth() !== state.currentMonth.getMonth()) {
+                     return <div className="p-1.5 w-10 h-10 flex flex-col items-center justify-center"></div>;
                 }
                 const price = getPrice(date);
                 const isSelected = state[type] && format(state[type]!, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
                 const today = new Date();
                 today.setHours(0,0,0,0);
-                const isDisabled = (type === "departure" && date < today) || (type === "return" && (date < state.departure || date < today));
+                const isDisabled = (type === "departure" && date < today) || (type === "return" && state.departure && date < state.departure) || (type === "return" && !state.departure && date < today);
 
                 return (
                   <button
@@ -346,43 +347,43 @@ export function FlightBooking() {
 
   return (
     <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Top service tabs */}
-        <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-2 py-3 sm:px-4 sm:py-4">
-          <div className="flex overflow-x-auto scrollbar-hide space-x-2 sm:space-x-4">
-            {services.map((s, i) => (
-              <button
-                key={i}
-                className={cn(
-                  "px-3 py-2 sm:px-4 transition-all rounded-md",
-                  s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]"
-                )}
-                disabled={!s.active} 
-                onClick={() => { /* Logic to switch forms can be added here */ }}
-              >
-                <div className="flex items-center space-x-1.5">
-                  <div className="relative">
-                    {s.iconPath ? (
-                        <Image src={s.iconPath} alt={s.label} width={20} height={20} className="filter brightness-0 invert" data-ai-hint="travel icon" />
-                    ) : (
-                        <s.LucideIcon className="w-5 h-5" />
-                    )}
-                    {s.hasNew && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-pink-500 text-white text-[10px] px-1 py-0.5 rounded-full leading-none">
-                        new
-                      </span>
-                    )}
+        <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-4">
+          <div className="flex overflow-x-auto scrollbar-hide space-x-4">
+            {services.map((s, i) => {
+              const IconComponent = s.LucideIcon;
+              return (
+                <button
+                  key={i}
+                  className={cn(
+                    "px-4 py-2 transition-all rounded-md",
+                    s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]"
+                  )}
+                  disabled={!s.active}
+                >
+                  <div className="flex items-center space-x-1.5">
+                    <div className="relative">
+                      {s.iconPath ? (
+                          <Image src={s.iconPath} alt={s.label} width={20} height={20} className="filter brightness-0 invert" data-ai-hint="travel icon" />
+                      ) : (
+                          <IconComponent className="w-5 h-5" />
+                      )}
+                      {s.hasNew && (
+                        <span className="absolute -top-1.5 -right-1.5 bg-pink-500 text-white text-[10px] px-1 py-0.5 rounded-full leading-none">
+                          new
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-sm font-medium">{s.label}</span>
                   </div>
-                  <span className="text-xs sm:text-sm font-medium">{s.label}</span>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         </div>
-        {/* Form content */}
-        <div className="p-4 sm:p-6 lg:p-8">
-          <div className="space-y-4 sm:space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
-              <div className="flex gap-2 sm:gap-3">
+        <div className="p-6 lg:p-8">
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex gap-3">
                 {["oneWay", "roundTrip", "multiCity"].map((type) => (
                   <label key={type} className="flex items-center cursor-pointer p-1 rounded hover:bg-gray-100">
                     <input
@@ -391,30 +392,27 @@ export function FlightBooking() {
                       value={type}
                       checked={state.tripType === type}
                       onChange={(e) => updateState({ tripType: e.target.value as typeof state.tripType })}
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500 focus:ring-orange-400"
+                      className="w-4 h-4 text-orange-500 focus:ring-orange-400"
                     />
-                    <span className="ml-1.5 text-xs sm:text-sm font-medium text-gray-700">
-                      {type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}
-                    </span>
+                    <span className="ml-1.5 text-sm font-medium text-gray-700">{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
                   </label>
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="md:col-span-2 flex items-center gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="md:col-span-2 flex items-center gap-2">
                 <LocationPopover type="from" />
-                <Button variant="ghost" size="icon" onClick={handleSwap} className="p-2 hover:bg-blue-50 rounded-full h-10 w-10 sm:h-12 sm:w-12 shrink-0">
+                <Button variant="ghost" size="sm" onClick={handleSwap} className="p-2 hover:bg-blue-50 rounded-full h-10 w-10 sm:h-12 sm:w-12 shrink-0">
                   <ArrowLeftRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </Button>
                 <LocationPopover type="to" />
               </div>
               <DatePopover type="departure" />
-              {state.tripType === "roundTrip" && <DatePopover type="return" />}
-              {state.tripType !== "roundTrip" && <div className="hidden lg:block"></div>} 
-              
+              {state.tripType === "roundTrip" ? <DatePopover type="return" /> : <div className="hidden lg:block"></div>}
+
               <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                 <PopoverTrigger asChild>
-                  <button className="border rounded-lg p-2 sm:p-3 hover:border-blue-300 text-left w-full">
+                  <button className="border rounded-lg p-3 hover:border-blue-300 text-left w-full">
                     <div className="text-xs text-gray-500 mb-1">Travellers & Class</div>
                     <div className="flex justify-between items-center">
                       <div>
@@ -530,6 +528,8 @@ export function FlightBooking() {
             </div>
           </div>
         </div>
-    </div>
+      </div>
   );
 };
+
+    
