@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDown } from "lucide-react" // Using ChevronDown as is common in ShadCN
+import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -16,9 +16,9 @@ const Collapsible = React.forwardRef<
   }
 >(({ className, children, open: openProp, defaultOpen, onOpenChange, ...props }, ref) => {
   const [isOpen, setIsOpen] = React.useState(defaultOpen ?? false)
-  const uniqueId = React.useId ? React.useId() : "collapsible-item"; // Fallback for older React if useId is not avail
+  // Ensure uniqueId is stable and suitable for AccordionItem value. Fallback for older React if useId isn't available.
+  const internalId = React.useId ? React.useId() : `collapsible-item-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Controlled component: If openProp is provided, it takes precedence
   React.useEffect(() => {
     if (openProp !== undefined) {
       setIsOpen(openProp)
@@ -26,14 +26,15 @@ const Collapsible = React.forwardRef<
   }, [openProp])
 
   const handleValueChange = (value: string) => {
-    const newOpenState = value === uniqueId
+    // value will be the internalId if the item is opened, or "" if closed
+    const newOpenState = value === internalId
     if (openProp === undefined) { // Only update internal state if not controlled
       setIsOpen(newOpenState)
     }
     onOpenChange?.(newOpenState)
   }
 
-  const accordionValue = isOpen ? uniqueId : ""
+  const accordionValue = isOpen ? internalId : ""
 
   return (
     <AccordionPrimitive.Root
@@ -45,8 +46,8 @@ const Collapsible = React.forwardRef<
       onValueChange={handleValueChange}
       {...props}
     >
-      <AccordionPrimitive.Item value={uniqueId} className="border-none"> 
-        {/* Children (Trigger and Content) will be rendered here, inside the Item */}
+      {/* This Item wrapper is crucial for the context */}
+      <AccordionPrimitive.Item value={internalId} className="border-none">
         {children}
       </AccordionPrimitive.Item>
     </AccordionPrimitive.Root>
@@ -86,25 +87,24 @@ const CollapsibleContent = React.forwardRef<
     )}
     {...props}
   >
+    {/* The div wrapper is important for animations that change height */}
     <div className={cn("pb-4 pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ))
 CollapsibleContent.displayName = AccordionPrimitive.Content.displayName
 
-// CollapsibleItem is part of the standard Accordion, but for a single Collapsible,
-// the root Collapsible component handles the Item internally.
-// Keeping the export for consistency if it's used elsewhere, though it's not typical for this pattern.
+// This export is mostly for API consistency if a full Accordion was being built,
+// not directly used by the typical single Collapsible pattern from the parent component.
 const CollapsibleItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn("border-b", className)} // Default ShadCN styling
+    className={cn("border-b", className)} // Default ShadCN styling for an item if used directly
     {...props}
   />
 ));
 CollapsibleItem.displayName = "CollapsibleItem";
-
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent, CollapsibleItem }
