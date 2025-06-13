@@ -1207,6 +1207,3 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
-
-this code in this file src/app/(main)/flights/search/page.tsx no more changes
-just do this
