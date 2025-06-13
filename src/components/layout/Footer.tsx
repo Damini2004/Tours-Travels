@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -10,7 +11,7 @@ const Footer = () => {
       <div className="absolute top-0 left-0 w-full h-10 bg-[url('/wave-top.svg')] bg-cover bg-repeat-x opacity-20 z-0"></div>
 
       {/* Destinations */}
-      <div className="max-w-7xl mx-auto px-6 py-12 border-b border-teal-300/30 z-10 relative">
+      <div className="max-w-7xl mx-auto px-6 pt-6 pb-12 border-b border-teal-300/30 z-10 relative"> {/* Changed py-12 to pt-6 pb-12 */}
         <h3 className="text-2xl font-bold mb-6 text-[#aef0f4]">
           Explore top hotel destinations we love
         </h3>
@@ -96,7 +97,8 @@ const Footer = () => {
       </div>
 
       {/* Footer Links */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm border-b border-teal-300/30 z-10 relative">
+      {/* Removed border-b border-teal-300/30 from this div */}
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm z-10 relative">
         <div>
           <h4 className="font-semibold mb-3 text-[#aef0f4] uppercase text-xs tracking-wide">
             LuxuryEscapes.com
