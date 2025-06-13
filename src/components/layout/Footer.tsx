@@ -1,8 +1,7 @@
-
 "use client";
 
 import Image from 'next/image';
-import { Facebook, Instagram, Youtube, Pinterest, CreditCard, Star, Apple, Play } from 'lucide-react';
+import { Facebook, Instagram, Youtube, CreditCard, Star, Apple, Play } from 'lucide-react'; // Removed Pinterest
 
 const Footer = () => {
   return (
@@ -66,7 +65,9 @@ const Footer = () => {
           <Facebook className="hover:text-blue-200 cursor-pointer" />
           <Instagram className="hover:text-pink-300 cursor-pointer" />
           <Youtube className="hover:text-red-300 cursor-pointer" />
-          <Pinterest className="hover:text-red-300 cursor-pointer" />
+          {/* Pinterest icon removed due to build error
+          <Pinterest className="hover:text-red-300 cursor-pointer" /> 
+          */}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
