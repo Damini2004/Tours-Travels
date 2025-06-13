@@ -34,6 +34,24 @@ const nextConfig: NextConfig = {
         hostname: 'static.coral.org',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.im.ge', // For PlacesGallery images
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.luxuryescapes.com', // For InfiniteCarousel images
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com', // For InfiniteCarousel images
+        port: '',
+        pathname: '/**',
       }
     ],
   },

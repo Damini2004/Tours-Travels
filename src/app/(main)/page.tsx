@@ -1,12 +1,13 @@
 
-import { HotelSearchForm } from "@/components/forms/hotel-search-form";
+
 import HeroSection from "@/components/hero/HeroSection"; // Import the new HeroSection
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AwardIcon, ClockIcon, ShieldCheckIcon, WalletIcon } from "lucide-react";
-import { placeholderHotels } from "@/lib/placeholder-data";
+// ExclusiveOffers is now part of PlacesGallery, which is part of HeroSection for this page structure
+// import { placeholderHotels } from "@/lib/placeholder-data"; // This would be used by ExclusiveOffers
 
 
 export default function HomePage() {
@@ -24,47 +25,11 @@ export default function HomePage() {
   ];
 
   return (
-    // Removed container from here, HeroSection manages its own container logic.
-    // Page specific container for content below hero:
     <>
       <HeroSection />
 
       <div className="container mx-auto px-4 py-8 md:py-12">
-        {/* The HeroSection used to be here, with the HotelSearchForm inside */}
-        {/* It has been moved to its own component above */}
-
-        <section className="my-16 py-8">
-          <h2 className="font-headline text-3xl font-semibold text-center mb-10">
-            Today's Top Exclusive Offers
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {placeholderHotels.slice(0,3).map(hotel => (
-              <Card key={hotel.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card">
-                {hotel.thumbnailUrl && (
-                  <div className="relative w-full h-56">
-                    <Image 
-                      src={hotel.thumbnailUrl} 
-                      alt={hotel.name} 
-                      layout="fill" 
-                      objectFit="cover" 
-                      data-ai-hint={hotel.thumbnailHint || "hotel exterior"}
-                    />
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="font-headline text-xl">{hotel.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{hotel.location}</p>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg font-semibold text-primary">${hotel.pricePerNight.toFixed(2)} <span className="text-xs text-muted-foreground">/ night</span></p>
-                  <Button asChild className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Link href={`/hotels/${hotel.id}`}>View Details</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+        {/* "Today's Top Exclusive Offers" is now part of PlacesGallery, which is inside HeroSection */}
         
         <section className="my-16 py-8 bg-card rounded-lg p-8">
           <h2 className="font-headline text-3xl font-semibold text-center mb-10">Why You Should Book With Us</h2>
