@@ -10,22 +10,18 @@ const places = [
   {
     name: 'Desert',
     image: 'https://i.im.ge/2022/12/09/dMKIrP.breathtaking-desert-blue-sky-morocco.jpg',
-    hint: 'desert morocco'
   },
   {
     name: 'Mountains',
     image: 'https://i.im.ge/2022/12/09/dMZqZx.vertical-shot-lake-marian-mountains-new-zealand.jpg',
-    hint: 'mountains new zealand'
   },
   {
     name: 'Countryside',
     image: 'https://i.im.ge/2022/12/09/dMKfLM.vertical-shot-beautiful-green-valley-cloudy-sky.jpg',
-    hint: 'green valley'
   },
   {
     name: 'Beach',
     image: 'https://i.im.ge/2022/12/09/dMVfWG.beautiful-views-azure-coast-rocks-pine-trees-white-sand-aegean-sea-turkey-kusadasi.jpg',
-    hint: 'beach turkey'
   },
 ];
 
@@ -61,7 +57,7 @@ const PlacesGallery = () => {
                         layout="fill" 
                         objectFit="cover" 
                         className="rounded-3xl" 
-                        data-ai-hint={place.hint}
+                        data-ai-hint={place.name.toLowerCase()} // Using place.name as hint
                      />
                   </div>
                   <div className="absolute top-0 left-0 p-6">
