@@ -1208,4 +1208,5 @@ export default function FlightSearchClient() {
   );
 }
 
-add this in the current file the exact same code in src/app/(main)/flights/search/page.tsx no more changes
+this code in this file src/app/(main)/flights/search/page.tsx no more changes
+just do this
