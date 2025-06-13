@@ -35,13 +35,6 @@ const popularCities: Location[] = [
 ];
 
 const travelClasses = ["Economy", "Premium Economy", "Business", "First Class"];
-const fareTypes = [
-  { id: "Regular", label: "Regular", description: "Regular fares" },
-  { id: "Student", label: "Student", description: "Extra discounts" },
-  { id: "SeniorCitizen", label: "Senior Citizen", description: "Up to ₹600 off" },
-  { id: "ArmedForces", label: "Armed Forces", description: "Up to ₹600 off" },
-  { id: "DoctorNurses", label: "Doctors/Nurses", description: "Up to ₹600 off" },
-];
 
 const mockPrices: Record<string, number> = {
   "2025-06-01": 7790, "2025-06-02": 8270, "2025-06-03": 6952, "2025-06-04": 6373, "2025-06-05": 6952,
@@ -62,7 +55,6 @@ export const FlightBooking = () => {
     return: undefined as Date | undefined,
     travellers: 1,
     travelClass: "Economy",
-    fareType: "Regular",
     zeroCancel: false,
     fromOpen: false,
     toOpen: false,
@@ -199,10 +191,6 @@ export const FlightBooking = () => {
                         <div className="h-16 bg-gray-200 rounded"></div> {/* To input */}
                         <div className="h-16 bg-gray-200 rounded"></div> {/* Departure date */}
                         <div className="h-16 bg-gray-200 rounded"></div> {/* Travellers */}
-                    </div>
-                    <div className="h-10 bg-gray-200 rounded w-1/3"></div> {/* Placeholder for fare types title */}
-                    <div className="flex gap-2">
-                        {[1,2,3,4].map(i => <div key={i} className="h-16 bg-gray-200 rounded w-24"></div>)} {/* Placeholder for fare type cards */}
                     </div>
                     <div className="flex justify-center mt-6">
                         <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div> {/* Search button */}
@@ -419,7 +407,6 @@ export const FlightBooking = () => {
                   </label>
                 ))}
               </div>
-              {/* "Book Flights" text removed to save space, implied by active tab */}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> {/* md:grid-cols-2 from prev version */}
               <div className="md:col-span-2 flex items-center gap-2"> 
@@ -511,36 +498,6 @@ export const FlightBooking = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="font-medium text-sm text-gray-700">Select a Fare Type:</span> {/* "Select a Fare Type:" from prev */}
-                {/* "Save" badge removed for space, can be re-added if needed */}
-              </div>
-              <ScrollArea className="pb-2"> {/* Added ScrollArea for fare types */}
-                <div className="flex gap-2 w-max"> 
-                    {fareTypes.map((f) => (
-                    <label
-                        key={f.id}
-                        className={cn(
-                        "border rounded-lg p-2.5 cursor-pointer min-w-[120px] flex-shrink-0", // Styles from prev version for better look
-                        state.fareType === f.id ? "border-orange-500 bg-orange-50 text-orange-700 ring-1 ring-orange-500" : "border-gray-200 hover:border-gray-300"
-                        )}
-                    >
-                        <input
-                        type="radio"
-                        name="fareType"
-                        value={f.id}
-                        checked={state.fareType === f.id}
-                        onChange={(e) => updateState({ fareType: e.target.value })}
-                        className="w-3.5 h-3.5 text-orange-500 focus:ring-orange-400 mb-1" // Orange from prev
-                        />
-                        <div className="text-sm font-semibold">{f.label}</div>
-                        <div className="text-xs text-gray-500">{f.description}</div>
-                    </label>
-                    ))}
-                </div>
-              </ScrollArea>
-            </div>
             <div className="flex justify-center pt-2 sm:pt-4"> {/* pt from prev */}
               <Button
                 onClick={search}
@@ -556,3 +513,5 @@ export const FlightBooking = () => {
     </div>
   );
 };
+
+  
