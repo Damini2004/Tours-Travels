@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect, useCallback } from 'react';
 import { getHotelById } from '@/lib/hotel-data';
 import { format, addDays } from 'date-fns';
+import { Badge } from '@/components/ui/badge'; // Added import for Badge
 
 interface CurrentUser {
   fullName: string;
