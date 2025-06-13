@@ -28,7 +28,6 @@ import { Calendar } from "@/components/ui/calendar";
 const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
 const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
 
-// Helper function defined at module scope
 const parseDuration = (durationStr: string): number => {
     const timePart = durationStr?.replace("PT", "") || "";
     let hours = 0, minutes = 0;
@@ -441,9 +440,50 @@ function FlightSearchClientInternal() {
     } else {
       const selectedFlight = flights.find(f => f.id === flightId);
       if (selectedFlight) {
-        const numAdults = parseInt(queryAdults);
-        const pricePerAdult = numAdults > 0 ? (parseFloat(selectedFlight.price.total) / numAdults).toFixed(2) : parseFloat(selectedFlight.price.total).toFixed(2);
-        alert(`Proceeding to book flight ${flightId} (Price: ₹${pricePerAdult}${numAdults > 0 ? ' per adult' : ''})`);
+        const itinerary = selectedFlight.itineraries[itineraryIdx];
+        if (!itinerary) return;
+
+        const params = new URLSearchParams();
+        params.set('flightId', selectedFlight.id);
+        params.set('fareName', selectedFlight.travelerPricings[0]?.fareDetailsBySegment[0]?.cabin || 'UNKNOWN');
+        params.set('farePrice', selectedFlight.price.total);
+        params.set('origin', itinerary.segments[0].departure.iataCode);
+        params.set('destination', itinerary.segments[itinerary.segments.length - 1].arrival.iataCode);
+        params.set('departureDate', itinerary.segments[0].departure.at);
+        params.set('arrivalDate', itinerary.segments[itinerary.segments.length - 1].arrival.at);
+        params.set('duration', itinerary.duration);
+        // For airlineName, it's better to pass a code and let the review page resolve it if needed, or pass a primary carrier.
+        // Amadeus validatingAirlineCodes might be an array, take the first.
+        params.set('airlineName', selectedFlight.validatingAirlineCodes[0] || itinerary.segments[0].carrierCode);
+        params.set('flightNumber', itinerary.segments.map(s => s.number).join(', ')); // Join if multiple
+        params.set('stops', (itinerary.segments.length - 1).toString());
+        
+        // Baggage info can be complex. Simplified for now.
+        const travelerPricing = selectedFlight.travelerPricings[0];
+        const firstSegmentFareDetails = travelerPricing?.fareDetailsBySegment[0];
+        const cabinBaggage = "7 Kg"; // Placeholder
+        const checkInBaggage = firstSegmentFareDetails?.includedCheckedBags?.quantity 
+                                ? `${firstSegmentFareDetails.includedCheckedBags.quantity} PC`
+                                : (firstSegmentFareDetails?.includedCheckedBags?.weight && firstSegmentFareDetails?.includedCheckedBags?.weightUnit
+                                    ? `${firstSegmentFareDetails.includedCheckedBags.weight} ${firstSegmentFareDetails.includedCheckedBags.weightUnit}`
+                                    : "15 Kg"); // Placeholder
+
+        params.set('cabinBaggage', cabinBaggage);
+        params.set('checkInBaggage', checkInBaggage);
+        params.set('aircraftType', itinerary.segments[0].aircraft?.code || 'N/A');
+        params.set('numSegments', itinerary.segments.length.toString());
+
+        itinerary.segments.forEach((seg, i) => {
+            params.set(`segment_${i}_departureAt`, seg.departure.at);
+            params.set(`segment_${i}_departureIata`, seg.departure.iataCode);
+            params.set(`segment_${i}_arrivalAt`, seg.arrival.at);
+            params.set(`segment_${i}_arrivalIata`, seg.arrival.iataCode);
+            params.set(`segment_${i}_duration`, seg.duration);
+            params.set(`segment_${i}_carrierCode`, seg.carrierCode);
+            params.set(`segment_${i}_number`, seg.number);
+        });
+        
+        router.push(`/flights/review-booking?${params.toString()}`);
         setSelectedOutbound(null); 
       }
     }
@@ -465,14 +505,14 @@ function FlightSearchClientInternal() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-primary mb-2">Searching for Skies...</h2>
-        <p className="text-muted-foreground">Please wait while we find the best flights for you.</p>
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+        <Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
+        <h2 className="text-2xl font-headline text-primary-foreground mb-2">Searching for Skies...</h2>
+        <p className="text-primary-foreground/80">Please wait while we find the best flights for you.</p>
         <div className="w-full max-w-4xl mt-8 space-y-4">
-          <Skeleton className="h-20 w-full" />
-          <Skeleton className="h-40 w-full" />
-          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-20 w-full bg-white/10" />
+          <Skeleton className="h-40 w-full bg-white/10" />
+          <Skeleton className="h-40 w-full bg-white/10" />
         </div>
       </div>
     );
@@ -480,18 +520,18 @@ function FlightSearchClientInternal() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
          <AlertCircle className="w-24 h-24 text-destructive mb-6" />
         <h2 className="text-2xl font-headline text-destructive mb-2">Oops! Something Went Wrong.</h2>
-        <Alert variant="destructive" className="max-w-md text-left">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Fetching Flights</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+        <Alert variant="destructive" className="max-w-md text-left bg-red-100/10 border-red-500/50 text-red-300">
+          <AlertCircle className="h-4 w-4 text-red-400" />
+          <AlertTitle className="text-red-300">Error Fetching Flights</AlertTitle>
+          <AlertDescription className="text-red-400">{error}</AlertDescription>
         </Alert>
         <Button
             onClick={handleHeaderSearch} 
             variant="outline"
-            className="mt-8"
+            className="mt-8 bg-white/10 border-primary-foreground/50 text-primary-foreground hover:bg-white/20"
           >
             Try a Different Search
         </Button>
@@ -503,7 +543,7 @@ function FlightSearchClientInternal() {
 
   if (currentFlightsToDisplay.length === 0 && !loading) {
     return (
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
         <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-1 shadow-md sticky top-0 z-30">
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
@@ -652,9 +692,9 @@ function FlightSearchClientInternal() {
             </div>
         </header>
         <div className="flex flex-col items-center justify-center flex-1 p-4 text-center">
-            <Briefcase className="w-24 h-24 text-muted-foreground mb-6" />
-            <h2 className="text-2xl font-headline text-foreground mb-2">No Flights Found</h2>
-            <p className="text-muted-foreground max-w-md mb-8">
+            <Briefcase className="w-24 h-24 text-primary-foreground/60 mb-6" />
+            <h2 className="text-2xl font-headline text-primary-foreground mb-2">No Flights Found</h2>
+            <p className="text-primary-foreground/80 max-w-md mb-8">
             We couldn't find any flights matching your criteria. Try adjusting your filters or search parameters with the form above.
             </p>
         </div>
@@ -663,7 +703,7 @@ function FlightSearchClientInternal() {
   }
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
       <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-primary-foreground py-1 shadow-md sticky top-0 z-30">
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
@@ -982,7 +1022,7 @@ function FlightSearchClientInternal() {
           </Sheet>
         </div>
         <main className="flex-1">
-          <h2 className="text-xl font-headline font-semibold text-foreground mb-3">Flights from {queryOrigin} to {queryDestination}</h2>
+          <h2 className="text-xl font-headline font-semibold text-primary-foreground mb-3">Flights from {queryOrigin} to {queryDestination}</h2>
           <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-card rounded-lg shadow-sm border">
             {[
               { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
@@ -1006,11 +1046,11 @@ function FlightSearchClientInternal() {
             ))}
           </div>
           <div className="mb-4 ml-1">
-            <p className="text-sm text-muted-foreground ">{filteredFlights.length} flights found</p>
-            <p className="text-xs text-muted-foreground">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
+            <p className="text-sm text-primary-foreground/80 ">{filteredFlights.length} flights found</p>
+            <p className="text-xs text-primary-foreground/60">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
           </div>
-          <div className="mb-4 p-2 bg-orange-100 border border-orange-300 rounded-md text-center">
-                <p className="text-sm text-orange-700 font-medium">
+          <div className="mb-4 p-2 bg-accent/20 border border-accent/30 rounded-md text-center">
+                <p className="text-sm text-accent-foreground font-medium">
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
@@ -1165,7 +1205,7 @@ function FlightSearchClientInternal() {
                            </div>
                         </div>
                         <div className="mt-2 text-center">
-                            <p className="text-xs text-green-600 bg-green-50 p-1.5 rounded-md">
+                            <p className="text-xs text-accent-foreground/90 bg-accent/30 p-1.5 rounded-md">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
@@ -1196,10 +1236,10 @@ function FlightSearchClientInternal() {
 export default function FlightSearchClient() {
   return (
     <Suspense fallback={
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-primary mb-2">Loading Flight Details...</h2>
-        <p className="text-muted-foreground">One moment please.</p>
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+        <Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
+        <h2 className="text-2xl font-headline text-primary-foreground mb-2">Loading Flight Details...</h2>
+        <p className="text-primary-foreground/80">One moment please.</p>
       </div>
     }>
       <TooltipProvider>
@@ -1208,3 +1248,4 @@ export default function FlightSearchClient() {
     </Suspense>
   );
 }
+
