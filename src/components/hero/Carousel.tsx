@@ -105,7 +105,7 @@ const Carousel = () => {
                   data-ai-hint={item.hint || "carousel image"}
                 >
                   <div className={cn(
-                      "absolute top-1/2 -translate-y-1/2 text-left p-5 bg-black/50 rounded-xl max-w-[600px] shadow-[0_8px_24px_rgba(0,0,0,0.8)] z-30", // z-30 for content to be on top
+                      "absolute top-1/2 -translate-y-1/2 text-left p-5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] opacity-75 rounded-xl max-w-[600px] shadow-[0_8px_24px_rgba(0,0,0,0.8)] z-30", // z-30 for content to be on top
                       "left-[30px] md:left-[100px]",
                       "w-[calc(100%-60px)] md:w-[500px]",
                       "max-[400px]:mt-[70px] max-[400px]:w-[70vw]",

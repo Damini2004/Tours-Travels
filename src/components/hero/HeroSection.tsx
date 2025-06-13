@@ -22,7 +22,7 @@ const HeroSection = () => {
             backgroundImage: `url('https://static.coral.org/uploads/2024/06/4-Blog-Why-Clean-Water-is-Vital-for-the-Future-of-Our-Oceans.jpg')`
           }}
         >
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] opacity-50"></div>
         </div>
 
         <SocialSidebar />
