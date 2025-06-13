@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation"; // Changed from useNavigate
+import { useRouter } from "next/navigation";
 import { Plane, Building, HomeIcon as Home, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import Image from "next/image"; // For service icons
+import Image from "next/image";
 
 interface Location { city: string; code: string; airport: string; }
 interface PassengerCounts { adults: number; children: number; infants: number; }
@@ -27,8 +27,8 @@ const services = [
 const popularCities: Location[] = [
   { city: "Mumbai", code: "BOM", airport: "Chhatrapati Shivaji International Airport" },
   { city: "New Delhi", code: "DEL", airport: "Indira Gandhi International Airport" },
-  { city: "Bangkok", code: "BKK", airport: "Suvarnabhumi Airport" }, // Corrected airport for BKK
-  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru" }, // Corrected airport
+  { city: "Bangkok", code: "BKK", airport: "Suvarnabhumi Airport" },
+  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru" },
   { city: "Pune", code: "PNQ", airport: "Pune Airport" },
   { city: "Chennai", code: "MAA", airport: "Chennai International Airport" },
   { city: "Kolkata", code: "CCU", airport: "Netaji Subhas Chandra Bose International Airport" },
@@ -44,7 +44,6 @@ const fareTypes = [
   { id: "DoctorNurses", label: "Doctors/Nurses", description: "Up to ₹600 off" },
 ];
 
-// Ensure mockPrices cover a wider range or handle missing dates gracefully
 const defaultPrice = 6000;
 const mockPrices: Record<string, number> = {
   "2025-06-01": 7790, "2025-06-02": 8270, "2025-06-03": 6952, "2025-06-04": 6373, "2025-06-05": 6952,
@@ -53,7 +52,6 @@ const mockPrices: Record<string, number> = {
   "2025-06-16": 5985, "2025-06-17": 5985, "2025-06-18": 5564, "2025-06-19": 6126, "2025-06-20": 5985,
   "2025-06-21": 5546, "2025-06-22": 5985, "2025-06-23": 5985, "2025-06-24": 5564, "2025-06-25": 5564,
   "2025-06-26": 6126, "2025-06-27": 6126, "2025-06-28": 5378, "2025-06-29": 4962, "2025-06-30": 4962,
-  // Add more dates for July 2025 for testing
   "2025-07-01": 5000, "2025-07-02": 5100, "2025-07-03": 5200, "2025-07-04": 5300, "2025-07-05": 5400,
 };
 
@@ -61,14 +59,14 @@ const mockPrices: Record<string, number> = {
 export function FlightBooking() {
   const [state, setState] = useState({
     tripType: "oneWay" as "oneWay" | "roundTrip" | "multiCity",
-    from: popularCities[1], // Default to New Delhi
-    to: popularCities[3],   // Default to Bengaluru
-    departure: new Date(new Date().getFullYear(), new Date().getMonth() +1, 3), // Default to next month
+    from: popularCities[1], 
+    to: popularCities[3],   
+    departure: new Date(new Date().getFullYear(), new Date().getMonth() +1, 3), 
     return: undefined as Date | undefined,
     travellers: 1,
     travelClass: "Economy",
     fareType: "Regular",
-    zeroCancel: false, // Relates to nonStop in search params
+    zeroCancel: false, 
     fromOpen: false,
     toOpen: false,
     departureOpen: false,
@@ -77,15 +75,14 @@ export function FlightBooking() {
     fromSearch: "",
     toSearch: "",
     passengers: { adults: 1, children: 0, infants: 0 } as PassengerCounts,
-    currentMonth: new Date(new Date().getFullYear(), new Date().getMonth() +1, 1), // For calendar navigation
+    currentMonth: new Date(new Date().getFullYear(), new Date().getMonth() +1, 1),
   });
 
-  const router = useRouter(); // Changed from useNavigate
+  const router = useRouter(); 
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    // Set default departure date to be in the future if current default is past
     const today = new Date();
     today.setHours(0,0,0,0);
     if (state.departure < today) {
@@ -94,6 +91,7 @@ export function FlightBooking() {
     } else {
         updateState({ currentMonth: new Date(state.departure.getFullYear(), state.departure.getMonth(), 1) });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -108,7 +106,7 @@ export function FlightBooking() {
     if (date) {
         const updates: Partial<typeof state> = { [type]: date, [`${type}Open`]: false };
         if (type === "departure" && state.return && date > state.return) {
-            updates.return = undefined; // Reset return date if it's before new departure date
+            updates.return = undefined; 
         }
         if (type === "departure") {
           updates.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -147,7 +145,7 @@ export function FlightBooking() {
       children: state.passengers.children.toString(),
       infants: state.passengers.infants.toString(),
       travelClass: mapClass(state.travelClass),
-      nonStop: state.zeroCancel.toString(), // Assuming zeroCancel maps to nonStop
+      nonStop: state.zeroCancel.toString(), 
     });
 
     if (state.tripType === "roundTrip" && state.return) {
@@ -164,7 +162,6 @@ export function FlightBooking() {
     } else {
         newMonth.setMonth(state.currentMonth.getMonth() + 1);
     }
-    // Prevent navigating to past months relative to today for departure
     const today = new Date();
     today.setHours(0,0,0,0); 
     if (newMonth < new Date(today.getFullYear(), today.getMonth(), 1) && (!state.return || state.departureOpen)) {
@@ -175,8 +172,8 @@ export function FlightBooking() {
 
 
   if (!isClient) {
-    return ( // Skeleton loader
-        <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-4 sm:p-6 md:-top-16">
+    return ( 
+        <div className="w-full max-w-5xl mx-auto p-2 sm:p-4">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
                 <div className="bg-gray-200 h-16"></div>
                 <div className="p-6 lg:p-8 space-y-6">
@@ -304,7 +301,7 @@ export function FlightBooking() {
             components={{
               Day: ({ date, displayMonth }) => {
                 if (displayMonth.getMonth() !== state.currentMonth.getMonth()) {
-                    return <div className="p-2 w-10 h-10"></div>; // Render empty div for days outside current month view
+                    return <div className="p-2 w-10 h-10"></div>; 
                 }
                 const price = getPrice(date);
                 const isSelected = state[type] && format(state[type]!, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
@@ -348,8 +345,8 @@ export function FlightBooking() {
   );
 
   return (
-    <div className="absolute -top-32 left-0 right-0 mx-auto w-full max-w-5xl p-2 sm:p-4 md:-top-20 z-20">
-      <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+    <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        {/* Top service tabs */}
         <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-2 py-3 sm:px-4 sm:py-4">
           <div className="flex overflow-x-auto scrollbar-hide space-x-2 sm:space-x-4">
             {services.map((s, i) => (
@@ -359,12 +356,11 @@ export function FlightBooking() {
                   "px-3 py-2 sm:px-4 transition-all rounded-md",
                   s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]"
                 )}
-                disabled={!s.active} // Only flights is active for now
+                disabled={!s.active} 
                 onClick={() => { /* Logic to switch forms can be added here */ }}
               >
                 <div className="flex items-center space-x-1.5">
                   <div className="relative">
-                    {/* Prefer Lucide icons if images are not provided */}
                     {s.iconPath ? (
                         <Image src={s.iconPath} alt={s.label} width={20} height={20} className="filter brightness-0 invert" data-ai-hint="travel icon" />
                     ) : (
@@ -382,6 +378,7 @@ export function FlightBooking() {
             ))}
           </div>
         </div>
+        {/* Form content */}
         <div className="p-4 sm:p-6 lg:p-8">
           <div className="space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
@@ -533,9 +530,6 @@ export function FlightBooking() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };
-
-    

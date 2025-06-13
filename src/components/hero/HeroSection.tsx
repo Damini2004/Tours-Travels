@@ -4,12 +4,12 @@
 import VerticalCarousel from "./VerticalCarousel";
 import SocialSidebar from "./SocialSidebar";
 import PlacesGallery from './PlacesGallery';
-import { FlightBooking } from "@/components/forms/FlightBooking"; // Changed path and component name
+import { FlightBooking } from "@/components/forms/FlightBooking";
 
 const HeroSection = () => {
   return (
     <>
-      <div className="relative h-[650px] md:h-[600px] flex items-center">
+      <div className="relative h-[600px] flex items-center">
         {/* Background Gradient */}
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(135deg, #0e3c47, #136f63, #1a5f7a)'
@@ -25,34 +25,33 @@ const HeroSection = () => {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        {/* Social Sidebar */}
         <SocialSidebar />
 
-        {/* Main Content Area for FlightBooking */}
-        {/* The FlightBooking component is absolutely positioned internally and will overlay this section */}
-        <div className="relative z-10 container mx-auto px-0 md:px-6 flex flex-col md:flex-row items-center justify-between h-full w-full">
-          {/* FlightBooking will be positioned by its own absolute styling relative to this container */}
-          <div className="w-full h-full flex items-center justify-center">
-             {/* This inner div helps center FlightBooking if its own positioning needs a reference point within the main container */}
-            <div className="relative w-full max-w-5xl"> {/* Max width to contain the form */}
+        {/* Main Content: FlightBooking on left, VerticalCarousel on right */}
+        <div className="relative z-10 container mx-auto px-4 md:px-6 flex items-center justify-between w-full">
+          {/* Left Side container for FlightBooking, allowing it to be positioned by its wrapper */}
+          <div className="flex-1"> {/* Occupies available space, pushing carousel to right */}
+            <div className="relative w-full max-w-5xl mx-auto"> {/* Centering and max-width for the content area of form */}
+              {/* This div absolutely positions the FlightBooking form */}
+              <div className="absolute -top-52 left-1/2 transform -translate-x-1/2 z-20 w-full px-2 sm:px-0">
                 <FlightBooking />
+              </div>
             </div>
           </div>
 
-
-          {/* Right Side - Vertical Carousel (conditionally rendered) */}
-          <div className="hidden lg:flex justify-center md:justify-end md:ml-8 mt-8 md:mt-0 self-center">
+          {/* Right Side - Vertical Carousel */}
+          <div className="hidden lg:flex justify-end ml-8"> {/* ml-8 for spacing from form area */}
             <VerticalCarousel />
           </div>
         </div>
       </div>
 
-      {/* Bottom Places Gallery */}
-      <PlacesGallery />
+      {/* Bottom Places Gallery (ensure it's not overlapped too much) */}
+      <div className="relative z-0"> {/* z-0 to be behind form if form is very tall */}
+        <PlacesGallery />
+      </div>
     </>
   );
 };
 
 export default HeroSection;
-
-    
