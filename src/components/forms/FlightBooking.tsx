@@ -1,16 +1,18 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation"; // Changed from useNavigate
-import { Plane, Building, Home as HomeIcon, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Plane, Building, Home as HomeIcon, Palmtree, Car, ChevronDown, Search, ArrowLeftRight, ChevronLeft, ChevronRight, Calendar as CalendarIconLucide } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label"; // Added Label import
 
 interface Location { city: string; code: string; airport: string; }
 interface PassengerCounts { adults: number; children: number; infants: number; }
@@ -18,15 +20,15 @@ interface PassengerCounts { adults: number; children: number; infants: number; }
 const services = [
   { icon: Plane, label: "Flights", active: true, hasNew: false },
   { icon: Building, label: "Hotels", active: false, hasNew: false },
-  { icon: HomeIcon, label: "Homestays", active: false, hasNew: false }, // Ensured HomeIcon is used
+  { icon: HomeIcon, label: "Homestays", active: false, hasNew: false },
   { icon: Palmtree, label: "Packages", active: false, hasNew: false },
-  { icon: Car, label: "Cabs", active: false, hasNew: false }, // Changed from Trains to Cabs as per latest user code
+  { icon: Car, label: "Cabs", active: false, hasNew: false },
 ];
 
 const popularCities: Location[] = [
   { city: "Mumbai", code: "BOM", airport: "Chhatrapati Shivaji International Airport" },
   { city: "New Delhi", code: "DEL", airport: "Indira Gandhi International Airport" },
-  { city: "Bangkok", code: "BKK", airport: "Bangkok" }, // Airport name was just "Bangkok"
+  { city: "Bangkok", code: "BKK", airport: "Bangkok" },
   { city: "Bengaluru", code: "BLR", airport: "Bengaluru International Airport" },
   { city: "Pune", code: "PNQ", airport: "Pune Airport" },
   { city: "Chennai", code: "MAA", airport: "Chennai International Airport" },
@@ -35,6 +37,14 @@ const popularCities: Location[] = [
 ];
 
 const travelClasses = ["Economy", "Premium Economy", "Business", "First Class"];
+
+const specialFares = [
+    { id: "regular", label: "Regular", subLabel: "Regular fares" },
+    { id: "student", label: "Student", subLabel: "Extra discounts" },
+    { id: "senior", label: "Senior Citizen", subLabel: "Up to ₹600 off" },
+    { id: "armedforces", label: "Armed Forces", subLabel: "Up to ₹600 off" },
+    { id: "doctors", label: "Doctors/Nurses", subLabel: "Up to ₹600 off" },
+];
 
 const mockPrices: Record<string, number> = {
   "2025-06-01": 7790, "2025-06-02": 8270, "2025-06-03": 6952, "2025-06-04": 6373, "2025-06-05": 6952,
@@ -45,17 +55,17 @@ const mockPrices: Record<string, number> = {
   "2025-06-26": 6126, "2025-06-27": 6126, "2025-06-28": 5378, "2025-06-29": 4962, "2025-06-30": 4962,
 };
 
-export const FlightBooking = () => {
-  const initialDepartureDate = new Date("2025-06-03");
+export function FlightBooking() {
+  const initialDepartureDate = new Date("2025-06-03"); // Design shows 3 Junyy, let's use a real date
   const [state, setState] = useState({
     tripType: "oneWay" as "oneWay" | "roundTrip" | "multiCity",
-    from: popularCities.find(c => c.code === "DEL") || popularCities[1], // Default to Delhi
-    to: popularCities.find(c => c.code === "BLR") || popularCities[3],   // Default to Bengaluru
+    from: popularCities.find(c => c.code === "DEL") || popularCities[1],
+    to: popularCities.find(c => c.code === "BLR") || popularCities[3],
     departure: initialDepartureDate,
     return: undefined as Date | undefined,
     travellers: 1,
     travelClass: "Economy",
-    zeroCancel: false,
+    specialFare: "regular",
     fromOpen: false,
     toOpen: false,
     departureOpen: false,
@@ -67,16 +77,14 @@ export const FlightBooking = () => {
     currentMonth: new Date(initialDepartureDate.getFullYear(), initialDepartureDate.getMonth(), 1),
   });
 
-  const router = useRouter(); // Changed from useNavigate
+  const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    // Ensure departure date is not in the past
     const today = new Date();
-    today.setHours(0,0,0,0); // Compare dates only
+    today.setHours(0,0,0,0);
     if (state.departure < today) {
-        // Set to tomorrow or a sensible future date if initialDepartureDate is also past
         const nextValidDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         updateState({
             departure: nextValidDate,
@@ -97,7 +105,6 @@ export const FlightBooking = () => {
   const handleDate = (date: Date | undefined, type: "departure" | "return") => {
     if (date) {
         const updates: Partial<typeof state> = { [type]: date, [`${type}Open`]: false };
-        // If departure date is changed, update currentMonth for calendar and clear return date if it's before new departure
         if (type === "departure") {
             updates.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
             if (state.return && date > state.return) {
@@ -139,13 +146,12 @@ export const FlightBooking = () => {
       children: state.passengers.children.toString(),
       infants: state.passengers.infants.toString(),
       travelClass: mapClass(state.travelClass),
-      nonStop: state.zeroCancel.toString(), // nonStop was missing from user's code, added from previous version
+      // nonStop query param removed as per previous user actions, confirm if needed
     });
 
     if (state.tripType === "roundTrip" && state.return) {
       params.append("returnDate", format(state.return, "yyyy-MM-dd"));
     }
-    // Navigate to flight search results page, consistent with current app structure
     router.push(`/flights/search?${params.toString()}`);
   };
   
@@ -157,21 +163,17 @@ export const FlightBooking = () => {
         newMonth.setMonth(state.currentMonth.getMonth() + 1);
     }
     
-    // Prevent navigating to months before today for departure calendar
-    // or before departure month for return calendar
     const today = new Date();
     const firstDayOfCurrentDisplayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-    // If departure calendar is open OR (it's a round trip, return calendar is open AND departure date is not set yet)
     if ( (state.departureOpen || (state.tripType === "roundTrip" && state.returnOpen && !state.departure)) && newMonth < firstDayOfCurrentDisplayMonth) {
-        return; // Don't go to past months relative to today
+        return;
     }
     
-    // If return calendar is open and departure date IS set
     if (state.returnOpen && state.departure) {
       const firstDayOfDepartureMonth = new Date(state.departure.getFullYear(), state.departure.getMonth(), 1);
       if (newMonth < firstDayOfDepartureMonth) {
-        return; // Don't go to months before departure month
+        return;
       }
     }
     updateState({ currentMonth: newMonth });
@@ -179,21 +181,21 @@ export const FlightBooking = () => {
 
 
   if (!isClient) {
-    // Basic skeleton or loading state
     return (
         <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-2 sm:p-4 md:-top-16">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
-                <div className="bg-gray-200 h-16"></div> {/* Placeholder for service tabs */}
+                <div className="bg-gray-200 h-16"></div>
                 <div className="p-4 md:p-6 space-y-6">
-                    <div className="h-6 bg-gray-200 rounded w-1/2"></div> {/* Placeholder for trip type */}
+                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="h-16 bg-gray-200 rounded"></div> {/* From input */}
-                        <div className="h-16 bg-gray-200 rounded"></div> {/* To input */}
-                        <div className="h-16 bg-gray-200 rounded"></div> {/* Departure date */}
-                        <div className="h-16 bg-gray-200 rounded"></div> {/* Travellers */}
+                        <div className="h-20 bg-gray-200 rounded"></div> 
+                        <div className="h-20 bg-gray-200 rounded"></div>
+                        <div className="h-20 bg-gray-200 rounded"></div>
+                        <div className="h-20 bg-gray-200 rounded"></div>
                     </div>
+                     <div className="h-20 bg-gray-200 rounded w-full"></div> {/* Placeholder for special fares */}
                     <div className="flex justify-center mt-6">
-                        <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div> {/* Search button */}
+                        <div className="h-12 bg-gray-300 rounded w-full max-w-sm"></div>
                     </div>
                 </div>
             </div>
@@ -204,14 +206,14 @@ export const FlightBooking = () => {
   const LocationPopover = ({ type }: { type: "from" | "to" }) => (
     <Popover open={state[`${type}Open`]} onOpenChange={(open) => updateState({ [`${type}Open`]: open })}>
       <PopoverTrigger asChild>
-        <button className="border rounded-lg p-2 sm:p-3 hover:border-blue-300 flex-1 text-left w-full">
-          <div className="text-xs text-gray-500 mb-1">{type === "from" ? "From" : "To"}</div>
+        <button className="border border-gray-300 rounded-lg p-2 hover:border-blue-500 flex-1 text-left w-full h-[76px] bg-white">
+          <div className="text-xs text-gray-500 mb-0.5">{type === "from" ? "From" : "To"}</div>
           <div className="flex justify-between items-center">
             <div>
-              <div className="font-bold text-sm sm:text-base truncate">{state[type].city}</div>
-              <div className="text-xs text-gray-600 truncate">{state[type].code} - {state[type].airport}</div>
+              <div className="font-bold text-sm text-gray-900 truncate">{state[type].city}</div>
+              <div className="text-xs text-gray-600 truncate">{state[type].code}</div>
             </div>
-            <ChevronDown className={cn("w-4 h-4 text-gray-400 shrink-0", state[`${type}Open`] && "rotate-180")} />
+            <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
           </div>
         </button>
       </PopoverTrigger>
@@ -257,22 +259,23 @@ export const FlightBooking = () => {
   const DatePopover = ({ type }: { type: "departure" | "return" }) => (
     <Popover open={state[`${type}Open`]} onOpenChange={(open) => updateState({ [`${type}Open`]: open })}>
       <PopoverTrigger asChild>
-        <button className="border rounded-lg p-2 sm:p-3 hover:border-blue-300 text-left w-full">
-          <div className="text-xs text-gray-500 mb-1">{type === "departure" ? "Departure" : "Return"}</div>
+        <button className="border border-gray-300 rounded-lg p-2 hover:border-blue-500 text-left w-full h-[76px] bg-white">
+          <div className="text-xs text-gray-500 mb-0.5">{type === "departure" ? "Departure" : "Return"}</div>
           <div className="flex justify-between items-center">
             <div>
               {type === "return" && !state.return ? (
-                <div className="text-xs text-gray-400">Add return date</div>
+                <div className="text-sm text-gray-400">Tue</div> 
               ) : (
                 <>
-                  <div className="font-bold text-sm sm:text-base">
-                    {format(state[type]!, "d MMMM yyyy")}
+                  <div className="font-bold text-sm text-gray-900">
+                    {/* Design shows "3 Junyy", using formatted date */}
+                    {format(state[type]!, "d MMM").split(' ')[0]} <span className="font-normal text-sm">{format(state[type]!, "MMM")}</span> 
                   </div>
-                  <div className="text-xs text-gray-600">{format(state[type]!, "EEEE")}</div>
+                  <div className="text-xs text-gray-600">{format(state[type]!, "EEE")}</div>
                 </>
               )}
             </div>
-            <ChevronDown className={cn("w-4 h-4 text-gray-400 shrink-0", state[`${type}Open`] && "rotate-180")} />
+            <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
           </div>
         </button>
       </PopoverTrigger>
@@ -298,36 +301,30 @@ export const FlightBooking = () => {
             initialFocus
             disabled={(date) => {
                 const today = new Date();
-                today.setHours(0,0,0,0); // Set to start of today for accurate comparison
+                today.setHours(0,0,0,0);
                 if (type === "departure") return date < today;
-                // For return date, disable dates before departure date OR before today if departure isn't set
                 if (type === "return") return state.departure ? date < state.departure : date < today;
                 return false;
             }}
             components={{
               Day: ({ date, displayMonth }) => {
-                 // Only render days for the current display month to avoid overflow issues or rendering outside days
-                 // This check helps if month state isn't perfectly synced with DayPicker's internal month view
                  if (state.currentMonth && displayMonth.getMonth() !== state.currentMonth.getMonth()) {
-                     return <div className="p-1.5 w-10 h-10 flex flex-col items-center justify-center"></div>; // Empty placeholder
+                     return <div className="p-1.5 w-10 h-10 flex flex-col items-center justify-center"></div>;
                  }
-
                 const price = getPrice(date);
                 const isSelected = state[type] && format(state[type]!, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
-                
                 const today = new Date(); today.setHours(0,0,0,0);
                 let isDisabled = false;
                 if (type === "departure") isDisabled = date < today;
                 else if (type === "return") {
                     isDisabled = state.departure ? date < state.departure : date < today;
                 }
-
                 return (
                   <button
                     className={cn(
-                      "relative p-1.5 rounded w-10 h-10 flex flex-col items-center justify-center", // Adjusted padding and size for compactness
+                      "relative p-1.5 rounded w-10 h-10 flex flex-col items-center justify-center",
                       !isDisabled && "hover:bg-gray-100",
-                      isSelected && !isDisabled && "bg-orange-500 text-white hover:bg-orange-600",
+                      isSelected && !isDisabled && "bg-blue-500 text-white hover:bg-blue-600", // Blue for selected
                       isDisabled && "text-gray-400 cursor-not-allowed"
                     )}
                     onClick={() => !isDisabled && handleDate(date, type)}
@@ -358,40 +355,40 @@ export const FlightBooking = () => {
   );
 
   return (
-    <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-2 sm:p-4 md:-top-16"> {/* Reduced padding */}
+    <div className="absolute -top-24 left-0 w-full max-w-[150rem] p-2 sm:p-4 md:-top-16">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-4">
+        <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-3"> {/* Reduced py */}
           <div className="flex overflow-x-auto scrollbar-hide space-x-4">
             {services.map((s, i) => {
-              const IconComponent = s.icon; // Lucide icon component
+              const IconComponent = s.icon;
               return (
                 <button
                   key={i}
                   className={cn(
-                    "px-4 py-2 transition-all rounded-md", // Added rounded-md for consistency
-                    s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]" // Styling from a previous good version
+                    "px-3 py-1.5 transition-all rounded-md", // Reduced padding
+                    s.active ? "border-b-2 border-white text-white bg-[#ffffff1a]" : "text-gray-300 hover:text-white hover:bg-[#ffffff10]"
                   )}
                   disabled={!s.active} 
                 >
                   <div className="flex items-center space-x-1.5">
                     <div className="relative">
-                      <IconComponent className="w-5 h-5" />
+                      <IconComponent className="w-4 h-4" /> {/* Reduced icon size */}
                       {s.hasNew && (
                         <span className="absolute -top-1.5 -right-1.5 bg-pink-500 text-white text-[10px] px-1 py-0.5 rounded-full leading-none">
                           new
                         </span>
                       )}
                     </div>
-                    <span className="text-sm font-medium">{s.label}</span>
+                    <span className="text-xs font-medium">{s.label}</span> {/* Reduced text size */}
                   </div>
                 </button>
               );
             })}
           </div>
         </div>
-        <div className="p-4 md:p-6"> {/* Reduced padding */}
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="p-4 md:p-6">
+          <div className="space-y-5"> {/* Increased base space-y */}
+            <div className="flex justify-between items-center mb-2">
               <div className="flex gap-3">
                 {["oneWay", "roundTrip", "multiCity"].map((type) => (
                   <label key={type} className="flex items-center cursor-pointer p-1 rounded hover:bg-gray-100">
@@ -401,34 +398,33 @@ export const FlightBooking = () => {
                       value={type}
                       checked={state.tripType === type}
                       onChange={(e) => updateState({ tripType: e.target.value as typeof state.tripType })}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-400" // Color from previous version
+                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="ml-1.5 text-sm font-medium text-gray-700">{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
+                    <span className="ml-1.5 text-sm font-medium text-gray-800">{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
                   </label>
                 ))}
               </div>
+              <span className="text-sm text-gray-700">Book Flights</span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> {/* md:grid-cols-2 from prev version */}
-              <div className="md:col-span-2 flex items-center gap-2"> 
-                <LocationPopover type="from" />
-                <Button variant="ghost" size="sm" onClick={handleSwap} className="p-2 hover:bg-blue-50 rounded-full h-10 w-10 sm:h-12 sm:w-12 shrink-0">
-                  <ArrowLeftRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_auto_1fr_1fr_1fr] gap-3 items-end"> {/* Adjusted grid for swap button */}
+              <LocationPopover type="from" />
+                <Button variant="ghost" size="icon" onClick={handleSwap} className="p-2 hover:bg-gray-100 rounded-full h-10 w-10 shrink-0 mx-auto self-center">
+                    <ArrowLeftRight className="w-4 h-4 text-gray-600" />
                 </Button>
-                <LocationPopover type="to" />
-              </div>
+              <LocationPopover type="to" />
               <DatePopover type="departure" />
-              {state.tripType === "roundTrip" ? <DatePopover type="return" /> : <div className="hidden lg:block"></div>} {/* Keep placeholder for grid consistency */}
+              {state.tripType === "roundTrip" ? <DatePopover type="return" /> : <div className="hidden lg:block"></div>} 
 
               <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                 <PopoverTrigger asChild>
-                  <button className="border rounded-lg p-3 hover:border-blue-300 text-left w-full">
-                    <div className="text-xs text-gray-500 mb-1">Travellers & Class</div>
+                  <button className="border border-gray-300 rounded-lg p-2 hover:border-blue-500 text-left w-full h-[76px] bg-white">
+                    <div className="text-xs text-gray-500 mb-0.5">Travellers & Class</div>
                     <div className="flex justify-between items-center">
                       <div>
-                        <div className="font-bold text-sm sm:text-base">{state.travellers} Traveller{state.travellers > 1 ? "s" : ""}</div>
+                        <div className="font-bold text-sm text-gray-900">{state.travellers} Traveller{state.travellers > 1 ? "s" : ""}</div>
                         <div className="text-xs text-gray-600 truncate">{state.travelClass}</div>
                       </div>
-                      <ChevronDown className={cn("w-4 h-4 text-gray-400 shrink-0", state.travellersOpen && "rotate-180")} />
+                      <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
                     </div>
                   </button>
                 </PopoverTrigger>
@@ -441,7 +437,7 @@ export const FlightBooking = () => {
                     ].map((item) => (
                       <div key={item.key} className="space-y-2">
                         <div className="font-semibold text-sm text-gray-700">{item.label}</div>
-                        <ScrollArea className="h-14"> {/* Added scroll area for passenger numbers */}
+                        <ScrollArea className="h-14">
                             <div className="flex gap-2 flex-wrap pb-2">
                             {item.options.map((num) => (
                                 <button
@@ -457,8 +453,8 @@ export const FlightBooking = () => {
                                 className={cn(
                                     "w-8 h-8 rounded text-xs font-medium border",
                                     state.passengers[item.key as keyof PassengerCounts] === num
-                                    ? "bg-orange-500 text-white border-orange-500" // Orange from prev version
-                                    : "bg-gray-100 hover:bg-gray-200 border-gray-200"
+                                    ? "bg-blue-600 text-white border-blue-600"
+                                    : "bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-800"
                                 )}
                                 >
                                 {num}
@@ -470,14 +466,14 @@ export const FlightBooking = () => {
                     ))}
                     <div className="space-y-2">
                       <div className="font-semibold text-sm text-gray-700">TRAVEL CLASS</div>
-                      <div className="grid grid-cols-2 gap-2"> {/* Grid from prev version */}
+                      <div className="grid grid-cols-2 gap-2">
                         {travelClasses.map((c) => (
                           <button
                             key={c}
                             onClick={() => updateState({ travelClass: c })}
                             className={cn(
-                              "px-3 py-1.5 rounded text-xs font-medium border", // py-1.5 from prev
-                              state.travelClass === c ? "bg-orange-500 text-white border-orange-500" : "bg-gray-100 hover:bg-gray-200 border-gray-200"
+                              "px-3 py-1.5 rounded text-xs font-medium border",
+                              state.travelClass === c ? "bg-blue-600 text-white border-blue-600" : "bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-800"
                             )}
                           >
                             {c}
@@ -488,7 +484,7 @@ export const FlightBooking = () => {
                     <div className="flex justify-end pt-2">
                       <Button
                         onClick={applyTravellers}
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-1.5 rounded-full text-sm" // Orange and rounded-full from prev
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-1.5 rounded-md text-sm"
                         disabled={totalPassengers() === 0}
                       >
                         Apply
@@ -498,13 +494,44 @@ export const FlightBooking = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <div className="flex justify-center pt-2 sm:pt-4"> {/* pt from prev */}
+
+            {/* Special Fares Section */}
+            <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 text-sm">Special Fares</h3>
+                    <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">Save</span>
+                </div>
+                <RadioGroup
+                    value={state.specialFare}
+                    onValueChange={(value) => updateState({ specialFare: value })}
+                    className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"
+                >
+                    {specialFares.map((fare) => (
+                    <Label
+                        key={fare.id}
+                        htmlFor={`fare-${fare.id}`}
+                        className={cn(
+                        "border rounded-md p-3 text-center cursor-pointer transition-all duration-200",
+                        state.specialFare === fare.id
+                            ? "border-blue-500 bg-blue-50 shadow-md"
+                            : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-sm"
+                        )}
+                    >
+                        <RadioGroupItem value={fare.id} id={`fare-${fare.id}`} className="sr-only peer" />
+                        <div className="font-medium text-sm text-gray-900 peer-data-[state=checked]:text-blue-700">{fare.label}</div>
+                        <div className="text-xs text-gray-500 peer-data-[state=checked]:text-blue-600">{fare.subLabel}</div>
+                    </Label>
+                    ))}
+                </RadioGroup>
+            </div>
+
+
+            <div className="flex justify-center pt-3">
               <Button
                 onClick={search}
-                className="w-full sm:w-auto sm:min-w-[280px] h-12 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-shadow" 
-                // Gradient and styling from prev version
+                className="w-full max-w-xs h-12 bg-[#0c4d52] hover:bg-[#0a3f44] text-white px-8 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-shadow"
               >
-                Search Flights
+                Search
               </Button>
             </div>
           </div>
@@ -512,6 +539,4 @@ export const FlightBooking = () => {
       </div>
     </div>
   );
-};
-
-  
+}
