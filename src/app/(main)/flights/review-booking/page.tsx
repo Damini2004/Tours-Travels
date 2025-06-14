@@ -109,18 +109,18 @@ function ReviewBookingContent() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
-            <div className="bg-[#031f2d]/80 backdrop-blur-sm text-primary-foreground py-4 sticky top-0 z-10">
+            <div className="bg-[#031f2d]/80 backdrop-blur-sm text-white py-4 sticky top-0 z-10">
                 <div className="max-w-6xl mx-auto px-4">
                     <h1 className="text-2xl font-semibold mb-3">Complete your booking</h1>
-                    <div className="flex border-b border-primary-foreground/30 space-x-1">
+                    <div className="flex border-b border-white/30 space-x-1">
                         {tabs.map((tab) => (
                             <button
                                 key={tab}
                                 className={cn(
                                     "pb-2 px-3 text-sm font-medium focus:outline-none",
                                     activeTab === tab
-                                        ? "border-b-2 border-primary-foreground text-primary-foreground"
-                                        : "text-primary-foreground/70 hover:text-primary-foreground"
+                                        ? "border-b-2 border-white text-white"
+                                        : "text-white/70 hover:text-white"
                                 )}
                             >
                                 {tab}
@@ -298,6 +298,3 @@ export default function ReviewBookingPage() {
         </Suspense>
     )
 }
-
-
-    
