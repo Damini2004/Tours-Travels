@@ -1,4 +1,3 @@
-
 "use client"; 
 
 import React, { useState, useEffect, Suspense, useMemo, useRef } from "react";
@@ -430,7 +429,9 @@ function FlightSearchClientInternal() {
     setActiveSortTab(tabKey);
     if (tabKey === "cheapest") setSortOption("price");
     else if (tabKey === "nonStopFirst") setSortOption("nonStopFirst");
-    else if (tabKey === "youMayPrefer") setSortOption("duration"); 
+    else if (tabKey === "youMayPrefer") {
+        setSortOption("duration"); // Simplified sort, actual "you may prefer" is complex
+    }
     else if (tabKey === "otherSort") setSortOption("departure"); 
   };
 
@@ -452,21 +453,18 @@ function FlightSearchClientInternal() {
         params.set('departureDate', itinerary.segments[0].departure.at);
         params.set('arrivalDate', itinerary.segments[itinerary.segments.length - 1].arrival.at);
         params.set('duration', itinerary.duration);
-        // For airlineName, it's better to pass a code and let the review page resolve it if needed, or pass a primary carrier.
-        // Amadeus validatingAirlineCodes might be an array, take the first.
         params.set('airlineName', selectedFlight.validatingAirlineCodes[0] || itinerary.segments[0].carrierCode);
-        params.set('flightNumber', itinerary.segments.map(s => s.number).join(', ')); // Join if multiple
+        params.set('flightNumber', itinerary.segments.map(s => s.number).join(', '));
         params.set('stops', (itinerary.segments.length - 1).toString());
         
-        // Baggage info can be complex. Simplified for now.
         const travelerPricing = selectedFlight.travelerPricings[0];
         const firstSegmentFareDetails = travelerPricing?.fareDetailsBySegment[0];
-        const cabinBaggage = "7 Kg"; // Placeholder
+        const cabinBaggage = "7 Kg"; 
         const checkInBaggage = firstSegmentFareDetails?.includedCheckedBags?.quantity 
                                 ? `${firstSegmentFareDetails.includedCheckedBags.quantity} PC`
                                 : (firstSegmentFareDetails?.includedCheckedBags?.weight && firstSegmentFareDetails?.includedCheckedBags?.weightUnit
                                     ? `${firstSegmentFareDetails.includedCheckedBags.weight} ${firstSegmentFareDetails.includedCheckedBags.weightUnit}`
-                                    : "15 Kg"); // Placeholder
+                                    : "15 Kg"); 
 
         params.set('cabinBaggage', cabinBaggage);
         params.set('checkInBaggage', checkInBaggage);
@@ -636,7 +634,7 @@ function FlightSearchClientInternal() {
                         </Popover>
                     </div>
                     <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
-                        <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS & CLASS</Label>
+                        <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS &amp; CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
                                 <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-primary-foreground hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium truncate">
@@ -644,7 +642,7 @@ function FlightSearchClientInternal() {
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80 p-4 space-y-3">
-                                <div className="text-lg font-semibold mb-2">Select Passengers & Class</div>
+                                <div className="text-lg font-semibold mb-2">Select Passengers &amp; Class</div>
                                 <div className="space-y-1">
                                     <Label className="text-xs font-normal">Adults (12+ yrs)</Label>
                                     <Select value={formAdults} onValueChange={setFormAdults}>
@@ -796,7 +794,7 @@ function FlightSearchClientInternal() {
                         </Popover>
                     </div>
                     <div className="rounded-md bg-white/10 flex flex-col justify-between p-1 lg:px-1 lg:py-0.5">
-                        <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS & CLASS</Label>
+                        <Label className="text-xs text-primary-foreground opacity-80 block mb-0.5">PASSENGERS &amp; CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
                                 <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-primary-foreground hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium truncate">
@@ -804,7 +802,7 @@ function FlightSearchClientInternal() {
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80 p-4 space-y-3">
-                                <div className="text-lg font-semibold mb-2">Select Passengers & Class</div>
+                                <div className="text-lg font-semibold mb-2">Select Passengers &amp; Class</div>
                                 <div className="space-y-1">
                                     <Label className="text-xs font-normal">Adults (12+ yrs)</Label>
                                     <Select value={formAdults} onValueChange={setFormAdults}>
@@ -856,19 +854,19 @@ function FlightSearchClientInternal() {
           className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky self-start h-[calc(100vh-var(--header-actual-height,180px)-3rem)] overflow-y-auto pr-2"
           style={{ top: `calc(${headerHeight}px + 1.5rem)` }}
         > 
-          <div className="bg-card border rounded-lg p-4 shadow-sm">
+          <div className="bg-white shadow-xl rounded-lg p-4">
             <Collapsible open={isAppliedFiltersOpen} onOpenChange={setIsAppliedFiltersOpen} defaultOpen className="mb-4">
                 <div className="flex justify-between items-center mb-2">
                     <CollapsibleTrigger className="flex-1 text-left">
-                        <h3 className="text-md font-headline font-semibold text-card-foreground">Applied Filters</h3>
+                        <h3 className="text-md font-headline font-semibold text-gray-700">Applied Filters</h3>
                     </CollapsibleTrigger>
                     <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-accent" onClick={clearAllFilters}>Clear All</Button>
                 </div>
                 <CollapsibleContent className="space-y-2 animate-slide-down">
                     {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && (
-                        <div className="flex items-center justify-between p-1.5 bg-primary/10 rounded-md text-xs text-primary border border-primary/20">
+                        <div className="flex items-center justify-between p-1.5 bg-accent/10 rounded-md text-xs text-accent border border-accent/20">
                             <span>Non Stop</span>
-                            <Button variant="ghost" size="icon" className="w-5 h-5" onClick={() => {
+                            <Button variant="ghost" size="icon" className="w-5 h-5 text-accent" onClick={() => {
                                 setStopFilters({ "0": true, "1": true, "2+": true }); 
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
@@ -879,7 +877,7 @@ function FlightSearchClientInternal() {
                 </CollapsibleContent>
             </Collapsible>
             <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-card-foreground hover:text-accent transition-colors mb-2">
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-700 hover:text-accent transition-colors mb-2">
                 <span>Popular Filters</span>
                 {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
@@ -890,36 +888,36 @@ function FlightSearchClientInternal() {
                       id={`stop-filter-${stopKey}`}
                       checked={stopFilters[stopKey]}
                       onCheckedChange={() => handleStopFilterChange(stopKey)}
-                      className="border-muted-foreground data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"
+                      className="border-gray-400 data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"
                       aria-label={`Filter by ${stopKey === "0" ? "non-stop" : stopKey === "1" ? "1 stop" : "2+ stops"}`}
                     />
-                    <label htmlFor={`stop-filter-${stopKey}`} className="text-sm font-medium text-foreground hover:text-accent transition-colors cursor-pointer">
+                    <label htmlFor={`stop-filter-${stopKey}`} className="text-sm font-medium text-gray-700 hover:text-accent transition-colors cursor-pointer">
                       {stopKey === "0" ? "Non-stop" : stopKey === "1" ? "1 Stop" : "2+ Stops"}
                     </label>
                   </div>
                 ))}
               </CollapsibleContent>
             </Collapsible>
-            <Separator className="my-4"/>
+            <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isDepartureAirportsOpen} onOpenChange={setIsDepartureAirportsOpen} className="mb-4">
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-card-foreground hover:text-accent transition-colors mb-2">
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-700 hover:text-accent transition-colors mb-2">
                     <span>Departure Airports</span>
                     {isDepartureAirportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
                     <div className="flex items-center gap-2.5">
-                        <Checkbox id="dep-airport-1" className="border-muted-foreground data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"/>
-                        <label htmlFor="dep-airport-1" className="text-sm font-medium text-foreground hover:text-accent transition-colors cursor-pointer">Hindon Airport (DZKm)</label>
+                        <Checkbox id="dep-airport-1" className="border-gray-400 data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"/>
+                        <label htmlFor="dep-airport-1" className="text-sm font-medium text-gray-700 hover:text-accent transition-colors cursor-pointer">Hindon Airport (DZKm)</label>
                     </div>
                     <div className="flex items-center gap-2.5">
-                        <Checkbox id="dep-airport-2" className="border-muted-foreground data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"/>
-                        <label htmlFor="dep-airport-2" className="text-sm font-medium text-foreground hover:text-accent transition-colors cursor-pointer">Indira Gandhi Intl Airport</label>
+                        <Checkbox id="dep-airport-2" className="border-gray-400 data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"/>
+                        <label htmlFor="dep-airport-2" className="text-sm font-medium text-gray-700 hover:text-accent transition-colors cursor-pointer">Indira Gandhi Intl Airport</label>
                     </div>
                 </CollapsibleContent>
             </Collapsible>
-            <Separator className="my-4"/>
+            <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-foreground hover:text-accent transition-colors mb-2">
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-700 hover:text-accent transition-colors mb-2">
                 <span>One Way Price</span>
                 {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
@@ -930,10 +928,10 @@ function FlightSearchClientInternal() {
                     max={initialMaxPrice}
                     step={100}
                     onValueChange={(value) => setPriceRange(value as [number, number])} 
-                    className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
-                    disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
+                    className="[&gt;span]:bg-accent [&gt;span&gt;span]:bg-accent-foreground [&gt;span&gt;span]:border-accent"
+                    disabled={flights.length === 0 || initialMinPrice &gt;= initialMaxPrice}
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
+                <div className="flex justify-between text-xs text-gray-500">
                   <span>₹{priceRange[0]}</span>
                   <span>₹{priceRange[1]}</span>
                 </div>
@@ -944,20 +942,20 @@ function FlightSearchClientInternal() {
         <div className="lg:hidden mb-4">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-accent border-accent hover:bg-accent/10 font-semibold py-3 rounded-lg">
-                <Filter className="w-5 h-5" />
-                Filters & Sort
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-gray-700 border-gray-400 hover:bg-gray-100 font-semibold py-3 rounded-lg">
+                <Filter className="w-5 h-5 text-accent" />
+                Filters &amp; Sort
               </Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="p-4 bg-card rounded-t-xl max-h-[80vh] overflow-y-auto">
+            <SheetContent side="bottom" className="p-4 bg-white rounded-t-xl max-h-[80vh] overflow-y-auto">
               <SheetHeader className="mb-4">
-                <SheetTitle className="text-lg font-headline font-semibold text-card-foreground flex items-center gap-2">
+                <SheetTitle className="text-lg font-headline font-semibold text-gray-800 flex items-center gap-2">
                    <Filter className="w-5 h-5 text-accent" /> Refine Your Search
                 </SheetTitle>
               </SheetHeader>
               <div className="space-y-5">
                  <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-accent transition-colors">
+                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 hover:text-accent transition-colors">
                         <span>Popular Filters</span>
                         {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </CollapsibleTrigger>
@@ -968,19 +966,19 @@ function FlightSearchClientInternal() {
                             id={`stop-filter-mobile-${stop}`}
                             checked={stopFilters[stop]}
                             onCheckedChange={() => handleStopFilterChange(stop)}
-                            className="border-muted-foreground data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"
+                            className="border-gray-400 data-[state=checked]:bg-accent data-[state=checked]:border-accent focus:ring-accent w-4 h-4 rounded"
                             aria-label={`Filter by ${stop === "0" ? "non-stop" : stop === "1" ? "1 stop" : "2+ stops"}`}
                             />
-                            <label htmlFor={`stop-filter-mobile-${stop}`} className="text-xs font-medium text-foreground hover:text-accent transition-colors cursor-pointer">
+                            <label htmlFor={`stop-filter-mobile-${stop}`} className="text-xs font-medium text-gray-700 hover:text-accent transition-colors cursor-pointer">
                             {stop === "0" ? "Non-stop" : stop === "1" ? "1 Stop" : "2+ Stops"}
                             </label>
                         </div>
                         ))}
                     </CollapsibleContent>
                 </Collapsible>
-                <Separator/>
+                <Separator className="bg-gray-200"/>
                 <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-accent transition-colors">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 hover:text-accent transition-colors">
                     <span>One Way Price</span>
                     {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </CollapsibleTrigger>
@@ -991,18 +989,18 @@ function FlightSearchClientInternal() {
                         max={initialMaxPrice}
                         step={100}
                         onValueChange={(value) => setPriceRange(value as [number, number])}
-                        className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
-                        disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
+                        className="[&gt;span]:bg-accent [&gt;span&gt;span]:bg-accent-foreground [&gt;span&gt;span]:border-accent"
+                        disabled={flights.length === 0 || initialMinPrice &gt;= initialMaxPrice}
                     />
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <div className="flex justify-between text-xs text-gray-500">
                       <span>₹{priceRange[0]}</span>
                       <span>₹{priceRange[1]}</span>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
-                <Separator/>
+                <Separator className="bg-gray-200"/>
                 <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-2 block">Sort by:</h4>
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2 block">Sort by:</h4>
                     <div className="grid grid-cols-2 gap-2">
                         {[
                             {key: "cheapest", label: "Cheapest", icon: Zap},
@@ -1011,7 +1009,7 @@ function FlightSearchClientInternal() {
                             {key: "otherSort", label: "Other Sort", icon: MoreHorizontal}
                         ].map(tab => (
                              <Button key={tab.key} variant={activeSortTab === tab.key ? "default" : "outline"} size="sm" onClick={() => handleSortTabChange(tab.key)} 
-                             className={cn("text-xs h-auto py-1.5 px-2.5 flex-col items-center justify-center h-16", activeSortTab === tab.key ? "bg-accent text-accent-foreground border-accent" : "border-input")}>
+                             className={cn("text-xs h-auto py-1.5 px-2.5 flex-col items-center justify-center h-16", activeSortTab === tab.key ? "bg-accent text-accent-foreground border-accent" : "border-input text-gray-700")}>
                                 <tab.icon className="w-5 h-5 mb-1"/>{tab.label}
                             </Button>
                         ))}
@@ -1023,11 +1021,11 @@ function FlightSearchClientInternal() {
         </div>
         <main className="flex-1">
           <h2 className="text-xl font-headline font-semibold text-primary-foreground mb-3">Flights from {queryOrigin} to {queryDestination}</h2>
-          <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-card rounded-lg shadow-sm border">
+          <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-white rounded-lg shadow-md border">
             {[
-              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
+              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length &gt; 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length &gt; 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length &gt; 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length &gt; 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length &gt; 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length &gt; 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
               { key: "otherSort", label: "Other Sort", icon: MoreHorizontal, price: "", duration: "" }
             ].map(tab => (
               <Button
@@ -1035,158 +1033,158 @@ function FlightSearchClientInternal() {
                 variant={activeSortTab === tab.key ? "default" : "ghost"}
                 onClick={() => handleSortTabChange(tab.key)}
                 className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center",
-                  activeSortTab === tab.key ? "bg-accent text-accent-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  activeSortTab === tab.key ? "bg-accent text-accent-foreground shadow-sm" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 )}
               >
                 <tab.icon className="w-5 h-5 mb-1" />
                 {tab.label}
-                {(tab.price || tab.duration) && (tab.price !== "N/A") && <span className="text-xxs opacity-80 mt-0.5">{tab.price}{tab.price && tab.duration && " | "}{tab.duration}</span>}
-                 {(tab.price === "N/A") && <span className="text-xxs opacity-80 mt-0.5">Not Available</span>}
-              </Button>
+                {(tab.price || tab.duration) && (tab.price !== "N/A") && &lt;span className="text-xxs opacity-80 mt-0.5">{tab.price}{tab.price &amp;&amp; tab.duration &amp;&amp; " | "}{tab.duration}&lt;/span>}
+                 {(tab.price === "N/A") && &lt;span className="text-xxs opacity-80 mt-0.5">Not Available&lt;/span>}
+              &lt;/Button>
             ))}
-          </div>
-          <div className="mb-4 ml-1">
-            <p className="text-sm text-primary-foreground/80 ">{filteredFlights.length} flights found</p>
-            <p className="text-xs text-primary-foreground/60">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
-          </div>
-          <div className="mb-4 p-2 bg-accent/20 border border-accent/30 rounded-md text-center">
-                <p className="text-sm text-accent-foreground font-medium">
+          &lt;/div>
+          &lt;div className="mb-4 ml-1">
+            &lt;p className="text-sm text-primary-foreground/80 ">{filteredFlights.length} flights found&lt;/p>
+            &lt;p className="text-xs text-primary-foreground/60">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.&lt;/p>
+          &lt;/div>
+          &lt;div className="mb-4 p-2 bg-accent/20 border border-accent/30 rounded-md text-center">
+                &lt;p className="text-sm text-accent-foreground font-medium">
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
-                </p>
-            </div>
-          <div className="space-y-4">
-            {currentFlightsToDisplay.map((flight) => {
+                &lt;/p>
+            &lt;/div>
+          &lt;div className="space-y-4">
+            {currentFlightsToDisplay.map((flight) =&gt; {
                 const numAdults = parseInt(queryAdults) || 1; 
                 const pricePerAdult = (parseFloat(flight.price.total) / numAdults).toFixed(2);
-                const displayItineraryIndex = queryIsRoundTrip && selectedOutbound ? 1 : 0;
+                const displayItineraryIndex = queryIsRoundTrip &amp;&amp; selectedOutbound ? 1 : 0;
                 const itinerary = flight.itineraries[displayItineraryIndex];
 
                 if (!itinerary) return null; 
 
                 return (
-                <Card
+                &lt;Card
                   key={`${flight.id}-${displayItineraryIndex}`}
                   className={cn(
-                    "overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200"
+                    "overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 bg-white"
                   )}
                   role="region"
-                  aria-label={`Flight offer ${flight.id} ${queryIsRoundTrip && selectedOutbound ? "return" : "outbound"}`}
-                >
-                  <CardContent className="p-3 md:p-4">
-                      <div className="mb-0 last:mb-0">
-                        {queryIsRoundTrip && (
-                          <h3 className="text-md font-headline font-semibold text-foreground mb-2 border-b pb-1.5">
+                  aria-label={`Flight offer ${flight.id} ${queryIsRoundTrip &amp;&amp; selectedOutbound ? "return" : "outbound"}`}
+                &gt;
+                  &lt;CardContent className="p-3 md:p-4">
+                      &lt;div className="mb-0 last:mb-0">
+                        {queryIsRoundTrip &amp;&amp; (
+                          &lt;h3 className="text-md font-headline font-semibold text-gray-800 mb-2 border-b pb-1.5">
                             {selectedOutbound ? "Return Journey" : "Outbound Journey"}
-                          </h3>
+                          &lt;/h3>
                         )}
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                          <div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
-                              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                        &lt;div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                          &lt;div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
+                              &lt;div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
                                   {itinerary.segments[0].carrierCode}
-                              </div>
-                              <div>
-                                  <div className="text-sm font-semibold text-foreground">
+                              &lt;/div>
+                              &lt;div>
+                                  &lt;div className="text-sm font-semibold text-gray-800">
                                       {itinerary.segments[0].carrierCode} Airlines 
-                                  </div>
-                                  <div className="text-xxs text-muted-foreground">
-                                      {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
-                                  </div>
-                              </div>
-                          </div>
-                          <div className="flex flex-1 items-center justify-around gap-2 w-full md:w-auto">
-                            <div className="text-center md:text-left">
-                                <div className="text-xl font-bold text-foreground">
+                                  &lt;/div>
+                                  &lt;div className="text-xxs text-gray-500">
+                                      {itinerary.segments.map(s =&gt; `${s.carrierCode}-${s.number}`).join(', ')}
+                                  &lt;/div>
+                              &lt;/div>
+                          &lt;/div>
+                          &lt;div className="flex flex-1 items-center justify-around gap-2 w-full md:w-auto">
+                            &lt;div className="text-center md:text-left">
+                                &lt;div className="text-xl font-bold text-gray-900">
                                     {format(new Date(itinerary.segments[0].departure.at), "HH:mm")}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
+                                &lt;/div>
+                                &lt;div className="text-xs text-gray-500">
                                     {itinerary.segments[0].departure.iataCode}
-                                </div>
-                            </div>
-                            <div className="flex-grow flex flex-col items-center justify-center px-2 min-w-[80px] md:min-w-[100px]">
-                                <div className="text-xs font-medium text-muted-foreground">
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div className="flex-grow flex flex-col items-center justify-center px-2 min-w-[80px] md:min-w-[100px]">
+                                &lt;div className="text-xs font-medium text-gray-600">
                                     {itinerary.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
-                                </div>
-                                <div className="w-full h-px bg-border relative my-1">
-                                    {itinerary.segments.length -1 > 0 && Array.from({length: itinerary.segments.length -1}).map((_,i) => (
-                                        <div key={i} className="absolute h-1.5 w-1.5 bg-muted-foreground rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%)`}}></div>
+                                &lt;/div>
+                                &lt;div className="w-full h-px bg-gray-300 relative my-1">
+                                    {itinerary.segments.length -1 &gt; 0 &amp;&amp; Array.from({length: itinerary.segments.length -1}).map((_,i) =&gt; (
+                                        &lt;div key={i} className="absolute h-1.5 w-1.5 bg-gray-500 rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}>&lt;/div>
                                     ))}
-                                </div>
-                                <div className="text-xs font-medium text-primary">
+                                &lt;/div>
+                                &lt;div className="text-xs font-medium text-blue-600">
                                     {getStopsLabel(itinerary.segments)}
-                                </div>
-                            </div>
-                            <div className="text-center md:text-right">
-                                <div className="text-xl font-bold text-foreground">
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div className="text-center md:text-right">
+                                &lt;div className="text-xl font-bold text-gray-900">
                                     {format(new Date(itinerary.segments[itinerary.segments.length - 1].arrival.at), "HH:mm")}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
+                                &lt;/div>
+                                &lt;div className="text-xs text-gray-500">
                                     {itinerary.segments[itinerary.segments.length - 1].arrival.iataCode}
-                                </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                <div className="text-xl md:text-2xl font-extrabold text-foreground text-center md:text-right">
+                                &lt;/div>
+                            &lt;/div>
+                          &lt;/div>
+                          &lt;div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
+                                &lt;div className="text-xl md:text-2xl font-extrabold text-gray-900 text-center md:text-right">
                                     ₹{pricePerAdult}
-                                </div>
-                                {parseInt(queryAdults) > 0 && <p className="text-xxs text-muted-foreground -mt-1">per adult</p> }
-                                {queryIsRoundTrip && !selectedOutbound ? (
-                                <Button
-                                    onClick={() => handleSelectFlight(flight.id, 0)}
+                                &lt;/div>
+                                {parseInt(queryAdults) &gt; 0 &amp;&amp; &lt;p className="text-xxs text-gray-500 -mt-1">per adult&lt;/p> }
+                                {queryIsRoundTrip &amp;&amp; !selectedOutbound ? (
+                                &lt;Button
+                                    onClick={() =&gt; handleSelectFlight(flight.id, 0)}
                                     className="w-full md:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`Select outbound flight ${flight.id}`}
-                                >
+                                &gt;
                                     Select Outbound
-                                </Button>
+                                &lt;/Button>
                                 ) : (
-                                <Button
-                                    onClick={() => handleSelectFlight(flight.id, displayItineraryIndex)}
+                                &lt;Button
+                                    onClick={() =&gt; handleSelectFlight(flight.id, displayItineraryIndex)}
                                     className="w-full md:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`View prices for flight ${flight.id}`}
-                                >
-                                    {queryIsRoundTrip && selectedOutbound ? 'Select Return' : 'View Prices'}
-                                </Button>
+                                &gt;
+                                    {queryIsRoundTrip &amp;&amp; selectedOutbound ? 'Select Return' : 'View Prices'}
+                                &lt;/Button>
                                 )}
-                           </div>
-                        </div>
-                        <div className="mt-3 border-t pt-2">
-                           <div className="flex justify-between items-center">
-                             <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-accent">Add to compare +</Button>
-                             <Collapsible>
-                                <CollapsibleTrigger
-                                    className="text-primary hover:text-accent text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
-                                    onClick={() => setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
+                           &lt;/div>
+                        &lt;/div>
+                        &lt;div className="mt-3 border-t border-gray-200 pt-2">
+                           &lt;div className="flex justify-between items-center">
+                             &lt;Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700">Add to compare +&lt;/Button>
+                             &lt;Collapsible>
+                                &lt;CollapsibleTrigger
+                                    className="text-blue-600 hover:text-blue-700 text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
+                                    onClick={() =&gt; setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
                                     aria-expanded={expandedFlight === `${flight.id}-${displayItineraryIndex}`}
                                     aria-controls={`flight-details-${flight.id}-${displayItineraryIndex}`}
-                                >
+                                &gt;
                                     {expandedFlight === `${flight.id}-${displayItineraryIndex}` ? "Hide Details" : "View Flight Details"}
                                     {expandedFlight === `${flight.id}-${displayItineraryIndex}` ? (
-                                    <ChevronUp className="w-3 h-3" />
+                                    &lt;ChevronUp className="w-3 h-3" />
                                     ) : (
-                                    <ChevronDown className="w-3 h-3" />
+                                    &lt;ChevronDown className="w-3 h-3" />
                                     )}
-                                </CollapsibleTrigger>
-                                <CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-muted/30 p-2 rounded-md">
-                                    {itinerary.segments.map((segment, segIdx) => (
-                                    <div
+                                &lt;/CollapsibleTrigger>
+                                &lt;CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-gray-100/70 p-2 rounded-md">
+                                    {itinerary.segments.map((segment, segIdx) =&gt; (
+                                    &lt;div
                                         key={segment.id}
-                                        className="text-xxs text-muted-foreground border-l-2 border-accent/50 pl-2 py-1"
-                                    >
-                                        <div className="flex items-center gap-1 font-medium text-foreground">
-                                        <MapPin className="w-3 h-3 text-accent" />
-                                        <span>
+                                        className="text-xxs text-gray-500 border-l-2 border-accent/50 pl-2 py-1"
+                                    &gt;
+                                        &lt;div className="flex items-center gap-1 font-medium text-gray-800">
+                                        &lt;MapPin className="w-3 h-3 text-accent" />
+                                        &lt;span>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
                                             {format(new Date(segment.arrival.at), "HH:mm")} ({segment.arrival.iataCode})
-                                        </span>
-                                        </div>
-                                        <div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}</div>
-                                        <div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
-                                        <Clock className="w-3 h-3 text-accent" />
+                                        &lt;/span>
+                                        &lt;/div>
+                                        &lt;div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}&lt;/div>
+                                        &lt;div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
+                                        &lt;Clock className="w-3 h-3 text-accent" />
                                         Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
-                                        </div>
-                                        {segIdx < itinerary.segments.length - 1 && itinerary.segments[segIdx + 1] && (
-                                        <div className="mt-1 text-muted-foreground/80 ml-[0.875rem]">
+                                        &lt;/div>
+                                        {segIdx &lt; itinerary.segments.length - 1 &amp;&amp; itinerary.segments[segIdx + 1] &amp;&amp; (
+                                        &lt;div className="mt-1 text-gray-500/80 ml-[0.875rem]">
                                             Layover at: {itinerary.segments[segIdx].arrival.iataCode} for {
-                                                (() => {
+                                                (() =&gt; {
                                                     const arrivalTime = new Date(segment.arrival.at).getTime();
                                                     const nextDepartureTime = new Date(itinerary.segments[segIdx+1].departure.at).getTime();
                                                     const layoverMillis = nextDepartureTime - arrivalTime;
@@ -1196,56 +1194,55 @@ function FlightSearchClientInternal() {
                                                 })()
                                             } (Departs:{" "}
                                             {format(new Date(itinerary.segments[segIdx + 1].departure.at), "HH:mm, d MMM")})
-                                        </div>
+                                        &lt;/div>
                                         )}
-                                    </div>
+                                    &lt;/div>
                                     ))}
-                                </CollapsibleContent>
-                                </Collapsible>
-                           </div>
-                        </div>
-                        <div className="mt-2 text-center">
-                            <p className="text-xs text-accent-foreground/90 bg-accent/30 p-1.5 rounded-md">
+                                &lt;/CollapsibleContent>
+                                &lt;/Collapsible>
+                           &lt;/div>
+                        &lt;/div>
+                        &lt;div className="mt-2 text-center">
+                            &lt;p className="text-xs text-accent-foreground/90 bg-accent/30 p-1.5 rounded-md">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
-                            </p>
-                        </div>
-                      </div>
-                  </CardContent>
-                </Card>
+                            &lt;/p>
+                        &lt;/div>
+                      &lt;/div>
+                  &lt;/CardContent>
+                &lt;/Card>
                 );
             })}
-          </div>
-        </main>
-      </div>
-      <footer className="mt-12 py-8 bg-card text-center text-muted-foreground border-t">
-        <p className="text-sm font-medium">
+          &lt;/div>
+        &lt;/main>
+      &lt;/div>
+      &lt;footer className="mt-12 py-8 bg-white text-center text-gray-500 border-t border-gray-200">
+        &lt;p className="text-sm font-medium">
           © {new Date().getFullYear()} Sky Explorer. All rights reserved.
-        </p>
-        <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
-      </footer>
-      <style jsx global>{`
+        &lt;/p>
+        &lt;p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).&lt;/p>
+      &lt;/footer>
+      &lt;style jsx global>{`
         :root {
           --header-actual-height: ${headerHeight}px;
         }
-      `}</style>
-    </div>
+      `}&lt;/style>
+    &lt;/div>
   );
 }
 
 
 export default function FlightSearchClient() {
   return (
-    <Suspense fallback={
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
-        <Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-primary-foreground mb-2">Loading Flight Details...</h2>
-        <p className="text-primary-foreground/80">One moment please.</p>
-      </div>
+    &lt;Suspense fallback={
+      &lt;div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+        &lt;Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
+        &lt;h2 className="text-2xl font-headline text-primary-foreground mb-2">Loading Flight Details...&lt;/h2>
+        &lt;p className="text-primary-foreground/80">One moment please.&lt;/p>
+      &lt;/div>
     }>
-      <TooltipProvider>
-        <FlightSearchClientInternal />
-      </TooltipProvider>
-    </Suspense>
+      &lt;TooltipProvider>
+        &lt;FlightSearchClientInternal />
+      &lt;/TooltipProvider>
+    &lt;/Suspense>
   );
 }
-
