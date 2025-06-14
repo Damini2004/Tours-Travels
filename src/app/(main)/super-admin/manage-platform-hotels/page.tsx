@@ -80,6 +80,9 @@ export default function ManagePlatformHotelsPage() {
         }
     }
 
+    const defaultPlaceholderThumbnail = 'https://placehold.co/600x400.png';
+    const defaultPlaceholderImage = 'https://placehold.co/1200x800.png';
+    const isCustomThumbnail = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultPlaceholderThumbnail;
 
     const newHotelData: Omit<Hotel, 'id'> = {
       name: hotelName,
@@ -90,10 +93,10 @@ export default function ManagePlatformHotelsPage() {
       rating: parseInt(rating) || 0,
       ownerEmail: ownerEmail.trim(),
       isApproved: true, 
-      thumbnailUrl: thumbnailUrl || 'https://placehold.co/600x400.png',
-      thumbnailHint: 'hotel exterior',
-      images: [thumbnailUrl || 'https://placehold.co/1200x800.png'],
-      imageHints: ['hotel room'],
+      thumbnailUrl: thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderThumbnail,
+      thumbnailHint: isCustomThumbnail ? 'hotel building' : 'hotel exterior',
+      images: [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderImage],
+      imageHints: [isCustomThumbnail ? 'hotel main view' : 'hotel room'],
       checkInTime: "15:00", 
       checkOutTime: "11:00", 
     };
@@ -184,7 +187,7 @@ export default function ManagePlatformHotelsPage() {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="saThumbnailUrl">Thumbnail URL</Label>
-                <Input id="saThumbnailUrl" placeholder="https://example.com/image.png" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} />
+                <Input id="saThumbnailUrl" placeholder="https://example.com/image.png or leave for default" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} />
             </div>
             <Button type="submit" className="w-full">
               Add Hotel to Platform
@@ -229,3 +232,4 @@ export default function ManagePlatformHotelsPage() {
     </div>
   );
 }
+
