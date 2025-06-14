@@ -116,20 +116,6 @@ const formatDateForDisplay = (dateString?: string): string => {
     }
 };
 
-const parseDuration = (durationStr: string): number => {
-    const timePart = durationStr?.replace("PT", "") || "";
-    let hours = 0, minutes = 0;
-    if (timePart.includes("H")) {
-    const parts = timePart.split("H");
-    hours = parseInt(parts[0]) || 0;
-    if (parts[1]) {
-        minutes = parseInt(parts[1].replace("M", "")) || 0;
-    }
-    } else if (timePart.includes("M")) {
-    minutes = parseInt(timePart.replace("M", "")) || 0;
-    }
-    return hours * 60 + minutes;
-};
 
 function FlightResultsClientInternal() {
   const searchParams = useSearchParams();
@@ -303,6 +289,21 @@ function FlightResultsClientInternal() {
     fetchFlights();
   }, [queryOrigin, queryDestination, queryDepartureDate, queryReturnDate, queryAdults, queryChildren, queryInfants, queryTravelClass, queryNonStop, formIsRoundTrip, formReturnDate]); 
 
+  const parseDuration = (durationStr: string): number => {
+    const timePart = durationStr?.replace("PT", "") || "";
+    let hours = 0, minutes = 0;
+    if (timePart.includes("H")) {
+    const parts = timePart.split("H");
+    hours = parseInt(parts[0]) || 0;
+    if (parts[1]) {
+        minutes = parseInt(parts[1].replace("M", "")) || 0;
+    }
+    } else if (timePart.includes("M")) {
+    minutes = parseInt(timePart.replace("M", "")) || 0;
+    }
+    return hours * 60 + minutes;
+  };
+
   useEffect(() => {
     let tempFiltered = [...flights];
 
@@ -402,7 +403,8 @@ function FlightResultsClientInternal() {
       } else {
           currentParams.delete("nonStop");
       }
-      router.push(`/flights/search?${currentParams.toString()}`);
+      // Use replace to avoid multiple history entries for filter changes
+      router.replace(`/flights/search?${currentParams.toString()}`); 
       return newFilters;
     });
   };
@@ -1223,11 +1225,11 @@ function FlightResultsClientInternal() {
         </p>
         <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
       </footer>
-      <style jsx global>{\`
+      <style jsx global>{`
         :root {
-          --header-actual-height: \${headerHeight}px;
+          --header-actual-height: ${headerHeight}px;
         }
-      \`}</style>
+      `}</style>
     </div>
   );
 }
@@ -1247,3 +1249,4 @@ export default function FlightResultsClient() {
     </Suspense>
   );
 }
+
