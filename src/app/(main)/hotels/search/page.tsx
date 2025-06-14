@@ -10,11 +10,11 @@ import { HotelIcon, SearchIcon, Loader2 } from "lucide-react";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { getHotels } from '@/lib/hotel-data';
 
-export default function HotelSearchResultsPage() {
-  const searchParams = useSearchParams();
+function HotelSearchForm() {
+const searchParams = useSearchParams();
   const locationQuery = searchParams.get('location');
   const checkInDate = searchParams.get('checkInDate');
   const guests = searchParams.get('guests');
@@ -106,5 +106,13 @@ export default function HotelSearchResultsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function HotelSearchResultsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HotelSearchForm />
+    </Suspense>
   );
 }

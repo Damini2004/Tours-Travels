@@ -9,10 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlusIcon, BriefcaseIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function SignupPage() {
+function SignupForm() { 
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -144,4 +144,14 @@ export default function SignupPage() {
       </Card>
     </div>
   );
+}
+
+export default function SignupPage() {
+  
+return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupForm />
+    </Suspense>
+  );
+  
 }

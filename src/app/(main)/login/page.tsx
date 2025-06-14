@@ -8,11 +8,11 @@ import { Label } from "@/components/ui/label";
 import { LogInIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage() {
-  const router = useRouter();
+function LoginForm() {
+const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
@@ -140,5 +140,13 @@ export default function LoginPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }
