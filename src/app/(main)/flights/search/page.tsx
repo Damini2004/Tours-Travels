@@ -1,7 +1,8 @@
-"use client"; 
 
-import React, { useState, useEffect, Suspense, useMemo, useRef } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation"; 
+"use client";
+
+import { Suspense, useMemo, useEffect, useState, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { format, parseISO, isValid, addDays } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,7 +10,7 @@ import { Plane, ChevronDown, ChevronUp, Filter, Clock, MapPin, AlertCircle, Zap,
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import type { FlightOffer, FlightOffersResponse } from "@/lib/types"; 
+import type { FlightOffer, FlightOffersResponse } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,28 +20,14 @@ import Image from "next/image";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; 
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
+
 const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
 const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
-
-const parseDuration = (durationStr: string): number => {
-    const timePart = durationStr?.replace("PT", "") || "";
-    let hours = 0, minutes = 0;
-    if (timePart.includes("H")) {
-    const parts = timePart.split("H");
-    hours = parseInt(parts[0]) || 0;
-    if (parts[1]) {
-        minutes = parseInt(parts[1].replace("M", "")) || 0;
-    }
-    } else if (timePart.includes("M")) {
-    minutes = parseInt(timePart.replace("M", "")) || 0;
-    }
-    return hours * 60 + minutes;
-};
 
 const getAccessToken = async (): Promise<string> => {
   const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
@@ -90,6 +77,7 @@ const getFlightOffers = async (
   return (await res.json()) as FlightOffersResponse;
 };
 
+
 const popularIndianAirports = [
   { iata: "DEL", name: "New Delhi, India (DEL)" },
   { iata: "BOM", name: "Mumbai, India (BOM)" },
@@ -128,10 +116,24 @@ const formatDateForDisplay = (dateString?: string): string => {
     }
 };
 
-function FlightSearchClientInternal() {
-  const searchParams = useSearchParams(); 
-  const router = useRouter(); 
-  const pathname = usePathname(); 
+const parseDuration = (durationStr: string): number => {
+    const timePart = durationStr?.replace("PT", "") || "";
+    let hours = 0, minutes = 0;
+    if (timePart.includes("H")) {
+    const parts = timePart.split("H");
+    hours = parseInt(parts[0]) || 0;
+    if (parts[1]) {
+        minutes = parseInt(parts[1].replace("M", "")) || 0;
+    }
+    } else if (timePart.includes("M")) {
+    minutes = parseInt(timePart.replace("M", "")) || 0;
+    }
+    return hours * 60 + minutes;
+};
+
+function FlightResultsClientInternal() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const headerRef = useRef<HTMLElement>(null);
 
   const [flights, setFlights] = useState<FlightOffer[]>([]);
@@ -243,7 +245,7 @@ function FlightSearchClientInternal() {
     if (queryNonStop === "true") {
       setStopFilters(prev => ({ ...prev, "0": true, "1": false, "2+": false }));
       if (flights.length > 0 && activeSortTab !== "nonStopFirst") setActiveSortTab("nonStopFirst");
-    } else { // Handles queryNonStop === "false" or undefined
+    } else { 
       setStopFilters(prev => ({ ...prev, "0": true, "1": true, "2+": true }));
     }
   }, [queryNonStop, flights.length, activeSortTab]);
@@ -387,7 +389,7 @@ function FlightSearchClientInternal() {
     } else {
         params.delete("nonStop");
     }
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`/flights/search?${params.toString()}`);
   };
 
   const handleStopFilterChange = (stopKey: string) => {
@@ -400,7 +402,7 @@ function FlightSearchClientInternal() {
       } else {
           currentParams.delete("nonStop");
       }
-      router.push(`${pathname}?${currentParams.toString()}`);
+      router.push(`/flights/search?${currentParams.toString()}`);
       return newFilters;
     });
   };
@@ -422,7 +424,7 @@ function FlightSearchClientInternal() {
     }
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.delete("nonStop");
-    router.push(`${pathname}?${currentParams.toString()}`);
+    router.push(`/flights/search?${currentParams.toString()}`);
   };
 
   const handleSortTabChange = (tabKey: string) => {
@@ -430,7 +432,7 @@ function FlightSearchClientInternal() {
     if (tabKey === "cheapest") setSortOption("price");
     else if (tabKey === "nonStopFirst") setSortOption("nonStopFirst");
     else if (tabKey === "youMayPrefer") {
-        setSortOption("duration"); // Simplified sort, actual "you may prefer" is complex
+        setSortOption("duration"); 
     }
     else if (tabKey === "otherSort") setSortOption("departure"); 
   };
@@ -870,7 +872,7 @@ function FlightSearchClientInternal() {
                                 setStopFilters({ "0": true, "1": true, "2+": true }); 
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
-                                router.push(`${pathname}?${currentParams.toString()}`);
+                                router.push(`/flights/search?${currentParams.toString()}`);
                             }}><X className="w-3 h-3"/></Button>
                         </div>
                     )}
@@ -928,8 +930,8 @@ function FlightSearchClientInternal() {
                     max={initialMaxPrice}
                     step={100}
                     onValueChange={(value) => setPriceRange(value as [number, number])} 
-                    className="[&gt;span]:bg-accent [&gt;span&gt;span]:bg-accent-foreground [&gt;span&gt;span]:border-accent"
-                    disabled={flights.length === 0 || initialMinPrice &gt;= initialMaxPrice}
+                    className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
+                    disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>₹{priceRange[0]}</span>
@@ -942,7 +944,7 @@ function FlightSearchClientInternal() {
         <div className="lg:hidden mb-4">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-gray-700 border-gray-400 hover:bg-gray-100 font-semibold py-3 rounded-lg">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-accent border-accent hover:bg-accent/10 font-semibold py-3 rounded-lg">
                 <Filter className="w-5 h-5 text-accent" />
                 Filters &amp; Sort
               </Button>
@@ -989,8 +991,8 @@ function FlightSearchClientInternal() {
                         max={initialMaxPrice}
                         step={100}
                         onValueChange={(value) => setPriceRange(value as [number, number])}
-                        className="[&gt;span]:bg-accent [&gt;span&gt;span]:bg-accent-foreground [&gt;span&gt;span]:border-accent"
-                        disabled={flights.length === 0 || initialMinPrice &gt;= initialMaxPrice}
+                        className="[&>span]:bg-accent [&>span>span]:bg-accent-foreground [&>span>span]:border-accent"
+                        disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>₹{priceRange[0]}</span>
@@ -1023,9 +1025,9 @@ function FlightSearchClientInternal() {
           <h2 className="text-xl font-headline font-semibold text-primary-foreground mb-3">Flights from {queryOrigin} to {queryDestination}</h2>
           <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-white rounded-lg shadow-md border">
             {[
-              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length &gt; 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length &gt; 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length &gt; 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length &gt; 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length &gt; 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length &gt; 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
+              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
               { key: "otherSort", label: "Other Sort", icon: MoreHorizontal, price: "", duration: "" }
             ].map(tab => (
               <Button
@@ -1038,153 +1040,153 @@ function FlightSearchClientInternal() {
               >
                 <tab.icon className="w-5 h-5 mb-1" />
                 {tab.label}
-                {(tab.price || tab.duration) && (tab.price !== "N/A") && &lt;span className="text-xxs opacity-80 mt-0.5">{tab.price}{tab.price &amp;&amp; tab.duration &amp;&amp; " | "}{tab.duration}&lt;/span>}
-                 {(tab.price === "N/A") && &lt;span className="text-xxs opacity-80 mt-0.5">Not Available&lt;/span>}
-              &lt;/Button>
+                {(tab.price || tab.duration) && (tab.price !== "N/A") && <span className="text-xxs opacity-80 mt-0.5">{tab.price}{tab.price && tab.duration && " | "}{tab.duration}</span>}
+                 {(tab.price === "N/A") && <span className="text-xxs opacity-80 mt-0.5">Not Available</span>}
+              </Button>
             ))}
-          &lt;/div>
-          &lt;div className="mb-4 ml-1">
-            &lt;p className="text-sm text-primary-foreground/80 ">{filteredFlights.length} flights found&lt;/p>
-            &lt;p className="text-xs text-primary-foreground/60">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.&lt;/p>
-          &lt;/div>
-          &lt;div className="mb-4 p-2 bg-accent/20 border border-accent/30 rounded-md text-center">
-                &lt;p className="text-sm text-accent-foreground font-medium">
+          </div>
+          <div className="mb-4 ml-1">
+            <p className="text-sm text-primary-foreground/80 ">{filteredFlights.length} flights found</p>
+            <p className="text-xs text-primary-foreground/60">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
+          </div>
+          <div className="mb-4 p-2 bg-accent/20 border border-accent/30 rounded-md text-center">
+                <p className="text-sm text-accent-foreground font-medium">
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
-                &lt;/p>
-            &lt;/div>
-          &lt;div className="space-y-4">
-            {currentFlightsToDisplay.map((flight) =&gt; {
+                </p>
+            </div>
+          <div className="space-y-4">
+            {currentFlightsToDisplay.map((flight) => {
                 const numAdults = parseInt(queryAdults) || 1; 
                 const pricePerAdult = (parseFloat(flight.price.total) / numAdults).toFixed(2);
-                const displayItineraryIndex = queryIsRoundTrip &amp;&amp; selectedOutbound ? 1 : 0;
+                const displayItineraryIndex = queryIsRoundTrip && selectedOutbound ? 1 : 0;
                 const itinerary = flight.itineraries[displayItineraryIndex];
 
                 if (!itinerary) return null; 
 
                 return (
-                &lt;Card
+                <Card
                   key={`${flight.id}-${displayItineraryIndex}`}
                   className={cn(
                     "overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 bg-white"
                   )}
                   role="region"
-                  aria-label={`Flight offer ${flight.id} ${queryIsRoundTrip &amp;&amp; selectedOutbound ? "return" : "outbound"}`}
-                &gt;
-                  &lt;CardContent className="p-3 md:p-4">
-                      &lt;div className="mb-0 last:mb-0">
-                        {queryIsRoundTrip &amp;&amp; (
-                          &lt;h3 className="text-md font-headline font-semibold text-gray-800 mb-2 border-b pb-1.5">
+                  aria-label={`Flight offer ${flight.id} ${queryIsRoundTrip && selectedOutbound ? "return" : "outbound"}`}
+                >
+                  <CardContent className="p-3 md:p-4">
+                      <div className="mb-0 last:mb-0">
+                        {queryIsRoundTrip && (
+                          <h3 className="text-md font-headline font-semibold text-gray-800 mb-2 border-b pb-1.5">
                             {selectedOutbound ? "Return Journey" : "Outbound Journey"}
-                          &lt;/h3>
+                          </h3>
                         )}
-                        &lt;div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                          &lt;div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
-                              &lt;div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                          <div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
+                              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
                                   {itinerary.segments[0].carrierCode}
-                              &lt;/div>
-                              &lt;div>
-                                  &lt;div className="text-sm font-semibold text-gray-800">
+                              </div>
+                              <div>
+                                  <div className="text-sm font-semibold text-gray-800">
                                       {itinerary.segments[0].carrierCode} Airlines 
-                                  &lt;/div>
-                                  &lt;div className="text-xxs text-gray-500">
-                                      {itinerary.segments.map(s =&gt; `${s.carrierCode}-${s.number}`).join(', ')}
-                                  &lt;/div>
-                              &lt;/div>
-                          &lt;/div>
-                          &lt;div className="flex flex-1 items-center justify-around gap-2 w-full md:w-auto">
-                            &lt;div className="text-center md:text-left">
-                                &lt;div className="text-xl font-bold text-gray-900">
+                                  </div>
+                                  <div className="text-xxs text-gray-500">
+                                      {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
+                                  </div>
+                              </div>
+                          </div>
+                          <div className="flex flex-1 items-center justify-around gap-2 w-full md:w-auto">
+                            <div className="text-center md:text-left">
+                                <div className="text-xl font-bold text-gray-900">
                                     {format(new Date(itinerary.segments[0].departure.at), "HH:mm")}
-                                &lt;/div>
-                                &lt;div className="text-xs text-gray-500">
+                                </div>
+                                <div className="text-xs text-gray-500">
                                     {itinerary.segments[0].departure.iataCode}
-                                &lt;/div>
-                            &lt;/div>
-                            &lt;div className="flex-grow flex flex-col items-center justify-center px-2 min-w-[80px] md:min-w-[100px]">
-                                &lt;div className="text-xs font-medium text-gray-600">
+                                </div>
+                            </div>
+                            <div className="flex-grow flex flex-col items-center justify-center px-2 min-w-[80px] md:min-w-[100px]">
+                                <div className="text-xs font-medium text-gray-600">
                                     {itinerary.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
-                                &lt;/div>
-                                &lt;div className="w-full h-px bg-gray-300 relative my-1">
-                                    {itinerary.segments.length -1 &gt; 0 &amp;&amp; Array.from({length: itinerary.segments.length -1}).map((_,i) =&gt; (
-                                        &lt;div key={i} className="absolute h-1.5 w-1.5 bg-gray-500 rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}>&lt;/div>
+                                </div>
+                                <div className="w-full h-px bg-gray-300 relative my-1">
+                                    {itinerary.segments.length -1 > 0 && Array.from({length: itinerary.segments.length -1}).map((_,i) => (
+                                        <div key={i} className="absolute h-1.5 w-1.5 bg-gray-500 rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}></div>
                                     ))}
-                                &lt;/div>
-                                &lt;div className="text-xs font-medium text-blue-600">
+                                </div>
+                                <div className="text-xs font-medium text-blue-600">
                                     {getStopsLabel(itinerary.segments)}
-                                &lt;/div>
-                            &lt;/div>
-                            &lt;div className="text-center md:text-right">
-                                &lt;div className="text-xl font-bold text-gray-900">
+                                </div>
+                            </div>
+                            <div className="text-center md:text-right">
+                                <div className="text-xl font-bold text-gray-900">
                                     {format(new Date(itinerary.segments[itinerary.segments.length - 1].arrival.at), "HH:mm")}
-                                &lt;/div>
-                                &lt;div className="text-xs text-gray-500">
+                                </div>
+                                <div className="text-xs text-gray-500">
                                     {itinerary.segments[itinerary.segments.length - 1].arrival.iataCode}
-                                &lt;/div>
-                            &lt;/div>
-                          &lt;/div>
-                          &lt;div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                &lt;div className="text-xl md:text-2xl font-extrabold text-gray-900 text-center md:text-right">
+                                </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
+                                <div className="text-xl md:text-2xl font-extrabold text-gray-900 text-center md:text-right">
                                     ₹{pricePerAdult}
-                                &lt;/div>
-                                {parseInt(queryAdults) &gt; 0 &amp;&amp; &lt;p className="text-xxs text-gray-500 -mt-1">per adult&lt;/p> }
-                                {queryIsRoundTrip &amp;&amp; !selectedOutbound ? (
-                                &lt;Button
-                                    onClick={() =&gt; handleSelectFlight(flight.id, 0)}
+                                </div>
+                                {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
+                                {queryIsRoundTrip && !selectedOutbound ? (
+                                <Button
+                                    onClick={() => handleSelectFlight(flight.id, 0)}
                                     className="w-full md:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`Select outbound flight ${flight.id}`}
-                                &gt;
+                                >
                                     Select Outbound
-                                &lt;/Button>
+                                </Button>
                                 ) : (
-                                &lt;Button
-                                    onClick={() =&gt; handleSelectFlight(flight.id, displayItineraryIndex)}
+                                <Button
+                                    onClick={() => handleSelectFlight(flight.id, displayItineraryIndex)}
                                     className="w-full md:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`View prices for flight ${flight.id}`}
-                                &gt;
-                                    {queryIsRoundTrip &amp;&amp; selectedOutbound ? 'Select Return' : 'View Prices'}
-                                &lt;/Button>
+                                >
+                                    {queryIsRoundTrip && selectedOutbound ? 'Select Return' : 'View Prices'}
+                                </Button>
                                 )}
-                           &lt;/div>
-                        &lt;/div>
-                        &lt;div className="mt-3 border-t border-gray-200 pt-2">
-                           &lt;div className="flex justify-between items-center">
-                             &lt;Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700">Add to compare +&lt;/Button>
-                             &lt;Collapsible>
-                                &lt;CollapsibleTrigger
+                           </div>
+                        </div>
+                        <div className="mt-3 border-t border-gray-200 pt-2">
+                           <div className="flex justify-between items-center">
+                             <Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700">Add to compare +</Button>
+                             <Collapsible>
+                                <CollapsibleTrigger
                                     className="text-blue-600 hover:text-blue-700 text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
-                                    onClick={() =&gt; setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
+                                    onClick={() => setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
                                     aria-expanded={expandedFlight === `${flight.id}-${displayItineraryIndex}`}
                                     aria-controls={`flight-details-${flight.id}-${displayItineraryIndex}`}
-                                &gt;
+                                >
                                     {expandedFlight === `${flight.id}-${displayItineraryIndex}` ? "Hide Details" : "View Flight Details"}
                                     {expandedFlight === `${flight.id}-${displayItineraryIndex}` ? (
-                                    &lt;ChevronUp className="w-3 h-3" />
+                                    <ChevronUp className="w-3 h-3" />
                                     ) : (
-                                    &lt;ChevronDown className="w-3 h-3" />
+                                    <ChevronDown className="w-3 h-3" />
                                     )}
-                                &lt;/CollapsibleTrigger>
-                                &lt;CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-gray-100/70 p-2 rounded-md">
-                                    {itinerary.segments.map((segment, segIdx) =&gt; (
-                                    &lt;div
+                                </CollapsibleTrigger>
+                                <CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-gray-100/70 p-2 rounded-md">
+                                    {itinerary.segments.map((segment, segIdx) => (
+                                    <div
                                         key={segment.id}
                                         className="text-xxs text-gray-500 border-l-2 border-accent/50 pl-2 py-1"
-                                    &gt;
-                                        &lt;div className="flex items-center gap-1 font-medium text-gray-800">
-                                        &lt;MapPin className="w-3 h-3 text-accent" />
-                                        &lt;span>
+                                    >
+                                        <div className="flex items-center gap-1 font-medium text-gray-800">
+                                        <MapPin className="w-3 h-3 text-accent" />
+                                        <span>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
                                             {format(new Date(segment.arrival.at), "HH:mm")} ({segment.arrival.iataCode})
-                                        &lt;/span>
-                                        &lt;/div>
-                                        &lt;div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}&lt;/div>
-                                        &lt;div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
-                                        &lt;Clock className="w-3 h-3 text-accent" />
+                                        </span>
+                                        </div>
+                                        <div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}</div>
+                                        <div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
+                                        <Clock className="w-3 h-3 text-accent" />
                                         Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
-                                        &lt;/div>
-                                        {segIdx &lt; itinerary.segments.length - 1 &amp;&amp; itinerary.segments[segIdx + 1] &amp;&amp; (
-                                        &lt;div className="mt-1 text-gray-500/80 ml-[0.875rem]">
+                                        </div>
+                                        {segIdx < itinerary.segments.length - 1 && itinerary.segments[segIdx + 1] && (
+                                        <div className="mt-1 text-gray-500/80 ml-[0.875rem]">
                                             Layover at: {itinerary.segments[segIdx].arrival.iataCode} for {
-                                                (() =&gt; {
+                                                (() => {
                                                     const arrivalTime = new Date(segment.arrival.at).getTime();
                                                     const nextDepartureTime = new Date(itinerary.segments[segIdx+1].departure.at).getTime();
                                                     const layoverMillis = nextDepartureTime - arrivalTime;
@@ -1194,55 +1196,54 @@ function FlightSearchClientInternal() {
                                                 })()
                                             } (Departs:{" "}
                                             {format(new Date(itinerary.segments[segIdx + 1].departure.at), "HH:mm, d MMM")})
-                                        &lt;/div>
+                                        </div>
                                         )}
-                                    &lt;/div>
+                                    </div>
                                     ))}
-                                &lt;/CollapsibleContent>
-                                &lt;/Collapsible>
-                           &lt;/div>
-                        &lt;/div>
-                        &lt;div className="mt-2 text-center">
-                            &lt;p className="text-xs text-accent-foreground/90 bg-accent/30 p-1.5 rounded-md">
+                                </CollapsibleContent>
+                                </Collapsible>
+                           </div>
+                        </div>
+                        <div className="mt-2 text-center">
+                            <p className="text-xs text-accent-foreground/90 bg-accent/30 p-1.5 rounded-md">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
-                            &lt;/p>
-                        &lt;/div>
-                      &lt;/div>
-                  &lt;/CardContent>
-                &lt;/Card>
+                            </p>
+                        </div>
+                      </div>
+                  </CardContent>
+                </Card>
                 );
             })}
-          &lt;/div>
-        &lt;/main>
-      &lt;/div>
-      &lt;footer className="mt-12 py-8 bg-white text-center text-gray-500 border-t border-gray-200">
-        &lt;p className="text-sm font-medium">
-          © {new Date().getFullYear()} Sky Explorer. All rights reserved.
-        &lt;/p>
-        &lt;p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).&lt;/p>
-      &lt;/footer>
-      &lt;style jsx global>{`
+          </div>
+        </main>
+      </div>
+      <footer className="mt-12 py-8 bg-card text-center text-muted-foreground border-t">
+        <p className="text-sm font-medium">
+          © {new Date().getFullYear()} Horizon Stays. All rights reserved.
+        </p>
+        <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
+      </footer>
+      <style jsx global>{\`
         :root {
-          --header-actual-height: ${headerHeight}px;
+          --header-actual-height: \${headerHeight}px;
         }
-      `}&lt;/style>
-    &lt;/div>
+      \`}</style>
+    </div>
   );
 }
 
-
-export default function FlightSearchClient() {
+export default function FlightResultsClient() {
   return (
-    &lt;Suspense fallback={
-      &lt;div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
-        &lt;Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
-        &lt;h2 className="text-2xl font-headline text-primary-foreground mb-2">Loading Flight Details...&lt;/h2>
-        &lt;p className="text-primary-foreground/80">One moment please.&lt;/p>
-      &lt;/div>
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+        <Plane className="w-24 h-24 text-primary-foreground animate-pulse mb-6" />
+        <h2 className="text-2xl font-headline text-primary-foreground mb-2">Loading Flight Details...</h2>
+        <p className="text-primary-foreground/80">One moment please.</p>
+      </div>
     }>
-      &lt;TooltipProvider>
-        &lt;FlightSearchClientInternal />
-      &lt;/TooltipProvider>
-    &lt;/Suspense>
+      <TooltipProvider>
+        <FlightResultsClientInternal />
+      </TooltipProvider>
+    </Suspense>
   );
 }
