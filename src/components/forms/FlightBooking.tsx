@@ -219,7 +219,7 @@ export function FlightBooking() {
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="start">
         <div className="p-3 border-b">
-          <h3 className="text-base font-semibold text-blue-600 mb-2">{type === "from" ? "From" : "To"}</h3>
+          {/* <h3 className="text-base font-semibold text-blue-600 mb-2">{type === "from" ? "From" : "To"}</h3> */}
           <div className="relative">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
@@ -281,7 +281,7 @@ export function FlightBooking() {
       </PopoverTrigger>
       <PopoverContent className="w-[340px] p-0" align="start">
         <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
+          {/* <div className="flex items-center justify-between mb-4">
             <Button variant="ghost" size="sm" onClick={() => handleMonthChange("prev")}>
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -291,7 +291,7 @@ export function FlightBooking() {
             <Button variant="ghost" size="sm" onClick={() => handleMonthChange("next")}>
               <ChevronRight className="w-4 h-4" />
             </Button>
-          </div>
+          </div> */}
           <Calendar
             mode="single"
             selected={state[type]}

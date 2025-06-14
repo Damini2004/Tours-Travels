@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'i.im.ge', // For PlacesGallery images
+        hostname: '**', // For PlacesGallery images
         port: '',
         pathname: '/**',
       },

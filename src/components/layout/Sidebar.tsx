@@ -67,8 +67,7 @@ export function Sidebar({
         <SheetHeader className="px-4 py-3 border-b border-gray-200 flex flex-row justify-between items-center">
           <SheetTitle className="text-left">
             <Link href="/" className="text-xl font-bold tracking-tight" onClick={onClose}>
-              <span className="text-black">LUXURY</span>
-              <span className="text-black font-extrabold">ESCAPES</span>
+              <span className="text-black">Hotel&amp;Tour</span>
             </Link>
           </SheetTitle>
           <SheetClose asChild>

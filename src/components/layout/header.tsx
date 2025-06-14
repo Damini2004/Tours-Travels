@@ -151,8 +151,7 @@ export function Header() {
             <Menu className="text-2xl text-[#1a1a1a] cursor-pointer" />
           </button>
           <Link href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-black">LUXURY</span>
-            <span className="text-black font-extrabold">ESCAPES</span>
+            <span className="text-black">Hotel&amp;Tour</span>
           </Link>
         </div>
 

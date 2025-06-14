@@ -9,19 +9,19 @@ import InfiniteCarousel from './InfiniteCarousel';
 const places = [
   {
     name: 'Desert',
-    image: 'https://i.im.ge/2022/12/09/dMKIrP.breathtaking-desert-blue-sky-morocco.jpg',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1bjQ5yo91-mJ5GH4LkHeyGKPzcLxAvZw4w&s',
   },
   {
     name: 'Mountains',
-    image: 'https://i.im.ge/2022/12/09/dMZqZx.vertical-shot-lake-marian-mountains-new-zealand.jpg',
+    image: 'https://burst.shopifycdn.com/photos/hiker-looks-up-at-vertical-mountain-peaks.jpg?width=1000&format=pjpg&exif=0&iptc=0',
   },
   {
     name: 'Countryside',
-    image: 'https://i.im.ge/2022/12/09/dMKfLM.vertical-shot-beautiful-green-valley-cloudy-sky.jpg',
+    image: 'https://i.pinimg.com/474x/f5/02/cc/f502cc429d47caa0ae617ec346f1a1fe.jpg',
   },
   {
     name: 'Beach',
-    image: 'https://i.im.ge/2022/12/09/dMVfWG.beautiful-views-azure-coast-rocks-pine-trees-white-sand-aegean-sea-turkey-kusadasi.jpg',
+    image: 'https://media.istockphoto.com/id/520862689/photo/view-of-passage-to-the-beach-at-sunrise.jpg?s=612x612&w=0&k=20&c=mUTK4pMMspg3gwwMulyyAmuk_Lxj0mGTH5aBuZl1EaY=',
   },
 ];
 
