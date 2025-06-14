@@ -238,7 +238,7 @@ export function Header() {
             </DropdownMenu>
           ) : isClient ? (
             <>
-              <Button onClick={() => router.push('/login')} variant="outline" className="border-[#1a1a1a] text-[#1a1a1a] px-4 py-1.5 rounded-md hover:bg-gray-100 text-sm h-auto">
+              <Button onClick={() => router.push('/login')} variant="outline" className="bg-[#1a1a1a] text-white px-4 py-1.5 rounded-md hover:bg-gray-100 text-sm h-auto">
                 Log in
               </Button>
               <Button onClick={() => router.push('/signup')} className="bg-[#1a1a1a] text-white px-4 py-1.5 rounded-md hover:bg-[#333] text-sm h-auto">
