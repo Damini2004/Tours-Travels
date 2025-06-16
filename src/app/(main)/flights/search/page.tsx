@@ -1037,7 +1037,7 @@ function FlightResultsClientInternal() {
                         ].map(tab => (
                              <Button key={tab.key} variant={activeSortTab === tab.key ? "default" : "outline"} size="sm" onClick={() => handleSortTabChange(tab.key)} 
                              className={cn("text-xs h-auto py-1.5 px-2.5 flex-col items-center justify-center h-16", 
-                                activeSortTab === tab.key ? "bg-sky-600 text-white border-sky-600" : "border-slate-600 text-gray-300 hover:bg-slate-700"
+                                activeSortTab === tab.key ? "bg-orange-500 text-white border-orange-500" : "border-slate-600 text-gray-300 hover:bg-slate-700"
                              )}>
                                 <tab.icon className="w-5 h-5 mb-1"/>{tab.label}
                             </Button>
@@ -1062,7 +1062,7 @@ function FlightResultsClientInternal() {
                 variant={activeSortTab === tab.key ? "default" : "ghost"}
                 onClick={() => handleSortTabChange(tab.key)}
                 className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center",
-                  activeSortTab === tab.key ? "bg-sky-600 text-white shadow-sm" : "text-gray-400 hover:bg-slate-700 hover:text-gray-100"
+                  activeSortTab === tab.key ? "bg-orange-500 text-white shadow-sm" : "text-gray-400 hover:bg-slate-700 hover:text-gray-100"
                 )}
               >
                 <tab.icon className="w-5 h-5 mb-1" />
