@@ -70,11 +70,7 @@ export function Sidebar({
               <span className="text-black">Hotel&amp;Tour</span>
             </Link>
           </SheetTitle>
-          <SheetClose asChild>
-            <Button variant="ghost" size="icon" className="text-[#555] hover:bg-gray-100">
-              <X className="h-5 w-5" />
-            </Button>
-          </SheetClose>
+          {/* The explicit SheetClose button that was here is now removed. The default X from SheetContent will handle closing. */}
         </SheetHeader>
         
         <div className="flex-grow overflow-y-auto p-4 space-y-1">
