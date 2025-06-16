@@ -4,38 +4,70 @@
 
 @layer base {
   :root {
-    --background: 190 15% 10%; /* Very dark desaturated cyan/blue */
-    --foreground: 190 10% 90%; /* Light grayish cyan/blue */
-    --card: 190 15% 15%; /* Slightly lighter than background */
+    /* Light Theme based on Horizon Stays */
+    --background: 207 88% 95%; /* #E3F2FD - Very light blue */
+    --foreground: 210 30% 20%; /* Dark blue-gray for text */
+
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 210 30% 20%; /* Dark blue-gray for text on cards */
+
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 210 30% 20%; /* Dark blue-gray for text on popovers */
+
+    --primary: 206 90% 68%; /* #64B5F6 - Soft blue */
+    --primary-foreground: 0 0% 100%; /* White for text on primary */
+
+    --secondary: 206 70% 88%; /* Lighter soft blue */
+    --secondary-foreground: 210 30% 25%; /* Darker blue-gray for text on secondary */
+
+    --muted: 210 30% 96%; /* Very light gray-blue */
+    --muted-foreground: 210 25% 55%; /* Medium gray-blue for muted text */
+
+    --accent: 35 100% 65%; /* #FFB74D - Warm orange */
+    --accent-foreground: 30 90% 10%; /* Dark brown/black for text on accent */
+
+    --destructive: 0 75% 55%; /* Red */
+    --destructive-foreground: 0 0% 100%; /* White for text on destructive */
+
+    --border: 206 50% 85%; /* Light blue-gray border */
+    --input: 0 0% 100%; /* White for input background */
+    --ring: 206 90% 68%; /* Soft blue for focus rings */
+
+    --chart-1: 206 70% 60%;
+    --chart-2: 35 80% 60%;
+    --chart-3: 160 60% 55%;
+    --chart-4: 280 65% 65%;
+    --chart-5: 50 70% 58%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Retain original dark theme variables if needed, or define a new dark theme */
+    --background: 190 15% 10%;
+    --foreground: 190 10% 90%;
+    --card: 190 15% 15%;
     --card-foreground: 190 10% 90%;
-    --popover: 190 15% 18%; /* Similar to card, maybe a bit lighter for popovers */
+    --popover: 190 15% 18%;
     --popover-foreground: 190 10% 90%;
-    
-    --primary: 180 70% 50%; /* Bright Teal/Cyan - For main interactive elements */
-    --primary-foreground: 190 15% 8%; /* Very dark text for on-primary elements (high contrast) */
-    
-    --secondary: 190 15% 25%; /* A step lighter for secondary elements or borders */
-    --secondary-foreground: 190 10% 85%; /* Text on secondary elements */
-    
-    --muted: 190 15% 30%; /* For less important elements, dividers */
-    --muted-foreground: 190 10% 65%; /* Text on muted elements, placeholder text */
-    
-    --accent: 180 65% 55%; /* Teal/Cyan - can be same as primary or slightly different shade */
-    --accent-foreground: 190 15% 8%; /* Dark text for on-accent elements */
-    
-    --destructive: 0 70% 55%; /* Standard red for destructive actions */
-    --destructive-foreground: 0 0% 100%; /* White text on destructive */
-    
-    --border: 190 15% 22%; /* Borders for cards, inputs */
-    --input: 190 15% 18%; /* Input field background */
-    --ring: 180 70% 55%; /* Focus ring color, often same as primary or accent */
+    --primary: 180 70% 50%;
+    --primary-foreground: 190 15% 8%;
+    --secondary: 190 15% 25%;
+    --secondary-foreground: 190 10% 85%;
+    --muted: 190 15% 30%;
+    --muted-foreground: 190 10% 65%;
+    --accent: 180 65% 55%;
+    --accent-foreground: 190 15% 8%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 190 15% 22%;
+    --input: 190 15% 18%;
+    --ring: 180 70% 55%;
 
     --chart-1: 180 70% 60%;
     --chart-2: 190 60% 55%;
     --chart-3: 200 50% 50%;
     --chart-4: 170 65% 50%;
     --chart-5: 210 55% 60%;
-    --radius: 0.5rem;
   }
 }
 

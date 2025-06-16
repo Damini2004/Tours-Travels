@@ -1,11 +1,9 @@
-
-"use client"; // Added "use client" as react-icons and event handlers likely need client-side rendering
+"use client"; 
 
 import React from 'react';
-// Header and Footer imports removed as they are handled by MainLayout
-import PopularArticles from './PopularArticles'; // Assumed local component
-// react-icons imports removed as they are not used in the current page content
-import ExclusiveOffer from "./ExclusiveOffer"; // Assumed local component
+import PopularArticles from './PopularArticles'; 
+import ExclusiveOffer from "./ExclusiveOffer"; 
+import Image from 'next/image'; // Import next/image
 
 const articles = [
   {
@@ -25,7 +23,7 @@ const articles = [
   },
   {
     title: "The Seafood Frontier: an RV Road Trip Along the Untamed Eyre Peninsula",
-    image: "https://www.holidify.com/images/bgImages/GREECE.jpg", // Duplicate image, consider changing
+    image: "https://www.holidify.com/images/bgImages/GREECE.jpg", 
     hint: "greece landscape"
   },
 ];
@@ -47,8 +45,8 @@ const bottomArticles = [
     hint: "vietnam scenery"
   },
     {
-    title: "Ooh La Luxe: The Best Hotels in Paris", // Duplicate article, consider changing
-    image: "https://www.holidify.com/images/bgImages/VIETNAM.jpg", // Duplicate image
+    title: "Ooh La Luxe: The Best Hotels in Paris", 
+    image: "https://www.holidify.com/images/bgImages/VIETNAM.jpg", 
     hint: "vietnam scenery"
   },
 ];
@@ -56,41 +54,45 @@ const bottomArticles = [
 export default function InspirationPage() {
   return (
     <>
-      {/* Header component removed from here */}
-
-      <div className='bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]' >
-        <div className=" text-white font-sans p-8 max-w-7xl mx-auto">
-          <h1 className="text-3xl font-headline font-semibold mb-10 text-center md:text-left">Latest Articles</h1>
+      <div className='bg-background' > {/* Changed to bg-background */}
+        <div className="text-foreground font-sans p-8 max-w-7xl mx-auto"> {/* Changed text-white to text-foreground */}
+          <h1 className="text-3xl font-headline font-semibold mb-10 text-center md:text-left text-foreground">Latest Articles</h1> {/* Changed text-white to text-foreground */}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Main Article */}
             <div className="lg:col-span-2">
-              <img
-                src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/bb/1d/60/mint-leaf.jpg?w=600&h=-1&s=1"
-                alt="Main Article"
-                className="w-full h-auto object-cover rounded-lg shadow-md mb-4 max-h-[400px]"
-                data-ai-hint="kuala lumpur restaurant"
-              />
+              <div className="relative w-full h-auto max-h-[400px] mb-4 aspect-video"> {/* Added aspect-video for better image display */}
+                <Image
+                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/bb/1d/60/mint-leaf.jpg?w=600&h=-1&s=1"
+                    alt="Main Article"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-md"
+                    data-ai-hint="kuala lumpur restaurant"
+                />
+              </div>
               <div className="mb-2 space-x-2 text-sm">
                 <span className="bg-card text-card-foreground px-2 py-1 rounded">Explore</span>
                 <span className="bg-card text-card-foreground px-2 py-1 rounded">Malaysia</span>
               </div>
-              <h2 className="text-2xl font-headline font-bold mb-2">The Best Kuala Lumpur Restaurants</h2>
+              <h2 className="text-2xl font-headline font-bold mb-2 text-foreground">The Best Kuala Lumpur Restaurants</h2> {/* Changed text-white to text-foreground */}
               <a href="#" className="text-primary hover:underline">Read more</a>
             </div>
 
-            {/* Sidebar Articles */}
             <div className="space-y-10">
               {articles.map((article, index) => (
                 <div className="flex gap-4 items-start" key={index}>
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="rounded-md w-28 h-28 sm:w-36 sm:h-36 object-cover flex-shrink-0"
-                    data-ai-hint={article.hint}
-                  />
+                  <div className="relative rounded-md w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0">
+                    <Image
+                        src={article.image}
+                        alt={article.title}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                        data-ai-hint={article.hint}
+                    />
+                  </div>
                   <div className="flex flex-col justify-between h-full">
-                    <h3 className="font-semibold text-base mb-1 leading-tight">{article.title}</h3>
+                    <h3 className="font-semibold text-base mb-1 leading-tight text-foreground">{article.title}</h3> {/* Changed text-white to text-foreground */}
                     <a href="#" className="text-primary hover:underline text-sm mt-auto">Read more</a>
                   </div>
                 </div>
@@ -98,29 +100,32 @@ export default function InspirationPage() {
             </div>
           </div>
 
-          {/* Bottom Section */}
-          <h2 className="text-2xl font-headline font-semibold mt-16 mb-8 text-center md:text-left">More to Explore</h2>
+          <h2 className="text-2xl font-headline font-semibold mt-16 mb-8 text-center md:text-left text-foreground">More to Explore</h2> {/* Changed text-white to text-foreground */}
           <div className="grid md:grid-cols-2 gap-10">
             {bottomArticles.map((article, index) => (
               <div className="flex gap-4 items-start" key={index}>
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="rounded-md w-28 h-28 sm:w-36 sm:h-36 object-cover flex-shrink-0"
-                  data-ai-hint={article.hint}
-                />
+                 <div className="relative rounded-md w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0">
+                    <Image
+                        src={article.image}
+                        alt={article.title}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                        data-ai-hint={article.hint}
+                    />
+                  </div>
                 <div className="flex flex-col justify-between h-full">
-                  <h3 className="font-semibold text-base mb-1 leading-tight">{article.title}</h3>
+                  <h3 className="font-semibold text-base mb-1 leading-tight text-foreground">{article.title}</h3> {/* Changed text-white to text-foreground */}
                   <a href="#" className="text-primary hover:underline text-sm mt-auto">Read more</a>
                 </div>
               </div>
             ))}
           </div>
         </div>
+        {/* These components likely have their own backgrounds, will need checking */}
         <PopularArticles />
         <ExclusiveOffer /> 
       </div>
-      {/* Footer component removed from here */}
     </>
   );
 }
