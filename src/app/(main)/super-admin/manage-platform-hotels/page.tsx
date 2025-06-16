@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Hotel } from '@/lib/types';
 import { getHotels, addHotel, saveHotels } from '@/lib/hotel-data';
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Added useRouter
+import { useRouter } from "next/navigation"; 
 
 interface User {
   fullName: string;
@@ -23,7 +23,7 @@ interface User {
 
 export default function ManagePlatformHotelsPage() {
   const { toast } = useToast();
-  const router = useRouter(); // Initialized useRouter
+  const router = useRouter(); 
   const [isLoading, setIsLoading] = useState(false);
 
   const [hotelName, setHotelName] = useState("");
@@ -110,7 +110,7 @@ export default function ManagePlatformHotelsPage() {
     setPricePerNight(""); setRatingState(""); setOwnerEmail(""); setOwnerPassword("");
     setThumbnailUrl("https://placehold.co/600x400.png"); setThumbnailHint("hotel exterior");
     fetchAllHotels(); 
-    router.push('/hotels/search'); // Redirect after adding hotel
+    router.push('/hotels/search'); 
   };
 
   const handleDeleteHotel = (hotelId: string) => {
@@ -229,7 +229,7 @@ export default function ManagePlatformHotelsPage() {
                                 <p className="text-xs text-gray-400">Owner: {hotel.ownerEmail || 'N/A'}</p>
                             </div>
                             <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
-                                <Button variant="outline" size="sm" asChild className="border-gray-500 text-gray-200 hover:bg-gray-700 hover:border-gray-600">
+                                <Button variant="outline" size="sm" asChild className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900">
                                     <Link href={`/hotels/${hotel.id}`} target="_blank"><EditIcon className="mr-1 h-3 w-3"/>View/Edit</Link>
                                 </Button>
                                 <Button variant="destructive" size="sm" onClick={() => handleDeleteHotel(hotel.id)}>
