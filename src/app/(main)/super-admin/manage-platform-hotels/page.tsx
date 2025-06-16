@@ -118,6 +118,8 @@ export default function ManagePlatformHotelsPage() {
         saveHotels(updatedHotels);
         toast({ title: "Hotel Deleted", description: `${hotelToDelete.name} has been removed.` });
         fetchAllHotels();
+    } else {
+        toast({ variant: "destructive", title: "Deletion Failed", description: "Could not find the hotel to delete." });
     }
   };
 

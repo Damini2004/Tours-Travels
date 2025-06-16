@@ -12,8 +12,8 @@ import type { FetchHotelDataInput, FetchHotelDataOutput } from "@/ai/flows/fetch
 import { fetchHotelDataViaSerpapi } from "@/ai/flows/fetch-hotel-data-via-serpapi-flow";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { addHotel } from '@/lib/hotel-data'; // Import addHotel
-import type { Hotel } from '@/lib/types'; // Import Hotel type
+import { addHotel } from '@/lib/hotel-data';
+import type { Hotel } from '@/lib/types';
 
 interface CurrentUser {
   fullName: string;
@@ -28,15 +28,14 @@ export default function RegisterHotelPage() {
   const [searchError, setSearchError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Form state
   const [hotelName, setHotelName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [amenities, setAmenitiesState] = useState(""); // Renamed to avoid conflict
+  const [amenities, setAmenitiesState] = useState("");
   const [checkInTime, setCheckInTime] = useState("");
   const [checkOutTime, setCheckOutTime] = useState("");
   const [pricePerNight, setPricePerNight] = useState("");
-  const [rating, setRating] = useState(""); // For simplicity, text input, convert to number
+  const [rating, setRating] = useState("");
 
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
@@ -101,8 +100,6 @@ export default function RegisterHotelPage() {
     setHotelName(hotelData.title || "");
     setLocation(hotelData.address || "");
     setRating(hotelData.rating ? String(hotelData.rating) : "");
-    // Note: SerpApi doesn't easily provide amenities, description, price in a structured way for all hotels.
-    // These would likely still need manual input or a more sophisticated extraction.
     toast({
         title: "Data Applied",
         description: `Details for ${hotelData.title || "selected hotel"} pre-filled. Please complete other fields.`,
@@ -131,20 +128,18 @@ export default function RegisterHotelPage() {
         pricePerNight: parseFloat(pricePerNight) || 0,
         rating: parseInt(rating) || 0,
         ownerEmail: currentUser.email,
-        // thumbnailUrl and images would be handled by file upload logic in a real app
         thumbnailUrl: 'https://placehold.co/600x400.png', 
         thumbnailHint: 'hotel exterior',
         images: ['https://placehold.co/1200x800.png'],
         imageHints: ['hotel room'],
     };
 
-    addHotel({ ...newHotelData, isApproved: false }); // isApproved is false for owner submissions
+    addHotel({ ...newHotelData, isApproved: false }); 
 
     toast({
         title: "Hotel Submitted!",
-        description: `${hotelName} has been submitted for approval.`,
+        description: `${hotelName} has been submitted for approval. You can find it under 'My Hotels'.`,
     });
-    // Reset form fields
     setHotelName("");
     setLocation("");
     setDescription("");
@@ -157,7 +152,7 @@ export default function RegisterHotelPage() {
     setSerpApiResults([]);
   };
 
-  if (!currentUser && typeof window !== 'undefined') { // Check typeof window for SSR safety
+  if (!currentUser && typeof window !== 'undefined') { 
     return (
         <div className="container mx-auto px-4 py-8">
             <Alert variant="destructive">
