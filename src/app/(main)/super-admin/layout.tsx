@@ -81,11 +81,7 @@ export default function SuperAdminLayout({
       <main className="flex-grow bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
         {children}
       </main>
-      <footer className="bg-black/50 py-4 text-center text-xs text-gray-400 backdrop-blur-sm">
-        <div className="container mx-auto">
-          {/* Content removed as per user request */}
-        </div>
-      </footer>
+      {/* Footer removed from here */}
     </div>
   );
 }
