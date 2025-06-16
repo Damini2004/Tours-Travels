@@ -8,7 +8,7 @@ import { FileCheckIcon, HotelIcon as HotelBuildingIcon, InfoIcon, CheckCircle2Ic
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useCallback } from "react";
 import type { Hotel } from "@/lib/types";
-import { getHotels, updateHotel, saveHotels } from "@/lib/hotel-data"; // Added saveHotels
+import { getHotels, updateHotel, saveHotels } from "@/lib/hotel-data";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,7 +46,7 @@ export default function ApproveHotelsPage() {
     const hotelToReject = currentHotels.find(h => h.id === hotelId);
     if (hotelToReject) {
         const remainingHotels = currentHotels.filter(h => h.id !== hotelId);
-        saveHotels(remainingHotels); // Use saveHotels from hotel-data
+        saveHotels(remainingHotels);
         toast({ title: "Hotel Rejected", description: `Hotel submission for '${hotelToReject.name}' has been removed.` });
         fetchPendingHotels(); 
     } else {
@@ -75,7 +75,7 @@ export default function ApproveHotelsPage() {
       {pendingHotels.length === 0 ? (
         <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
           <InfoIcon className="h-4 w-4 text-gray-400" />
-          <AlertTitle className="text-white">No Pending Approvals</AlertTitle>
+          <AlertTitle className="text-white font-semibold">No Pending Approvals</AlertTitle>
           <AlertDescription className="text-gray-300">
             There are currently no new hotel registrations awaiting approval.
           </AlertDescription>

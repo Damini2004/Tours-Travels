@@ -87,7 +87,7 @@ export default function ManageUsersPage() {
 
       <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="text-xl text-white">User List</CardTitle>
+          <CardTitle className="text-xl text-white font-semibold">User List</CardTitle>
           <CardDescription className="text-gray-300">
             Showing {users.length} registered users. 
           </CardDescription>
@@ -96,7 +96,7 @@ export default function ManageUsersPage() {
           {users.length === 0 ? (
             <Alert className="bg-slate-700/50 border-slate-600 text-gray-300">
               <SearchIcon className="h-4 w-4 text-gray-400" />
-              <AlertTitle className="text-gray-200">No Users Found</AlertTitle>
+              <AlertTitle className="text-gray-200 font-semibold">No Users Found</AlertTitle>
               <AlertDescription>There are no users matching your criteria.</AlertDescription>
             </Alert>
           ) : (
@@ -119,8 +119,8 @@ export default function ManageUsersPage() {
                         <Badge 
                             variant={'outline'}
                             className={
-                                user.role === 'super_admin' ? 'border-primary/70 text-primary bg-primary/10' : 
-                                user.role === 'hotel_owner' ? 'border-accent/70 text-accent bg-accent/10' : 
+                                user.role === 'super_admin' ? 'border-primary text-primary bg-primary/10' : 
+                                user.role === 'hotel_owner' ? 'border-accent text-accent bg-accent/10' : 
                                 'border-gray-600 text-gray-300 bg-gray-700/30'
                             }
                         >

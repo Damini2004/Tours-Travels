@@ -62,13 +62,13 @@ export default function SuperAdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))] text-white"> {/* Adjusted min-h */}
-      <div className="py-12 px-4 md:px-8 shadow-md">
+    <div className="min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
+      <div className="py-10 px-4 md:px-8 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-lg">
         <div className="container mx-auto">
             <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-            <ShieldCheckIcon className="mr-3 h-10 w-10" /> SUPER ADMIN PLATFORM OVERVIEW
+            <ShieldCheckIcon className="mr-3 h-10 w-10 text-primary" /> SUPER ADMIN PLATFORM OVERVIEW
             </h1>
-            <p className="text-gray-300 font-medium mt-2 text-lg">This is the main dashboard for Super Administrators.</p>
+            <p className="text-gray-300 font-medium mt-2 text-lg">Central hub for platform management and insights.</p>
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export default function SuperAdminDashboardPage() {
             { title: "Pending Hotel Approvals", value: pendingApprovals, icon: FileCheckIcon, desc: "Hotels awaiting review" },
             { title: "Approved Listings", value: totalListings, icon: ListChecks, desc: "Live hotels on platform" },
             { title: "Total Bookings", value: totalBookings, icon: BriefcaseIcon, desc: "Across all hotels" },
-            { title: "Monthly Revenue (Placeholder)", value: `$${monthlyRevenue.toLocaleString()}`, icon: DollarSignIcon, desc: "Estimated current month" }
+            { title: "Monthly Revenue (Est.)", value: `$${monthlyRevenue.toLocaleString()}`, icon: DollarSignIcon, desc: "Current month estimate" }
           ].map((metric, index) => (
             <Card key={index} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -106,7 +106,6 @@ export default function SuperAdminDashboardPage() {
           <AlertTitle className="text-white">Advanced Analytics Placeholder</AlertTitle>
           <AlertDescription className="text-gray-300">
             Detailed charts for user growth, booking trends, and revenue streams will be displayed here.
-            A view for all bookings could be added under a separate "Manage Bookings" tab for Super Admin.
           </AlertDescription>
         </Alert>
       </div>

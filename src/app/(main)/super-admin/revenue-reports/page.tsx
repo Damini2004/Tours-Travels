@@ -41,13 +41,13 @@ export default function RevenueReportsPage() {
       
       <Card className="mb-8 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="text-lg text-white">Detailed Financial Report</CardTitle>
+          <CardTitle className="text-lg font-semibold text-white">Detailed Financial Report</CardTitle>
           <CardDescription className="text-gray-300">Download comprehensive financial statements.</CardDescription>
         </CardHeader>
         <CardContent>
             <Alert className="bg-slate-700/50 border-slate-600 text-gray-300">
                 <DownloadIcon className="h-4 w-4 text-gray-400"/>
-                <AlertTitle className="text-gray-200">Report Generation Placeholder</AlertTitle>
+                <AlertTitle className="text-gray-200 font-semibold">Report Generation Placeholder</AlertTitle>
                 <AlertDescription>Functionality to generate and download CSV/PDF reports will be implemented here.</AlertDescription>
             </Alert>
             <div className="mt-4">
@@ -60,7 +60,7 @@ export default function RevenueReportsPage() {
 
       <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
         <LineChartIcon className="h-4 w-4 text-gray-400" />
-        <AlertTitle className="text-white">Revenue Charts Placeholder</AlertTitle>
+        <AlertTitle className="text-white font-semibold">Revenue Charts Placeholder</AlertTitle>
         <AlertDescription className="text-gray-300">
           Interactive charts showing revenue trends, revenue by source (hotels/flights), and commission breakdowns will be available here.
         </AlertDescription>

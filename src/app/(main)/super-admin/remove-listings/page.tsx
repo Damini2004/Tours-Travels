@@ -29,7 +29,7 @@ export default function RemoveListingsPage() {
       </div>
 
       <Tabs defaultValue="hotels" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-slate-800/50 p-1 rounded-md">
+        <TabsList className="grid w-full grid-cols-2 mb-6 bg-slate-800/50 p-1 rounded-md border border-slate-700">
           <TabsTrigger value="hotels" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2"><HotelBuildingIcon className="mr-2 h-4 w-4" />Hotels ({placeholderListedHotels.length})</TabsTrigger>
           <TabsTrigger value="flights" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2"><PlaneIcon className="mr-2 h-4 w-4" />Flights ({placeholderListedFlights.length})</TabsTrigger>
         </TabsList>
@@ -38,7 +38,7 @@ export default function RemoveListingsPage() {
           {placeholderListedHotels.length === 0 ? (
              <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
               <SearchIcon className="h-4 w-4 text-gray-400" />
-              <AlertTitle className="text-white">No Hotels Listed</AlertTitle>
+              <AlertTitle className="text-white font-semibold">No Hotels Listed</AlertTitle>
               <AlertDescription className="text-gray-300">There are no hotels currently listed on the platform.</AlertDescription>
             </Alert>
           ) : (
@@ -46,7 +46,7 @@ export default function RemoveListingsPage() {
               {placeholderListedHotels.map((hotel) => (
                 <Card key={hotel.id} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-lg text-white">{hotel.name}</CardTitle>
+                    <CardTitle className="text-lg font-semibold text-white">{hotel.name}</CardTitle>
                     <CardDescription className="text-gray-300">{hotel.location} - Listed on: {hotel.listedDate}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -64,7 +64,7 @@ export default function RemoveListingsPage() {
            {placeholderListedFlights.length === 0 ? (
             <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
               <SearchIcon className="h-4 w-4 text-gray-400" />
-              <AlertTitle className="text-white">No Flights Listed</AlertTitle>
+              <AlertTitle className="text-white font-semibold">No Flights Listed</AlertTitle>
               <AlertDescription className="text-gray-300">There are no flights currently listed on the platform.</AlertDescription>
             </Alert>
           ) : (
@@ -72,7 +72,7 @@ export default function RemoveListingsPage() {
               {placeholderListedFlights.map((flight) => (
                 <Card key={flight.id} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-lg text-white">{flight.airline} - {flight.route}</CardTitle>
+                    <CardTitle className="text-lg font-semibold text-white">{flight.airline} - {flight.route}</CardTitle>
                     <CardDescription className="text-gray-300">Listed on: {flight.listedDate}</CardDescription>
                   </CardHeader>
                   <CardContent>

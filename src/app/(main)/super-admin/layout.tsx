@@ -7,7 +7,7 @@ import { Loader2Icon, ShieldAlertIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-// Header is part of the (main) layout, not re-imported here
+// Header is part of the (main)/layout.tsx, not re-imported here
 
 interface CurrentUser {
   fullName: string;
@@ -81,9 +81,9 @@ export default function SuperAdminLayout({
       <main className="flex-grow bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
         {children}
       </main>
-      <footer className="bg-black/50 py-6 text-center text-sm text-gray-300 backdrop-blur-sm">
+      <footer className="bg-black/50 py-4 text-center text-xs text-gray-400 backdrop-blur-sm">
         <div className="container mx-auto">
-          Super Admin Panel - © {new Date().getFullYear()} Hotel&Tour
+          {/* Content removed as per user request */}
         </div>
       </footer>
     </div>

@@ -139,7 +139,7 @@ export default function ManagePlatformHotelsPage() {
 
       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center text-xl text-white"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
+          <CardTitle className="flex items-center text-xl text-white font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
           <CardDescription className="text-gray-300">Hotels added here are automatically approved. If owner email is new, an owner account will be created.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -202,7 +202,7 @@ export default function ManagePlatformHotelsPage() {
 
       <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-            <CardTitle className="flex items-center text-xl text-white"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
+            <CardTitle className="flex items-center text-xl text-white font-semibold"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
             <CardDescription className="text-gray-300">Total hotels on platform: {allHotels.length}. Approved: {allHotels.filter(h=>h.isApproved).length}. Pending: {allHotels.filter(h=>!h.isApproved).length}</CardDescription>
         </CardHeader>
         <CardContent>
