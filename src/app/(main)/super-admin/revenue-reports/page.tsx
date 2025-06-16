@@ -13,16 +13,16 @@ const revenueLast30Days = 15230.00;
 
 export default function RevenueReportsPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-background min-h-screen">
       <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
+        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-foreground">
           <LineChartIcon className="mr-3 h-8 w-8 text-primary" /> Revenue Reports
         </h1>
         <p className="text-muted-foreground">Track platform earnings, booking values, and financial trends.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Platform Revenue</CardTitle>
             <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
@@ -32,7 +32,7 @@ export default function RevenueReportsPage() {
             <p className="text-xs text-muted-foreground">All-time gross revenue</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Revenue (Last 30 Days)</CardTitle>
             <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
@@ -42,7 +42,7 @@ export default function RevenueReportsPage() {
             <p className="text-xs text-muted-foreground">+8.1% from previous period</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average Booking Value</CardTitle>
             <BarChartIcon className="h-4 w-4 text-muted-foreground" />
@@ -54,13 +54,13 @@ export default function RevenueReportsPage() {
         </Card>
       </div>
       
-      <Card className="mb-8">
+      <Card className="mb-8 bg-card text-card-foreground">
         <CardHeader>
-          <CardTitle>Detailed Financial Report</CardTitle>
+          <CardTitle className="text-lg">Detailed Financial Report</CardTitle>
           <CardDescription>Download comprehensive financial statements.</CardDescription>
         </CardHeader>
         <CardContent>
-            <Alert>
+            <Alert className="bg-secondary text-secondary-foreground">
                 <DownloadIcon className="h-4 w-4"/>
                 <AlertTitle>Report Generation Placeholder</AlertTitle>
                 <AlertDescription>Functionality to generate and download CSV/PDF reports will be implemented here.</AlertDescription>
@@ -73,7 +73,7 @@ export default function RevenueReportsPage() {
         </CardContent>
       </Card>
 
-      <Alert>
+      <Alert className="bg-card text-card-foreground">
         <LineChartIcon className="h-4 w-4" />
         <AlertTitle>Revenue Charts Placeholder</AlertTitle>
         <AlertDescription>

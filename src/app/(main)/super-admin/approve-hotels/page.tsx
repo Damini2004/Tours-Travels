@@ -45,10 +45,15 @@ export default function ApproveHotelsPage() {
     // For now, rejection could mean deleting it or marking it as rejected.
     // Simple deletion for this prototype:
     const currentHotels = getHotels();
-    const remainingHotels = currentHotels.filter(h => h.id !== hotelId);
-    localStorage.setItem('appHotelsDB', JSON.stringify(remainingHotels)); // Directly using localStorage key for simplicity here
-    toast({ title: "Hotel Rejected", description: `Hotel submission has been removed.` });
-    fetchPendingHotels(); // Refresh list
+    const hotelToReject = currentHotels.find(h => h.id === hotelId);
+    if (hotelToReject) {
+        const remainingHotels = currentHotels.filter(h => h.id !== hotelId);
+        localStorage.setItem('appHotelsDB', JSON.stringify(remainingHotels));
+        toast({ title: "Hotel Rejected", description: `Hotel submission for '${hotelToReject.name}' has been removed.` });
+        fetchPendingHotels(); 
+    } else {
+        toast({ variant: "destructive", title: "Rejection Failed", description: "Could not find the hotel to reject."})
+    }
   };
 
 
@@ -61,16 +66,16 @@ export default function ApproveHotelsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-background min-h-screen">
       <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
+        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-foreground">
           <FileCheckIcon className="mr-3 h-8 w-8 text-primary" /> Approve Hotel Registrations
         </h1>
         <p className="text-muted-foreground">Review and approve or reject new hotel submissions.</p>
       </div>
 
       {pendingHotels.length === 0 ? (
-        <Alert>
+        <Alert className="bg-card text-card-foreground">
           <InfoIcon className="h-4 w-4" />
           <AlertTitle>No Pending Approvals</AlertTitle>
           <AlertDescription>
@@ -80,7 +85,7 @@ export default function ApproveHotelsPage() {
       ) : (
         <div className="space-y-6">
           {pendingHotels.map((hotel) => (
-            <Card key={hotel.id}>
+            <Card key={hotel.id} className="bg-card text-card-foreground">
               <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start">
                   <div>
@@ -90,21 +95,21 @@ export default function ApproveHotelsPage() {
                     </CardTitle>
                     <CardDescription>Location: {hotel.location} | Submitted by: {hotel.ownerEmail || 'N/A'}</CardDescription>
                   </div>
-                  <Badge variant="secondary" className="mt-2 sm:mt-0">Pending Approval</Badge>
+                  <Badge variant="secondary" className="mt-2 sm:mt-0 bg-yellow-100 text-yellow-800 border-yellow-300">Pending Approval</Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-1">Price per night: ${hotel.pricePerNight}</p>
                 <p className="text-sm text-muted-foreground mb-4">Rating: {hotel.rating}/5</p>
                 <div className="flex gap-2 flex-wrap">
-                  <Button size="sm" onClick={() => handleApproveHotel(hotel.id)}>
+                  <Button size="sm" onClick={() => handleApproveHotel(hotel.id)} className="bg-green-600 hover:bg-green-700 text-white">
                     <CheckCircle2Icon className="mr-2 h-4 w-4" /> Approve
                   </Button>
                   <Button variant="destructive" size="sm" onClick={() => handleRejectHotel(hotel.id)}>
                     <XCircleIcon className="mr-2 h-4 w-4" /> Reject
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/hotels/${hotel.id}`} target="_blank"> {/* Allows viewing even if not approved for SA */}
+                    <Link href={`/hotels/${hotel.id}`} target="_blank"> 
                        <EyeIcon className="mr-2 h-4 w-4" /> View Details
                     </Link>
                   </Button>

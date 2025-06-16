@@ -34,6 +34,7 @@ export default function ManagePlatformHotelsPage() {
   const [ownerEmail, setOwnerEmail] = useState("");
   const [ownerPassword, setOwnerPassword] = useState(""); // New state for owner password
   const [thumbnailUrl, setThumbnailUrl] = useState("https://placehold.co/600x400.png");
+  const [thumbnailHint, setThumbnailHint] = useState("hotel exterior");
 
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
 
@@ -69,7 +70,7 @@ export default function ManagePlatformHotelsPage() {
         const ownerExists = usersDB.some(user => user.email === ownerEmail.trim());
         if (!ownerExists) {
             const newOwner: User = {
-                fullName: "Hotel Owner", // Or derive from email, or add a field for it
+                fullName: "Hotel Owner", 
                 email: ownerEmail.trim(),
                 role: "hotel_owner",
                 password: ownerPassword,
@@ -79,10 +80,15 @@ export default function ManagePlatformHotelsPage() {
             toast({ title: "Hotel Owner Created", description: `New owner account for ${ownerEmail} created.`});
         }
     }
-
+    
     const defaultPlaceholderThumbnail = 'https://placehold.co/600x400.png';
     const defaultPlaceholderImage = 'https://placehold.co/1200x800.png';
-    const isCustomThumbnail = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultPlaceholderThumbnail;
+    
+    const currentThumbnailUrl = thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderThumbnail;
+    const currentImageUrls = [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderImage];
+
+    const isCustomImage = currentThumbnailUrl !== defaultPlaceholderThumbnail;
+
 
     const newHotelData: Omit<Hotel, 'id'> = {
       name: hotelName,
@@ -93,10 +99,10 @@ export default function ManagePlatformHotelsPage() {
       rating: parseInt(rating) || 0,
       ownerEmail: ownerEmail.trim(),
       isApproved: true, 
-      thumbnailUrl: thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderThumbnail,
-      thumbnailHint: isCustomThumbnail ? 'hotel building' : 'hotel exterior',
-      images: [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderImage],
-      imageHints: [isCustomThumbnail ? 'hotel main view' : 'hotel room'],
+      thumbnailUrl: currentThumbnailUrl,
+      thumbnailHint: isCustomImage ? "hotel building" : "hotel exterior",
+      images: currentImageUrls,
+      imageHints: [isCustomImage ? "hotel main view" : "hotel room"],
       checkInTime: "15:00", 
       checkOutTime: "11:00", 
     };
@@ -116,6 +122,7 @@ export default function ManagePlatformHotelsPage() {
     setOwnerEmail("");
     setOwnerPassword("");
     setThumbnailUrl("https://placehold.co/600x400.png");
+    setThumbnailHint("hotel exterior");
     fetchAllHotels(); 
   };
 
@@ -130,19 +137,25 @@ export default function ManagePlatformHotelsPage() {
     }
   };
 
+  useEffect(() => {
+    const defaultPlaceholderThumbnail = 'https://placehold.co/600x400.png';
+    const isCustom = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultPlaceholderThumbnail;
+    setThumbnailHint(isCustom ? "hotel building" : "hotel exterior");
+  }, [thumbnailUrl]);
+
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-background min-h-screen">
       <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
+        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-foreground">
           <HotelBuildingIcon className="mr-3 h-8 w-8 text-primary" /> Manage Platform Hotels
         </h1>
         <p className="text-muted-foreground">Add new hotels, view, and manage existing hotel listings.</p>
       </div>
 
-      <Card className="w-full max-w-3xl mx-auto mb-12">
+      <Card className="w-full max-w-3xl mx-auto mb-12 bg-card text-card-foreground">
         <CardHeader>
-          <CardTitle className="flex items-center"><PlusCircleIcon className="mr-2 h-6 w-6" />Add New Hotel (Super Admin)</CardTitle>
+          <CardTitle className="flex items-center text-xl"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
           <CardDescription>Hotels added here are automatically approved. If owner email is new, an owner account will be created.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -169,7 +182,7 @@ export default function ManagePlatformHotelsPage() {
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="saOwnerEmail">Owner's Email *</Label>
+                    <Label htmlFor="saOwnerEmail" className="flex items-center"><KeyRoundIcon className="mr-1.5 h-4 w-4 text-muted-foreground"/>Owner's Email *</Label>
                     <Input id="saOwnerEmail" type="email" placeholder="owner@example.com" required value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} />
                 </div>
                  <div className="space-y-2">
@@ -186,19 +199,26 @@ export default function ManagePlatformHotelsPage() {
               <Input id="saAmenities" placeholder="Pool, Gym, Spa" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="saThumbnailUrl">Thumbnail URL</Label>
-                <Input id="saThumbnailUrl" placeholder="https://example.com/image.png or leave for default" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} />
+                <Label htmlFor="saThumbnailUrl">Thumbnail URL (leave for default placeholder)</Label>
+                <Input id="saThumbnailUrl" placeholder="https://placehold.co/600x400.png" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} />
+                {thumbnailUrl && thumbnailUrl !== "https://placehold.co/600x400.png" && (
+                    <div className="mt-2">
+                        <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border" 
+                             onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400.png/CCCCCC/FFFFFF?text=Invalid+URL"; }} 
+                        />
+                    </div>
+                )}
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Add Hotel to Platform
             </Button>
           </form>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-card text-card-foreground">
         <CardHeader>
-            <CardTitle className="flex items-center"><ListIcon className="mr-2 h-6 w-6" />All Listed Hotels</CardTitle>
+            <CardTitle className="flex items-center text-xl"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
             <CardDescription>Total hotels on platform: {allHotels.length}. Approved: {allHotels.filter(h=>h.isApproved).length}. Pending: {allHotels.filter(h=>!h.isApproved).length}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -207,15 +227,19 @@ export default function ManagePlatformHotelsPage() {
             ) : allHotels.length === 0 ? (
                 <p className="text-muted-foreground">No hotels found on the platform yet.</p>
             ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {allHotels.map(hotel => (
-                        <div key={hotel.id} className="p-3 border rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-muted/50">
-                            <div>
-                                <h3 className="font-semibold">{hotel.name} <span className={`text-xs px-1.5 py-0.5 rounded-full ${hotel.isApproved ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{hotel.isApproved ? 'Approved' : 'Pending'}</span></h3>
+                        <div key={hotel.id} className="p-3 border rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-muted/10 transition-colors">
+                            <div className="flex-grow">
+                                <h3 className="font-semibold text-base">{hotel.name} 
+                                    <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${hotel.isApproved ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-yellow-100 text-yellow-700 border border-yellow-300'}`}>
+                                        {hotel.isApproved ? 'Approved' : 'Pending'}
+                                    </span>
+                                </h3>
                                 <p className="text-xs text-muted-foreground">{hotel.location}</p>
                                 <p className="text-xs text-muted-foreground">Owner: {hotel.ownerEmail || 'N/A'}</p>
                             </div>
-                            <div className="flex gap-2 mt-2 sm:mt-0">
+                            <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
                                 <Button variant="outline" size="sm" asChild>
                                     <Link href={`/hotels/${hotel.id}`} target="_blank"><EditIcon className="mr-1 h-3 w-3"/>View/Edit</Link>
                                 </Button>
@@ -232,4 +256,3 @@ export default function ManagePlatformHotelsPage() {
     </div>
   );
 }
-
