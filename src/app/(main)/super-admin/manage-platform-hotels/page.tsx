@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Hotel } from '@/lib/types';
 import { getHotels, addHotel, saveHotels } from '@/lib/hotel-data';
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Added useRouter
 
 interface User {
   fullName: string;
@@ -22,6 +23,7 @@ interface User {
 
 export default function ManagePlatformHotelsPage() {
   const { toast } = useToast();
+  const router = useRouter(); // Initialized useRouter
   const [isLoading, setIsLoading] = useState(false);
 
   const [hotelName, setHotelName] = useState("");
@@ -108,6 +110,7 @@ export default function ManagePlatformHotelsPage() {
     setPricePerNight(""); setRatingState(""); setOwnerEmail(""); setOwnerPassword("");
     setThumbnailUrl("https://placehold.co/600x400.png"); setThumbnailHint("hotel exterior");
     fetchAllHotels(); 
+    router.push('/hotels/search'); // Redirect after adding hotel
   };
 
   const handleDeleteHotel = (hotelId: string) => {
@@ -141,7 +144,7 @@ export default function ManagePlatformHotelsPage() {
 
       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center text-xl text-white font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
+          <CardTitle className="flex items-center text-white text-xl font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
           <CardDescription className="text-gray-300">Hotels added here are automatically approved. If owner email is new, an owner account will be created.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -204,7 +207,7 @@ export default function ManagePlatformHotelsPage() {
 
       <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-            <CardTitle className="flex items-center text-xl text-white font-semibold"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
+            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
             <CardDescription className="text-gray-300">Total hotels on platform: {allHotels.length}. Approved: {allHotels.filter(h=>h.isApproved).length}. Pending: {allHotels.filter(h=>!h.isApproved).length}</CardDescription>
         </CardHeader>
         <CardContent>
