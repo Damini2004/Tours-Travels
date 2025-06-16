@@ -1113,7 +1113,7 @@ function FlightResultsClientInternal() {
                               </div>
                               <div>
                                   <div className="text-sm font-semibold text-gray-100">
-                                      {itinerary.segments[0].carrierCode} Airlines 
+                                      {flight.dictionaries?.carriers?.[itinerary.segments[0].carrierCode] || `${itinerary.segments[0].carrierCode} Airlines`} 
                                   </div>
                                   <div className="text-xxs text-gray-400">
                                       {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
@@ -1152,14 +1152,14 @@ function FlightResultsClientInternal() {
                             </div>
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                <div className="text-xl md:text-2xl font-extrabold text-sky-400 text-center md:text-right">
+                                <div className="text-xl md:text-2xl font-extrabold text-white text-center md:text-right">
                                     ₹{pricePerAdult}
                                 </div>
                                 {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-400 -mt-1">per adult</p> }
                                 {queryIsRoundTrip && !selectedOutbound ? (
                                 <Button
                                     onClick={() => handleSelectFlight(flight.id, 0)}
-                                    className="w-full md:w-auto bg-orange-500 text-white hover:bg-orange-600 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
+                                    className="w-full md:w-auto bg-orange-500 text-white hover:opacity-90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`Select outbound flight ${flight.id}`}
                                 >
                                     Select Outbound
@@ -1167,7 +1167,7 @@ function FlightResultsClientInternal() {
                                 ) : (
                                 <Button
                                     onClick={() => handleSelectFlight(flight.id, displayItineraryIndex)}
-                                    className="w-full md:w-auto bg-orange-500 text-white hover:bg-orange-600 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
+                                    className="w-full md:w-auto bg-orange-500 text-white hover:opacity-90 text-sm font-semibold px-4 py-2 rounded-md shadow-sm"
                                     aria-label={`View prices for flight ${flight.id}`}
                                 >
                                     {queryIsRoundTrip && selectedOutbound ? 'Select Return' : 'View Prices'}
@@ -1274,4 +1274,3 @@ export default function FlightResultsClient() {
     </Suspense>
   );
 }
-
