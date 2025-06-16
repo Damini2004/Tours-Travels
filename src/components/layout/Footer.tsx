@@ -101,7 +101,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm z-10 relative">
         <div>
           <h4 className="font-semibold mb-3 text-[#aef0f4] uppercase text-xs tracking-wide">
-            LuxuryEscapes.com
+            Hotel&Tour
           </h4>
           <ul className="space-y-2 text-[#c8edf0cc]">
             <li className="hover:text-white hover:underline underline-offset-2 cursor-pointer">About Us</li>
@@ -122,7 +122,7 @@ const Footer = () => {
         </div>
         <div>
           <h4 className="font-semibold mb-3 text-[#aef0f4] uppercase text-xs tracking-wide">
-            Luxury Escapes Locations
+            Hotel&Tour Locations
           </h4>
           <ul className="space-y-2 text-[#c8edf0cc]">
             <li className="hover:text-white hover:underline underline-offset-2 cursor-pointer">Melbourne</li>
@@ -144,7 +144,7 @@ const Footer = () => {
           <Image src="/logos/award2024.png" alt="Award" width={50} height={24} className="h-6 w-auto" data-ai-hint="award logo" />
         </div>
         <div className="mt-4 md:mt-0">
-          © 2017 - 2025 GrandeurNet. All rights reserved.
+          © 2017 - {new Date().getFullYear()} Hotel&Tour. All rights reserved.
         </div>
       </div>
     </footer>
