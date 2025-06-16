@@ -26,7 +26,7 @@ export default function RevenueReportsPage() {
           { title: "Revenue (Last 30 Days)", value: `$${revenueLast30Days.toLocaleString()}`, icon: TrendingUpIcon, desc: "+8.1% from previous period" },
           { title: "Average Booking Value", value: `$${averageBookingValue.toLocaleString()}`, icon: BarChartIcon, desc: "Across all bookings" },
         ].map((metric, index) => (
-            <Card key={index} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+            <Card key={index} className="bg-slate-800/60 backdrop-blur-md border border-primary/60 rounded-lg shadow-xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-300">{metric.title}</CardTitle>
               <metric.icon className="h-4 w-4 text-gray-400" />
@@ -39,7 +39,7 @@ export default function RevenueReportsPage() {
         ))}
       </div>
       
-      <Card className="mb-8 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+      <Card className="mb-8 bg-slate-800/60 backdrop-blur-md border border-primary/60 rounded-lg shadow-xl">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-white">Detailed Financial Report</CardTitle>
           <CardDescription className="text-gray-300">Download comprehensive financial statements.</CardDescription>
@@ -51,14 +51,14 @@ export default function RevenueReportsPage() {
                 <AlertDescription>Functionality to generate and download CSV/PDF reports will be implemented here.</AlertDescription>
             </Alert>
             <div className="mt-4">
-                <Button variant="outline" className="border-gray-500 text-gray-200 hover:bg-gray-700 hover:border-gray-600">
+                <Button className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200">
                     <DownloadIcon className="mr-2 h-4 w-4" /> Download Monthly Statement (Placeholder)
                 </Button>
             </div>
         </CardContent>
       </Card>
 
-      <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
+      <Alert className="bg-slate-800/60 backdrop-blur-md border border-primary/60 text-gray-200 shadow-xl">
         <LineChartIcon className="h-4 w-4 text-gray-400" />
         <AlertTitle className="text-white font-semibold">Revenue Charts Placeholder</AlertTitle>
         <AlertDescription className="text-gray-300">
@@ -68,3 +68,4 @@ export default function RevenueReportsPage() {
     </div>
   );
 }
+
