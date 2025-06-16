@@ -55,91 +55,56 @@ export default function SuperAdminDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 flex justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-120px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white py-12 px-4 md:px-8 shadow-md">
+    <div className="min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))] text-white"> {/* Adjusted min-h */}
+      <div className="py-12 px-4 md:px-8 shadow-md">
         <div className="container mx-auto">
-            <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
+            <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
             <ShieldCheckIcon className="mr-3 h-10 w-10" /> SUPER ADMIN PLATFORM OVERVIEW
             </h1>
-            <p className="text-white/90 font-medium mt-2 text-lg">This is the main dashboard for Super Administrators.</p>
+            <p className="text-gray-300 font-medium mt-2 text-lg">This is the main dashboard for Super Administrators.</p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="font-headline text-2xl md:text-3xl font-bold flex items-center text-foreground">
+          <h2 className="font-headline text-2xl md:text-3xl font-bold flex items-center text-white">
             <LayoutDashboard className="mr-3 h-7 w-7 text-primary" /> Key Metrics
           </h2>
-          <p className="text-muted-foreground">Platform overview and key statistics.</p>
+          <p className="text-gray-300">Platform overview and key statistics.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-card text-card-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalUsers}</div>
-              <p className="text-xs text-muted-foreground">Registered users</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-card text-card-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Hotel Approvals</CardTitle>
-              <FileCheckIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{pendingApprovals}</div>
-              <p className="text-xs text-muted-foreground">Hotels awaiting review</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-card text-card-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Approved Listings</CardTitle>
-              <ListChecks className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalListings}</div>
-              <p className="text-xs text-muted-foreground">Live hotels on platform</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-card text-card-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
-              <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalBookings}</div>
-              <p className="text-xs text-muted-foreground">Across all hotels</p>
-            </CardContent>
-          </Card>
+          {[
+            { title: "Total Users", value: totalUsers, icon: UsersIcon, desc: "Registered users" },
+            { title: "Pending Hotel Approvals", value: pendingApprovals, icon: FileCheckIcon, desc: "Hotels awaiting review" },
+            { title: "Approved Listings", value: totalListings, icon: ListChecks, desc: "Live hotels on platform" },
+            { title: "Total Bookings", value: totalBookings, icon: BriefcaseIcon, desc: "Across all hotels" },
+            { title: "Monthly Revenue (Placeholder)", value: `$${monthlyRevenue.toLocaleString()}`, icon: DollarSignIcon, desc: "Estimated current month" }
+          ].map((metric, index) => (
+            <Card key={index} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-gray-300">{metric.title}</CardTitle>
+                <metric.icon className="h-4 w-4 text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-white">{metric.value}</div>
+                <p className="text-xs text-gray-400">{metric.desc}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-card text-card-foreground">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Monthly Revenue (Placeholder)</CardTitle>
-              <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">${monthlyRevenue.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">Estimated current month</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Alert className="bg-card text-card-foreground">
-          <LineChartIcon className="h-4 w-4" />
-          <AlertTitle>Advanced Analytics Placeholder</AlertTitle>
-          <AlertDescription>
+        <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
+          <LineChartIcon className="h-4 w-4 text-gray-400" />
+          <AlertTitle className="text-white">Advanced Analytics Placeholder</AlertTitle>
+          <AlertDescription className="text-gray-300">
             Detailed charts for user growth, booking trends, and revenue streams will be displayed here.
             A view for all bookings could be added under a separate "Manage Bookings" tab for Super Admin.
           </AlertDescription>

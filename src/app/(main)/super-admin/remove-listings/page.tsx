@@ -20,34 +20,34 @@ const placeholderListedFlights = [
 
 export default function RemoveListingsPage() {
   return (
-    <div className="container mx-auto px-4 py-8 bg-background min-h-screen">
+    <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-foreground">
+        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
           <Trash2Icon className="mr-3 h-8 w-8 text-primary" /> Remove Listings
         </h1>
-        <p className="text-muted-foreground">Manage and remove hotel or flight listings from the platform.</p>
+        <p className="text-gray-300">Manage and remove hotel or flight listings from the platform.</p>
       </div>
 
       <Tabs defaultValue="hotels" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted">
-          <TabsTrigger value="hotels" className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"><HotelBuildingIcon className="mr-2 h-4 w-4" />Hotels ({placeholderListedHotels.length})</TabsTrigger>
-          <TabsTrigger value="flights" className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm"><PlaneIcon className="mr-2 h-4 w-4" />Flights ({placeholderListedFlights.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 mb-6 bg-slate-800/50 p-1 rounded-md">
+          <TabsTrigger value="hotels" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2"><HotelBuildingIcon className="mr-2 h-4 w-4" />Hotels ({placeholderListedHotels.length})</TabsTrigger>
+          <TabsTrigger value="flights" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2"><PlaneIcon className="mr-2 h-4 w-4" />Flights ({placeholderListedFlights.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="hotels">
           {placeholderListedHotels.length === 0 ? (
-             <Alert className="bg-card text-card-foreground">
-              <SearchIcon className="h-4 w-4" />
-              <AlertTitle>No Hotels Listed</AlertTitle>
-              <AlertDescription>There are no hotels currently listed on the platform.</AlertDescription>
+             <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
+              <SearchIcon className="h-4 w-4 text-gray-400" />
+              <AlertTitle className="text-white">No Hotels Listed</AlertTitle>
+              <AlertDescription className="text-gray-300">There are no hotels currently listed on the platform.</AlertDescription>
             </Alert>
           ) : (
             <div className="space-y-4">
               {placeholderListedHotels.map((hotel) => (
-                <Card key={hotel.id} className="bg-card text-card-foreground">
+                <Card key={hotel.id} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-lg">{hotel.name}</CardTitle>
-                    <CardDescription>{hotel.location} - Listed on: {hotel.listedDate}</CardDescription>
+                    <CardTitle className="text-lg text-white">{hotel.name}</CardTitle>
+                    <CardDescription className="text-gray-300">{hotel.location} - Listed on: {hotel.listedDate}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button variant="destructive" size="sm">
@@ -62,18 +62,18 @@ export default function RemoveListingsPage() {
 
         <TabsContent value="flights">
            {placeholderListedFlights.length === 0 ? (
-            <Alert className="bg-card text-card-foreground">
-              <SearchIcon className="h-4 w-4" />
-              <AlertTitle>No Flights Listed</AlertTitle>
-              <AlertDescription>There are no flights currently listed on the platform.</AlertDescription>
+            <Alert className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 text-gray-200 shadow-xl">
+              <SearchIcon className="h-4 w-4 text-gray-400" />
+              <AlertTitle className="text-white">No Flights Listed</AlertTitle>
+              <AlertDescription className="text-gray-300">There are no flights currently listed on the platform.</AlertDescription>
             </Alert>
           ) : (
              <div className="space-y-4">
               {placeholderListedFlights.map((flight) => (
-                <Card key={flight.id} className="bg-card text-card-foreground">
+                <Card key={flight.id} className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-lg">{flight.airline} - {flight.route}</CardTitle>
-                    <CardDescription>Listed on: {flight.listedDate}</CardDescription>
+                    <CardTitle className="text-lg text-white">{flight.airline} - {flight.route}</CardTitle>
+                    <CardDescription className="text-gray-300">Listed on: {flight.listedDate}</CardDescription>
                   </CardHeader>
                   <CardContent>
                      <Button variant="destructive" size="sm">

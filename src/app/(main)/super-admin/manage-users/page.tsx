@@ -70,71 +70,70 @@ export default function ManageUsersPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 flex justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-120px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
-
   return (
-    <div className="container mx-auto px-4 py-8 bg-background min-h-screen">
+    <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
-        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-foreground">
+        <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
           <UserCogIcon className="mr-3 h-8 w-8 text-primary" /> Manage Users
         </h1>
-        <p className="text-muted-foreground">View, edit, or suspend user accounts.</p>
+        <p className="text-gray-300">View, edit, or suspend user accounts.</p>
       </div>
 
-      <Card className="bg-card text-card-foreground">
+      <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="text-xl">User List</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl text-white">User List</CardTitle>
+          <CardDescription className="text-gray-300">
             Showing {users.length} registered users. 
           </CardDescription>
         </CardHeader>
         <CardContent>
           {users.length === 0 ? (
-            <Alert className="bg-secondary text-secondary-foreground">
-              <SearchIcon className="h-4 w-4" />
-              <AlertTitle>No Users Found</AlertTitle>
+            <Alert className="bg-slate-700/50 border-slate-600 text-gray-300">
+              <SearchIcon className="h-4 w-4 text-gray-400" />
+              <AlertTitle className="text-gray-200">No Users Found</AlertTitle>
               <AlertDescription>There are no users matching your criteria.</AlertDescription>
             </Alert>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Full Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                  <TableRow className="border-slate-700">
+                    <TableHead className="text-gray-400">Full Name</TableHead>
+                    <TableHead className="text-gray-400">Email</TableHead>
+                    <TableHead className="text-gray-400">Role</TableHead>
+                    <TableHead className="text-right text-gray-400">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {users.map((user) => (
-                    <TableRow key={user.id || user.email}>
-                      <TableCell className="font-medium">{user.fullName}</TableCell>
-                      <TableCell>{user.email}</TableCell>
+                    <TableRow key={user.id || user.email} className="border-slate-700 hover:bg-slate-700/50">
+                      <TableCell className="font-medium text-gray-100">{user.fullName}</TableCell>
+                      <TableCell className="text-gray-200">{user.email}</TableCell>
                       <TableCell>
                         <Badge 
-                            variant={user.role === 'super_admin' ? 'default' : user.role === 'hotel_owner' ? 'secondary' : 'outline'}
+                            variant={'outline'}
                             className={
-                                user.role === 'super_admin' ? 'bg-primary text-primary-foreground border-primary' : 
-                                user.role === 'hotel_owner' ? 'bg-accent text-accent-foreground border-accent' : 
-                                'border-border'
+                                user.role === 'super_admin' ? 'border-primary/70 text-primary bg-primary/10' : 
+                                user.role === 'hotel_owner' ? 'border-accent/70 text-accent bg-accent/10' : 
+                                'border-gray-600 text-gray-300 bg-gray-700/30'
                             }
                         >
                           {user.role.replace('_', ' ')}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" className="mr-2 text-muted-foreground hover:text-primary" disabled>
+                        <Button variant="ghost" size="icon" className="mr-2 text-gray-400 hover:text-primary" disabled>
                           <EditIcon className="h-4 w-4" />
                           <span className="sr-only">Edit User</span>
                         </Button>
                         {!(user.role === 'super_admin' && user.email === process.env.NEXT_PUBLIC_SUPER_ADMIN_EMAIL) && (
-                          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80" onClick={() => handleDeleteUser(user.email)}>
+                          <Button variant="ghost" size="icon" className="text-destructive/80 hover:text-destructive" onClick={() => handleDeleteUser(user.email)}>
                             <Trash2Icon className="h-4 w-4" />
                             <span className="sr-only">Delete User</span>
                           </Button>
