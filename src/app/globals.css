@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Light Theme based on Horizon Stays */
-    --background: 207 88% 95%; /* #E3F2FD - Very light blue */
+    --background: 0 0% 100%; /* #FFFFFF - Pure White */
     --foreground: 210 30% 20%; /* Dark blue-gray for text */
 
     --card: 0 0% 100%; /* White */
