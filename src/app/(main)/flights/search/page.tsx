@@ -955,7 +955,7 @@ function FlightResultsClientInternal() {
                     max={initialMaxPrice}
                     step={100}
                     onValueChange={(value) => setPriceRange(value as [number, number])} 
-                    className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-blue-100 [&>span:first-child>span]:border-blue-600"
+                    className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-blue-600"
                     disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
                 <div className="flex justify-between text-xs text-gray-500">
@@ -1016,7 +1016,7 @@ function FlightResultsClientInternal() {
                         max={initialMaxPrice}
                         step={100}
                         onValueChange={(value) => setPriceRange(value as [number, number])}
-                        className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-blue-100 [&>span:first-child>span]:border-blue-600"
+                        className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-blue-600"
                         disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
                     <div className="flex justify-between text-xs text-gray-500">
@@ -1246,7 +1246,7 @@ function FlightResultsClientInternal() {
       </div>
       <footer className="mt-12 py-8 bg-gray-100 text-center text-gray-600 border-t border-gray-200">
         <p className="text-sm font-medium">
-          © {new Date().getFullYear()} Horizon Stays. All rights reserved.
+          © {new Date().getFullYear()} Sky Explorer. All rights reserved.
         </p>
         <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
       </footer>
@@ -1275,3 +1275,5 @@ export default function FlightResultsClient() {
   );
 }
 
+```
+Change the name of the product from skyexplorer to Hotel&Tour
