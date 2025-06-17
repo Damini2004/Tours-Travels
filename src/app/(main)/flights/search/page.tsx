@@ -1275,5 +1275,4 @@ export default function FlightResultsClient() {
   );
 }
 
-```
-Change the name of the product from skyexplorer to Hotel&Tour
+Apply this code and in the file, I want the design as it is
