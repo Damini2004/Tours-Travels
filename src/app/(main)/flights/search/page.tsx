@@ -544,7 +544,7 @@ function FlightResultsClientInternal() {
 
   if (currentFlightsToDisplay.length === 0 && !loading) {
     return (
-      <div className="flex flex-col flex-1 bg-white text-gray-800">
+      <div className="flex flex-col flex-1 bg-white">
         <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white py-1 shadow-md sticky top-0 z-30 border-b border-transparent">
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
@@ -1033,7 +1033,7 @@ function FlightResultsClientInternal() {
              <p className="text-sm text-gray-600">{filteredFlights.length} flights found</p>
              <p className="text-xs text-gray-500">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
           </div>
-          <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-gray-100 rounded-lg shadow-sm">
+          <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-lg shadow-sm">
             {[
               { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
               { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
@@ -1045,7 +1045,7 @@ function FlightResultsClientInternal() {
                 variant={activeSortTab === tab.key ? "default" : "ghost"}
                 onClick={() => handleSortTabChange(tab.key)}
                 className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center",
-                  activeSortTab === tab.key ? "bg-orange-500 text-white shadow-sm" : "text-gray-700 hover:bg-gray-200 hover:text-gray-800"
+                  activeSortTab === tab.key ? "bg-orange-500 text-white shadow-sm" : "text-gray-300 hover:bg-white/20 hover:text-white"
                 )}
               >
                 <tab.icon className="w-5 h-5 mb-1" />
@@ -1055,8 +1055,8 @@ function FlightResultsClientInternal() {
               </Button>
             ))}
           </div>
-          <div className="mb-4 p-2 bg-sky-50 border border-sky-200 rounded-md text-center">
-                <p className="text-sm text-sky-700 font-medium">
+          <div className="mb-4 p-2 bg-white border border-gray-200 rounded-md text-center">
+                <p className="text-sm font-medium bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
@@ -1131,7 +1131,7 @@ function FlightResultsClientInternal() {
                             </div>
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                <div className="text-xl md:text-2xl font-extrabold text-primary text-center md:text-right">
+                                <div className="text-xl md:text-2xl font-extrabold text-center md:text-right bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
                                     ₹{pricePerAdult}
                                 </div>
                                 {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
@@ -1210,8 +1210,8 @@ function FlightResultsClientInternal() {
                                 </Collapsible>
                            </div>
                         </div>
-                        <div className="mt-2 text-center">
-                            <p className="text-xs text-sky-700 bg-sky-50 p-1.5 rounded-md">
+                        <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-gray-200">
+                            <p className="text-xs font-medium bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
