@@ -507,13 +507,13 @@ function FlightResultsClientInternal() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
-        <Plane className="w-24 h-24 text-sky-600 animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-gray-700 mb-2">Searching for Skies...</h2>
-        <p className="text-gray-500">Please wait while we find the best flights for you.</p>
+        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
+        <h2 className="text-2xl font-headline text-foreground mb-2">Searching for Skies...</h2>
+        <p className="text-muted-foreground">Please wait while we find the best flights for you.</p>
         <div className="w-full max-w-4xl mt-8 space-y-4">
-          <Skeleton className="h-20 w-full bg-gray-200" />
-          <Skeleton className="h-40 w-full bg-gray-200" />
-          <Skeleton className="h-40 w-full bg-gray-200" />
+          <Skeleton className="h-20 w-full bg-muted" />
+          <Skeleton className="h-40 w-full bg-muted" />
+          <Skeleton className="h-40 w-full bg-muted" />
         </div>
       </div>
     );
@@ -522,8 +522,8 @@ function FlightResultsClientInternal() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center bg-white">
-         <AlertCircle className="w-24 h-24 text-red-500 mb-6" />
-        <h2 className="text-2xl font-headline text-red-600 mb-2">Oops! Something Went Wrong.</h2>
+         <AlertCircle className="w-24 h-24 text-destructive mb-6" />
+        <h2 className="text-2xl font-headline text-destructive mb-2">Oops! Something Went Wrong.</h2>
         <Alert variant="destructive" className="max-w-md text-left">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error Fetching Flights</AlertTitle>
@@ -684,7 +684,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
                     >
                         SEARCH
                     </Button>
@@ -693,9 +693,9 @@ function FlightResultsClientInternal() {
             </div>
         </header>
         <div className="flex flex-col items-center justify-center flex-1 p-4 text-center bg-white">
-            <Briefcase className="w-24 h-24 text-gray-400 mb-6" />
-            <h2 className="text-2xl font-headline text-gray-700 mb-2">No Flights Found</h2>
-            <p className="text-gray-500 max-w-md mb-8">
+            <Briefcase className="w-24 h-24 text-muted-foreground mb-6" />
+            <h2 className="text-2xl font-headline text-foreground mb-2">No Flights Found</h2>
+            <p className="text-muted-foreground max-w-md mb-8">
             We couldn't find any flights matching your criteria. Try adjusting your filters or search parameters with the form above.
             </p>
         </div>
@@ -844,7 +844,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
                     >
                         SEARCH
                     </Button>
@@ -857,19 +857,19 @@ function FlightResultsClientInternal() {
           className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky self-start h-[calc(100vh-var(--header-actual-height,180px)-3rem)] overflow-y-auto pr-2"
           style={{ top: `calc(${headerHeight}px + 1.5rem)` }}
         > 
-          <div className="bg-white shadow-lg border border-gray-200 rounded-lg p-4 text-gray-800">
+          <div className="bg-card shadow-lg border border-border rounded-lg p-4 text-card-foreground">
             <Collapsible open={isAppliedFiltersOpen} onOpenChange={setIsAppliedFiltersOpen} defaultOpen className="mb-4">
                 <div className="flex justify-between items-center mb-2">
                     <CollapsibleTrigger className="flex-1 text-left">
-                        <h3 className="text-md font-headline font-semibold text-gray-800">Applied Filters</h3>
+                        <h3 className="text-md font-headline font-semibold text-foreground">Applied Filters</h3>
                     </CollapsibleTrigger>
-                    <Button variant="link" className="text-xs p-0 h-auto text-sky-600 hover:text-sky-700" onClick={clearAllFilters}>Clear All</Button>
+                    <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-primary/90" onClick={clearAllFilters}>Clear All</Button>
                 </div>
                 <CollapsibleContent className="space-y-2 animate-slide-down">
                     {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && (
-                        <div className="flex items-center justify-between p-1.5 bg-sky-50 rounded-md text-xs text-sky-700 border border-sky-200">
+                        <div className="flex items-center justify-between p-1.5 bg-primary/10 rounded-md text-xs text-primary border border-primary/30">
                             <span>Non Stop</span>
-                            <Button variant="ghost" size="icon" className="w-5 h-5 text-sky-600 hover:bg-sky-100" onClick={() => {
+                            <Button variant="ghost" size="icon" className="w-5 h-5 text-primary hover:bg-primary/20" onClick={() => {
                                 setStopFilters({ "0": true, "1": true, "2+": true }); 
                                 const currentParams = new URLSearchParams(searchParams.toString());
                                 currentParams.delete("nonStop");
@@ -878,12 +878,12 @@ function FlightResultsClientInternal() {
                         </div>
                     )}
                      {(!stopFilters["0"] || !stopFilters["1"] || !stopFilters["2+"]) && Object.entries(stopFilters).filter(([_,v])=>!v).length === 0 && priceRange[0] === initialMinPrice && priceRange[1] === initialMaxPrice && (
-                         <p className="text-xs text-gray-500">No filters applied.</p>
+                         <p className="text-xs text-muted-foreground">No filters applied.</p>
                     )}
                 </CollapsibleContent>
             </Collapsible>
             <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-sky-600 transition-colors mb-2">
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-foreground hover:text-primary transition-colors mb-2">
                 <span>Popular Filters</span>
                 {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
@@ -894,36 +894,36 @@ function FlightResultsClientInternal() {
                       id={`stop-filter-${stopKey}`}
                       checked={stopFilters[stopKey]}
                       onCheckedChange={() => handleStopFilterChange(stopKey)}
-                      className="border-gray-400 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 focus:ring-sky-600 w-4 h-4 rounded"
+                      className="border-gray-400 data-[state=checked]:bg-primary data-[state=checked]:border-primary focus:ring-primary w-4 h-4 rounded"
                       aria-label={`Filter by ${stopKey === "0" ? "non-stop" : stopKey === "1" ? "1 stop" : "2+ stops"}`}
                     />
-                    <label htmlFor={`stop-filter-${stopKey}`} className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors cursor-pointer">
+                    <label htmlFor={`stop-filter-${stopKey}`} className="text-sm font-medium text-foreground hover:text-gray-900 transition-colors cursor-pointer">
                       {stopKey === "0" ? "Non-stop" : stopKey === "1" ? "1 Stop" : "2+ Stops"}
                     </label>
                   </div>
                 ))}
               </CollapsibleContent>
             </Collapsible>
-            <Separator className="my-4 bg-gray-200"/>
+            <Separator className="my-4 bg-border"/>
             <Collapsible open={isDepartureAirportsOpen} onOpenChange={setIsDepartureAirportsOpen} className="mb-4">
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-sky-600 transition-colors mb-2">
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-foreground hover:text-primary transition-colors mb-2">
                     <span>Departure Airports</span>
                     {isDepartureAirportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
                     <div className="flex items-center gap-2.5">
-                        <Checkbox id="dep-airport-1" className="border-gray-400 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 focus:ring-sky-600 w-4 h-4 rounded"/>
-                        <label htmlFor="dep-airport-1" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors cursor-pointer">Hindon Airport (DZKm)</label>
+                        <Checkbox id="dep-airport-1" className="border-gray-400 data-[state=checked]:bg-primary data-[state=checked]:border-primary focus:ring-primary w-4 h-4 rounded"/>
+                        <label htmlFor="dep-airport-1" className="text-sm font-medium text-foreground hover:text-gray-900 transition-colors cursor-pointer">Hindon Airport (DZKm)</label>
                     </div>
                     <div className="flex items-center gap-2.5">
-                        <Checkbox id="dep-airport-2" className="border-gray-400 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 focus:ring-sky-600 w-4 h-4 rounded"/>
-                        <label htmlFor="dep-airport-2" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors cursor-pointer">Indira Gandhi Intl Airport</label>
+                        <Checkbox id="dep-airport-2" className="border-gray-400 data-[state=checked]:bg-primary data-[state=checked]:border-primary focus:ring-primary w-4 h-4 rounded"/>
+                        <label htmlFor="dep-airport-2" className="text-sm font-medium text-foreground hover:text-gray-900 transition-colors cursor-pointer">Indira Gandhi Intl Airport</label>
                     </div>
                 </CollapsibleContent>
             </Collapsible>
-            <Separator className="my-4 bg-gray-200"/>
+            <Separator className="my-4 bg-border"/>
             <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-sky-600 transition-colors mb-2">
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-foreground hover:text-primary transition-colors mb-2">
                 <span>One Way Price</span>
                 {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
@@ -934,10 +934,10 @@ function FlightResultsClientInternal() {
                     max={initialMaxPrice}
                     step={100}
                     onValueChange={(value) => setPriceRange(value as [number, number])} 
-                    className="[&>span:first-child]:bg-sky-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-sky-600"
+                    className="[&>span:first-child]:bg-primary [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-primary"
                     disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span>₹{priceRange[0]}</span>
                   <span>₹{priceRange[1]}</span>
                 </div>
@@ -948,20 +948,20 @@ function FlightResultsClientInternal() {
         <div className="lg:hidden mb-4">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-sky-600 border-sky-600/70 hover:bg-sky-50 hover:text-sky-700 font-semibold py-3 rounded-lg">
-                <Filter className="w-5 h-5 text-sky-600" />
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2 text-primary border-primary/70 hover:bg-primary/10 hover:text-primary/90 font-semibold py-3 rounded-lg">
+                <Filter className="w-5 h-5 text-primary" />
                 Filters & Sort
               </Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="p-4 bg-white border-t border-gray-200 text-gray-800 rounded-t-xl max-h-[80vh] overflow-y-auto">
+            <SheetContent side="bottom" className="p-4 bg-card border-t border-border text-card-foreground rounded-t-xl max-h-[80vh] overflow-y-auto">
               <SheetHeader className="mb-4">
-                <SheetTitle className="text-lg font-headline font-semibold text-gray-800 flex items-center gap-2">
-                   <Filter className="w-5 h-5 text-sky-600" /> Refine Your Search
+                <SheetTitle className="text-lg font-headline font-semibold text-foreground flex items-center gap-2">
+                   <Filter className="w-5 h-5 text-primary" /> Refine Your Search
                 </SheetTitle>
               </SheetHeader>
               <div className="space-y-5">
                  <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 hover:text-sky-600 transition-colors">
+                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors">
                         <span>Popular Filters</span>
                         {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </CollapsibleTrigger>
@@ -972,19 +972,19 @@ function FlightResultsClientInternal() {
                             id={`stop-filter-mobile-${stop}`}
                             checked={stopFilters[stop]}
                             onCheckedChange={() => handleStopFilterChange(stop)}
-                            className="border-gray-400 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 focus:ring-sky-600 w-4 h-4 rounded"
+                            className="border-gray-400 data-[state=checked]:bg-primary data-[state=checked]:border-primary focus:ring-primary w-4 h-4 rounded"
                             aria-label={`Filter by ${stop === "0" ? "non-stop" : stop === "1" ? "1 stop" : "2+ stops"}`}
                             />
-                            <label htmlFor={`stop-filter-mobile-${stop}`} className="text-xs font-medium text-gray-700 hover:text-gray-900 transition-colors cursor-pointer">
+                            <label htmlFor={`stop-filter-mobile-${stop}`} className="text-xs font-medium text-foreground hover:text-gray-900 transition-colors cursor-pointer">
                             {stop === "0" ? "Non-stop" : stop === "1" ? "1 Stop" : "2+ Stops"}
                             </label>
                         </div>
                         ))}
                     </CollapsibleContent>
                 </Collapsible>
-                <Separator className="bg-gray-200"/>
+                <Separator className="bg-border"/>
                 <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 hover:text-sky-600 transition-colors">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors">
                     <span>One Way Price</span>
                     {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </CollapsibleTrigger>
@@ -995,18 +995,18 @@ function FlightResultsClientInternal() {
                         max={initialMaxPrice}
                         step={100}
                         onValueChange={(value) => setPriceRange(value as [number, number])}
-                        className="[&>span:first-child]:bg-sky-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-sky-600"
+                        className="[&>span:first-child]:bg-primary [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-primary"
                         disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
-                    <div className="flex justify-between text-xs text-gray-500">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                       <span>₹{priceRange[0]}</span>
                       <span>₹{priceRange[1]}</span>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
-                <Separator className="bg-gray-200"/>
+                <Separator className="bg-border"/>
                 <div>
-                    <h4 className="text-sm font-semibold text-gray-800 mb-2 block">Sort by:</h4>
+                    <h4 className="text-sm font-semibold text-foreground mb-2 block">Sort by:</h4>
                     <div className="grid grid-cols-2 gap-2">
                         {[
                             {key: "cheapest", label: "Cheapest", icon: Zap},
@@ -1016,7 +1016,7 @@ function FlightResultsClientInternal() {
                         ].map(tab => (
                              <Button key={tab.key} variant={activeSortTab === tab.key ? "default" : "outline"} size="sm" onClick={() => handleSortTabChange(tab.key)} 
                              className={cn("text-xs h-auto py-1.5 px-2.5 flex-col items-center justify-center h-16", 
-                                activeSortTab === tab.key ? "bg-orange-500 text-white border-orange-500" : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                                activeSortTab === tab.key ? "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent" : "border-border text-foreground hover:bg-muted"
                              )}>
                                 <tab.icon className="w-5 h-5 mb-1"/>{tab.label}
                             </Button>
@@ -1028,10 +1028,10 @@ function FlightResultsClientInternal() {
           </Sheet>
         </div>
         <main className="flex-1">
-          <h2 className="text-xl font-headline font-semibold text-gray-800 mb-1">Flights from {queryOrigin} to {queryDestination}</h2>
+          <h2 className="text-xl font-headline font-semibold text-foreground mb-1">Flights from {queryOrigin} to {queryDestination}</h2>
           <div className="mb-3 ml-1">
-             <p className="text-sm text-gray-600">{filteredFlights.length} flights found</p>
-             <p className="text-xs text-gray-500">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
+             <p className="text-sm text-muted-foreground">{filteredFlights.length} flights found</p>
+             <p className="text-xs text-muted-foreground">Flights sorted by {sortOption.replace(/([A-Z])/g, ' $1').toLowerCase().replace("non stop", "non-stop")} on this route.</p>
           </div>
           <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-lg shadow-sm">
             {[
@@ -1042,10 +1042,10 @@ function FlightResultsClientInternal() {
             ].map(tab => (
               <Button
                 key={tab.key}
-                variant={activeSortTab === tab.key ? "default" : "ghost"}
+                variant="ghost"
                 onClick={() => handleSortTabChange(tab.key)}
-                className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center",
-                  activeSortTab === tab.key ? "bg-orange-500 text-white shadow-sm" : "text-gray-300 hover:bg-white/20 hover:text-white"
+                className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center transition-colors duration-150",
+                  activeSortTab === tab.key ? "bg-white/10 text-white font-semibold shadow-sm hover:bg-white/20" : "text-gray-300 hover:bg-white/20 hover:text-white"
                 )}
               >
                 <tab.icon className="w-5 h-5 mb-1" />
@@ -1055,15 +1055,15 @@ function FlightResultsClientInternal() {
               </Button>
             ))}
           </div>
-          <div className="mb-4 p-2 bg-white border border-gray-200 rounded-md text-center">
-                <p className="text-sm font-medium bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
+          <div className="mb-4 p-2 bg-white border border-border rounded-md text-center">
+                <p className="text-sm bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium">
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
           <div className="space-y-4">
             {currentFlightsToDisplay.map((flight) => {
                 const numAdults = parseInt(queryAdults) || 1; 
-                const pricePerAdult = (parseFloat(flight.price.total) / numAdults).toFixed(2);
+                const pricePerAdult = (parseFloat(flight.price.total) / numAdults);
                 const displayItineraryIndex = queryIsRoundTrip && selectedOutbound ? 1 : 0;
                 const itinerary = flight.itineraries[displayItineraryIndex];
 
@@ -1073,7 +1073,7 @@ function FlightResultsClientInternal() {
                 <Card
                   key={`${flight.id}-${displayItineraryIndex}`}
                   className={cn(
-                    "overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white border-gray-200 text-gray-800"
+                    "overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 bg-card border-border text-card-foreground"
                   )}
                   role="region"
                   aria-label={`Flight offer ${flight.id} ${queryIsRoundTrip && selectedOutbound ? "return" : "outbound"}`}
@@ -1081,60 +1081,60 @@ function FlightResultsClientInternal() {
                   <CardContent className="p-3 md:p-4">
                       <div className="mb-0 last:mb-0">
                         {queryIsRoundTrip && (
-                          <h3 className="text-md font-headline font-semibold text-gray-800 mb-2 border-b border-gray-200 pb-1.5">
+                          <h3 className="text-md font-headline font-semibold text-foreground mb-2 border-b border-border pb-1.5">
                             {selectedOutbound ? "Return Journey" : "Outbound Journey"}
                           </h3>
                         )}
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                           <div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
-                              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sky-600 font-bold text-sm shrink-0">
+                              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-primary font-bold text-sm shrink-0">
                                   {itinerary.segments[0].carrierCode}
                               </div>
                               <div>
-                                  <div className="text-sm font-semibold text-gray-800">
+                                  <div className="text-sm font-semibold text-foreground">
                                       {flight.dictionaries?.carriers?.[itinerary.segments[0].carrierCode] || `${itinerary.segments[0].carrierCode} Airlines`} 
                                   </div>
-                                  <div className="text-xxs text-gray-500">
+                                  <div className="text-xxs text-muted-foreground">
                                       {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
                                   </div>
                               </div>
                           </div>
                           <div className="flex flex-1 items-center justify-around gap-2 w-full md:w-auto">
                             <div className="text-center md:text-left">
-                                <div className="text-xl font-bold text-gray-800">
+                                <div className="text-xl font-bold text-foreground">
                                     {format(new Date(itinerary.segments[0].departure.at), "HH:mm")}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-muted-foreground">
                                     {itinerary.segments[0].departure.iataCode}
                                 </div>
                             </div>
                             <div className="flex-grow flex flex-col items-center justify-center px-2 min-w-[80px] md:min-w-[100px]">
-                                <div className="text-xs font-medium text-gray-500">
+                                <div className="text-xs font-medium text-muted-foreground">
                                     {itinerary.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
                                 </div>
-                                <div className="w-full h-px bg-gray-300 relative my-1">
+                                <div className="w-full h-px bg-border relative my-1">
                                     {itinerary.segments.length -1 > 0 && Array.from({length: itinerary.segments.length -1}).map((_,i) => (
-                                        <div key={i} className="absolute h-1.5 w-1.5 bg-gray-400 rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}></div>
+                                        <div key={i} className="absolute h-1.5 w-1.5 bg-muted-foreground rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}></div>
                                     ))}
                                 </div>
-                                <div className="text-xs font-medium text-sky-600">
+                                <div className="text-xs font-medium text-primary">
                                     {getStopsLabel(itinerary.segments)}
                                 </div>
                             </div>
                             <div className="text-center md:text-right">
-                                <div className="text-xl font-bold text-gray-800">
+                                <div className="text-xl font-bold text-foreground">
                                     {format(new Date(itinerary.segments[itinerary.segments.length - 1].arrival.at), "HH:mm")}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-muted-foreground">
                                     {itinerary.segments[itinerary.segments.length - 1].arrival.iataCode}
                                 </div>
                             </div>
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
                                 <div className="text-xl md:text-2xl font-extrabold text-center md:text-right bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
-                                    ₹{pricePerAdult}
+                                    ₹{pricePerAdult.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </div>
-                                {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
+                                {parseInt(queryAdults) > 0 && <p className="text-xxs text-muted-foreground -mt-1">per adult</p> }
                                 {queryIsRoundTrip && !selectedOutbound ? (
                                 <Button
                                     onClick={() => handleSelectFlight(flight.id, 0)}
@@ -1154,12 +1154,12 @@ function FlightResultsClientInternal() {
                                 )}
                            </div>
                         </div>
-                        <div className="mt-3 border-t border-gray-200 pt-2">
+                        <div className="mt-3 border-t border-border pt-2">
                            <div className="flex justify-between items-center">
-                             <Button variant="link" className="text-xs p-0 h-auto text-sky-600 hover:text-sky-700">Add to compare +</Button>
+                             <Button variant="link" className="text-xs p-0 h-auto text-primary hover:text-primary/90">Add to compare +</Button>
                              <Collapsible>
                                 <CollapsibleTrigger
-                                    className="text-sky-600 hover:text-sky-700 text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
+                                    className="text-primary hover:text-primary/90 text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
                                     onClick={() => setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
                                     aria-expanded={expandedFlight === `${flight.id}-${displayItineraryIndex}`}
                                     aria-controls={`flight-details-${flight.id}-${displayItineraryIndex}`}
@@ -1171,14 +1171,14 @@ function FlightResultsClientInternal() {
                                     <ChevronDown className="w-3 h-3" />
                                     )}
                                 </CollapsibleTrigger>
-                                <CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-gray-50 p-2 rounded-md">
+                                <CollapsibleContent id={`flight-details-${flight.id}-${displayItineraryIndex}`} className="mt-2 space-y-2 animate-slide-down bg-muted/50 p-2 rounded-md">
                                     {itinerary.segments.map((segment, segIdx) => (
                                     <div
                                         key={segment.id}
-                                        className="text-xxs text-gray-500 border-l-2 border-sky-600/70 pl-2 py-1"
+                                        className="text-xxs text-muted-foreground border-l-2 border-primary/70 pl-2 py-1"
                                     >
-                                        <div className="flex items-center gap-1 font-medium text-gray-700">
-                                        <MapPin className="w-3 h-3 text-sky-600" />
+                                        <div className="flex items-center gap-1 font-medium text-foreground">
+                                        <MapPin className="w-3 h-3 text-primary" />
                                         <span>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
                                             {format(new Date(segment.arrival.at), "HH:mm")} ({segment.arrival.iataCode})
@@ -1186,11 +1186,11 @@ function FlightResultsClientInternal() {
                                         </div>
                                         <div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}</div>
                                         <div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
-                                        <Clock className="w-3 h-3 text-sky-600" />
+                                        <Clock className="w-3 h-3 text-primary" />
                                         Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
                                         </div>
                                         {segIdx < itinerary.segments.length - 1 && itinerary.segments[segIdx + 1] && (
-                                        <div className="mt-1 text-gray-500 ml-[0.875rem]">
+                                        <div className="mt-1 text-muted-foreground ml-[0.875rem]">
                                             Layover at: {itinerary.segments[segIdx].arrival.iataCode} for {
                                                 (() => {
                                                     const arrivalTime = new Date(segment.arrival.at).getTime();
@@ -1210,8 +1210,8 @@ function FlightResultsClientInternal() {
                                 </Collapsible>
                            </div>
                         </div>
-                        <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-gray-200">
-                            <p className="text-xs font-medium bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
+                        <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-border">
+                            <p className="text-xs bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium">
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
@@ -1223,7 +1223,7 @@ function FlightResultsClientInternal() {
           </div>
         </main>
       </div>
-      <footer className="mt-12 py-8 bg-white text-center text-gray-500 border-t border-gray-200">
+      <footer className="mt-12 py-8 bg-background text-center text-muted-foreground border-t border-border">
         <p className="text-sm font-medium">
           © {new Date().getFullYear()} Hotel&Tour. All rights reserved.
         </p>
@@ -1242,9 +1242,9 @@ export default function FlightResultsClient() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
-        <Plane className="w-24 h-24 text-sky-600 animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-gray-700 mb-2">Loading Flight Details...</h2>
-        <p className="text-gray-500">One moment please.</p>
+        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
+        <h2 className="text-2xl font-headline text-foreground mb-2">Loading Flight Details...</h2>
+        <p className="text-muted-foreground">One moment please.</p>
       </div>
     }>
       <TooltipProvider>
