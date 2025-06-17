@@ -844,7 +844,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
+                        className="bg-orange-500 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
                     >
                         SEARCH
                     </Button>
@@ -876,6 +876,9 @@ function FlightResultsClientInternal() {
                                 router.push(`/flights/search?${currentParams.toString()}`);
                             }}><X className="w-3 h-3"/></Button>
                         </div>
+                    )}
+                     {(!stopFilters["0"] || !stopFilters["1"] || !stopFilters["2+"]) && Object.entries(stopFilters).filter(([_,v])=>!v).length === 0 && priceRange[0] === initialMinPrice && priceRange[1] === initialMaxPrice && (
+                         <p className="text-xs text-gray-500">No filters applied.</p>
                     )}
                 </CollapsibleContent>
             </Collapsible>
@@ -1128,7 +1131,7 @@ function FlightResultsClientInternal() {
                             </div>
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                <div className="text-xl md:text-2xl font-extrabold text-gray-800 text-center md:text-right">
+                                <div className="text-xl md:text-2xl font-extrabold text-white text-center md:text-right">
                                     ₹{pricePerAdult}
                                 </div>
                                 {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
@@ -1222,7 +1225,7 @@ function FlightResultsClientInternal() {
       </div>
       <footer className="mt-12 py-8 bg-white text-center text-gray-500 border-t border-gray-200">
         <p className="text-sm font-medium">
-          © {new Date().getFullYear()} Horizon Stays. All rights reserved.
+          © {new Date().getFullYear()} Hotel&Tour. All rights reserved.
         </p>
         <p className="text-xs mt-1">Flight data provided by Amadeus Self-Service APIs (Test Environment).</p>
       </footer>
@@ -1250,3 +1253,4 @@ export default function FlightResultsClient() {
     </Suspense>
   );
 }
+
