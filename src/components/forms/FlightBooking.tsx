@@ -170,7 +170,7 @@ export function FlightBooking() {
 
   if (!isClient) {
     return (
-        <div className="w-full max-w-4xl mx-auto">
+        <div className="w-full max-w-5xl mx-auto">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
                 <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] h-12"></div>
                 <div className="p-4 md:p-6 space-y-4">
@@ -318,7 +318,7 @@ export function FlightBooking() {
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-2">
           <div className="flex overflow-x-auto scrollbar-hide space-x-3">
