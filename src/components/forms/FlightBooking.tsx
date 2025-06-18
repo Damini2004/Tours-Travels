@@ -176,12 +176,11 @@ export function FlightBooking() {
                 <div className="p-4 md:p-6 space-y-4">
                     <div className="h-6 bg-gray-200 rounded w-1/2"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-stretch">
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div> 
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-3"></div> 
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-1 flex items-center justify-center"><ArrowLeftRight className="w-5 h-5 text-gray-300"/></div>
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-3"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-3"></div> {/* Adjusted for one-way skeleton */}
                     </div>
                      <div className="h-20 bg-gray-200 rounded w-full"></div>
                     <div className="flex justify-center mt-6">
@@ -318,7 +317,7 @@ export function FlightBooking() {
   );
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto"> {/* Reverted to max-w-5xl */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-2">
           <div className="flex overflow-x-auto scrollbar-hide space-x-3">
@@ -370,23 +369,23 @@ export function FlightBooking() {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-stretch">
-                <div className="md:col-span-2"><LocationPopover type="from" /></div>
+                <div className="md:col-span-3"><LocationPopover type="from" /></div>
                 <div className="md:col-span-1 flex items-center justify-center">
                     <Button variant="outline" size="icon" onClick={handleSwap} className="p-2 hover:bg-gray-100 rounded-full h-10 w-10 shrink-0 border-gray-300 text-gray-600">
                         <ArrowLeftRight className="w-4 h-4" />
                     </Button>
                 </div>
-                <div className="md:col-span-2"><LocationPopover type="to" /></div>
+                <div className="md:col-span-3"><LocationPopover type="to" /></div>
                 <div className="md:col-span-2"><DatePopover type="departure" /></div>
                 {state.tripType === "roundTrip" && (
                     <div className="md:col-span-2"><DatePopover type="return" /></div>
                 )}
-                <div className={cn("md:col-span-3")}>
+                <div className={cn(state.tripType === "roundTrip" ? "md:col-span-1" : "md:col-span-3")}>
                     <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                         <PopoverTrigger asChild>
                             <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
                                 <div className="text-xs text-gray-500 mb-0.5">Travellers & Class</div>
-                                <div className="font-bold text-lg text-slate-900 leading-tight">{totalPassengers()} Traveller{totalPassengers() > 1 ? "s" : ""}</div>
+                                <div className="font-bold text-lg text-slate-900 leading-tight truncate">{totalPassengers()} Traveller{totalPassengers() > 1 ? "s" : ""}</div>
                                 <div className="text-xs text-gray-600 truncate">{state.travelClass}</div>
                                 <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 absolute right-2 top-1/2 -translate-y-1/2" />
                             </button>
@@ -475,7 +474,7 @@ export function FlightBooking() {
                         key={fare.id}
                         htmlFor={`fare-${fare.id}`}
                         className={cn(
-                        "border rounded-md p-1.5 text-center cursor-pointer transition-all duration-200",
+                        "border rounded-md p-1.5 text-center cursor-pointer transition-all duration-200", // Reduced padding
                         state.specialFare === fare.id
                             ? "border-sky-300 bg-sky-300/10 shadow-md ring-1 ring-sky-300"
                             : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-sm"
@@ -508,3 +507,4 @@ export function FlightBooking() {
     
 
     
+
