@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Suspense, useMemo, useEffect, useState } from 'react';
@@ -108,7 +109,7 @@ function ReviewBookingContent() {
 
     return (
         <div className="min-h-screen bg-white">
-            <div className="bg-[#031f2d] text-white py-4">
+            <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white py-4">
                 <div className="max-w-6xl mx-auto px-4">
                     <h1 className="text-2xl font-semibold mb-3">Complete your booking</h1>
                     <div className="flex border-b border-blue-500/50 space-x-1">
@@ -297,3 +298,5 @@ export default function ReviewBookingPage() {
         </Suspense>
     )
 }
+
+    
