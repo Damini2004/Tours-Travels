@@ -76,3 +76,6 @@ const PlacesGallery = () => {
 };
 
 export default PlacesGallery;
+
+
+    
