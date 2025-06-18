@@ -3,6 +3,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { MapPinIcon, HeartIcon } from "lucide-react"; // Added icons
+import { cn } from "@/lib/utils"; // For conditional classes
 
 const offers = [
   {
@@ -51,14 +53,21 @@ const offers = [
   },
 ];
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
 const ExclusiveOffers = () => {
-  const [activeTab, setActiveTab] = useState("Hotels"); 
+  const [activeTab, setActiveTab] = useState("Hotels");
+  const [savedOffers, setSavedOffers] = useState<Record<number, boolean>>({});
+
+  const toggleSaveOffer = (offerId: number) => {
+    setSavedOffers(prev => ({ ...prev, [offerId]: !prev[offerId] }));
+  };
 
   return (
-    <div className="bg-white text-gray-800 font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] px-2.5 md:px-[50px] pt-[30px] pb-12 md:pb-16 min-h-[auto] box-border">
+    <div className="bg-background text-foreground font-sans px-2.5 md:px-[50px] pt-[30px] pb-12 md:pb-16 min-h-[auto] box-border">
       <div className="header flex flex-col md:flex-row justify-between items-start md:items-center mb-5 md:mb-8 md:mx-0 lg:mx-[50px]">
         <h2 className="text-2xl md:text-3xl lg:text-[45px] text-gray-900 font-semibold">
-          Today's top <em>exclusive offers</em>
+          Today's top <em className={`${gradientTextClass} not-italic`}>exclusive offers</em>
         </h2>
         <div className="filters flex flex-wrap gap-1 md:gap-2 mt-3 md:mt-0">
           {["Bonus Dining & Drinks", "Family Friendly", "Sun & Beach"].map((filterName) => (
@@ -78,49 +87,67 @@ const ExclusiveOffers = () => {
       <div className="offer-list flex overflow-x-auto gap-4 md:gap-6 mt-5 scrollbar-hide pb-4">
         {offers.map((offer) => (
           <div 
-            className="offer-card bg-white border border-gray-200 w-full max-w-[320px] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-[550px] flex-shrink-0 flex flex-col justify-between h-full shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1" 
+            className="offer-card bg-card border border-border w-full max-w-[320px] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-[550px] flex-shrink-0 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-xl transition-all duration-300 ease-in-out hover:-translate-y-1" 
             key={offer.id}
           >
             <div className="image-wrapper relative">
               {offer.tag && (
-                <span className="tag absolute top-2.5 left-2.5 bg-accent text-accent-foreground px-3 py-1 text-xs rounded-full font-semibold shadow-sm z-10">
+                <span className="tag absolute top-3 left-3 bg-accent text-accent-foreground px-3 py-1 text-xs rounded-full font-semibold shadow z-10">
                   ⚡ {offer.tag}
                 </span>
               )}
-              <div className="relative w-full h-[150px] sm:h-[160px] md:h-[180px] lg:h-[200px]">
+              <div className="relative w-full h-48"> {/* Consistent image height */}
                 <Image 
                   src={offer.image} 
                   alt={offer.title} 
                   layout="fill"
                   objectFit="cover"
-                  className="filter brightness-95 group-hover:brightness-100 transition-filter duration-300 ease-in-out"
+                  className="rounded-t-lg filter brightness-90 group-hover:brightness-100 transition-all duration-300 ease-in-out"
                   data-ai-hint={offer.imageHint}
                 />
               </div>
-              <button className="save absolute top-2.5 right-2.5 text-muted-foreground bg-transparent border-none rounded-full p-1.5 text-xl cursor-pointer transition-colors duration-300 hover:text-destructive z-10">
-                ♡
+              <button 
+                onClick={() => toggleSaveOffer(offer.id)}
+                aria-label={savedOffers[offer.id] ? "Unsave offer" : "Save offer"}
+                className="save absolute top-3 right-3 text-card-foreground bg-card/70 backdrop-blur-sm rounded-full p-1.5 cursor-pointer transition-colors duration-300 hover:text-destructive z-10"
+              >
+                <HeartIcon className={cn("h-5 w-5", savedOffers[offer.id] && "fill-accent text-accent")} />
               </button>
             </div>
-            <div className="offer-info p-3.5 md:p-4 lg:p-5 text-gray-700">
-              <p className="location text-xs text-muted-foreground mb-1">{offer.location}</p>
-              <p className="hotel text-xs text-muted-foreground mb-1">{offer.hotel}</p>
-              <p className="title font-bold my-2 text-sm md:text-base lg:text-base leading-snug text-gray-900 h-[4.2em] overflow-hidden">
-                {offer.title}
-              </p>
-              <div className="rating flex items-center gap-1.5 md:gap-2.5 bg-secondary px-2.5 py-1 md:px-3 md:py-1.5 rounded-full w-fit my-2.5 font-semibold text-secondary-foreground">
-                <span className="score bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white font-bold px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-lg text-xs md:text-sm">
-                  {offer.rating}
-                </span>
-                <span className="text-xs md:text-sm">{offer.ratingLabel}</span>
+
+            <div className="offer-info p-4 flex-grow flex flex-col">
+              <div className="text-xs text-muted-foreground mb-1 flex items-center">
+                  <MapPinIcon className="mr-1.5 h-3.5 w-3.5 shrink-0 text-muted-foreground/80" /> 
+                  <span className="truncate">{offer.location}</span>
               </div>
-              <div className="price-info">
-                <p className="my-1.5 text-xs md:text-sm text-gray-600">
-                  {offer.nights} nights from <strong className="text-base text-gray-800">{offer.price}</strong> /room
-                </p>
-                <p className="my-1.5 text-xs md:text-sm text-gray-600">
-                  Valued up to <s className="text-gray-500">{offer.originalPrice}</s> <span className="discount text-teal-600 font-bold">-{offer.discount}</span>
-                </p>
-                <button className="view-offer mt-3 w-full md:w-auto bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white px-3 py-1.5 md:px-4 md:py-2 cursor-pointer rounded-md font-semibold text-sm md:text-base transition-opacity duration-300 ease-in-out hover:opacity-90">
+              <p className="text-xs text-muted-foreground mb-2">{offer.hotel}</p>
+              
+              <h3 className="font-semibold text-base md:text-base leading-snug text-foreground mb-3 h-[3.2em] overflow-hidden"> {/* Adjusted title height and margin */}
+                {offer.title}
+              </h3>
+
+              {offer.rating > 0 && (
+                <div className="rating flex items-center gap-2 bg-secondary/60 px-2.5 py-1 rounded-full w-fit my-2 font-medium text-secondary-foreground">
+                  <span className={`score ${gradientTextClass} font-bold px-1.5 py-0.5 rounded-md text-sm`}>
+                    {offer.rating.toFixed(1)}
+                  </span>
+                  <span className="text-xs">{offer.ratingLabel}</span>
+                </div>
+              )}
+              
+              <div className="mt-auto pt-3"> {/* Price and CTA pushed to bottom */}
+                <div className="mb-2">
+                  <span className="text-xs text-muted-foreground">{offer.nights} nights from </span>
+                  <span className={`text-xl md:text-2xl font-bold ${gradientTextClass}`}>{offer.price}</span>
+                  <span className="text-xs text-muted-foreground"> /room</span>
+                </div>
+                {offer.originalPrice && (
+                  <div className="text-xs text-muted-foreground mb-3">
+                    Valued up to <s className="text-gray-400">{offer.originalPrice}</s>
+                    {offer.discount && <span className="ml-2 text-green-600 font-semibold">-{offer.discount}</span>}
+                  </div>
+                )}
+                <button className="view-offer mt-2 w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white px-4 py-2.5 cursor-pointer rounded-md font-semibold text-sm md:text-base transition-opacity duration-300 ease-in-out hover:opacity-90 shadow-md hover:shadow-lg">
                   View offer
                 </button>
               </div>
