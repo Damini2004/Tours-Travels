@@ -51,6 +51,50 @@ const offers = [
     tag: "Booked 45 times in 3 days",
     imageHint: "singapore hotel city"
   },
+  {
+    id: 4,
+    title: "Luxury Bali Jungle Retreat with Private Pool Villas & Floating Breakfast",
+    location: "Ubud, Bali, Indonesia",
+    hotel: "Viceroy Bali",
+    nights: 4,
+    price: "₹1,85,000",
+    originalPrice: "₹3,50,000",
+    discount: "47%",
+    rating: 9.6,
+    ratingLabel: "Exceptional",
+    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/iir8p4tz991yxf4fgnno.jpeg",
+    tag: "Top Pick",
+    imageHint: "bali jungle villa"
+  },
+  {
+    id: 5,
+    title: "Iconic Dubai Desert Oasis with Camel Rides & Stargazing Dinners",
+    location: "Dubai Desert Conservation Reserve, UAE",
+    hotel: "Al Maha, a Luxury Collection Desert Resort & Spa",
+    nights: 2,
+    price: "₹2,10,000",
+    originalPrice: "₹3,00,000",
+    discount: "30%",
+    rating: 9.2,
+    ratingLabel: "Excellent",
+    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/q8p992j0wc29l3j5t63z.jpeg",
+    imageHint: "dubai desert resort"
+  },
+  {
+    id: 6,
+    title: "Chic Parisian Getaway near Eiffel Tower with Daily Champagne Breakfast",
+    location: "Paris, France",
+    hotel: "Le Bristol Paris",
+    nights: 3,
+    price: "₹2,50,000",
+    originalPrice: "₹4,00,000",
+    discount: "37%",
+    rating: 9.0,
+    ratingLabel: "Excellent",
+    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/k947jhm1q3b7wsqi4qam.jpeg",
+    tag: "Highly Rated",
+    imageHint: "paris hotel eiffel"
+  }
 ];
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
@@ -122,7 +166,7 @@ const ExclusiveOffers = () => {
               </div>
               <p className="text-xs text-muted-foreground mb-2">{offer.hotel}</p>
               
-              <h3 className="font-semibold text-base md:text-base leading-snug text-foreground mb-3 h-[3.2em] overflow-hidden"> {/* Adjusted title height and margin */}
+              <h3 className="font-bold text-base md:text-base leading-snug text-foreground mb-3 h-[3.2em] overflow-hidden"> {/* Adjusted title height and margin */}
                 {offer.title}
               </h3>
 
@@ -160,3 +204,4 @@ const ExclusiveOffers = () => {
 };
 
 export default ExclusiveOffers;
+
