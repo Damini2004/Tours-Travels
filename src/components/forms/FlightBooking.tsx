@@ -367,7 +367,6 @@ export function FlightBooking() {
                   </label>
                 ))}
               </div>
-              {/* Removed "Book International and Domestic Flights" text span */}
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-stretch">
@@ -476,7 +475,7 @@ export function FlightBooking() {
                         key={fare.id}
                         htmlFor={`fare-${fare.id}`}
                         className={cn(
-                        "border rounded-md p-2.5 text-center cursor-pointer transition-all duration-200",
+                        "border rounded-md p-1.5 text-center cursor-pointer transition-all duration-200",
                         state.specialFare === fare.id
                             ? "border-sky-300 bg-sky-300/10 shadow-md ring-1 ring-sky-300"
                             : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-sm"
