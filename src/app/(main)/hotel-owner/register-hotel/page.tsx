@@ -21,6 +21,9 @@ interface CurrentUser {
   role: string;
 }
 
+const defaultHotelImage = 'https://media.istockphoto.com/id/1197480605/photo/3d-render-of-luxury-hotel-lobby-and-reception.jpg?s=612x612&w=0&k=20&c=h2DMumrFFZDGqPypcK4Whx8mM1EdCKWh8PLY2saLIzo=';
+const defaultHotelHint = 'hotel lobby';
+
 export default function RegisterHotelPage() {
   const [serpApiQuery, setSerpApiQuery] = useState("");
   const [serpApiResults, setSerpApiResults] = useState<FetchHotelDataOutput>([]);
@@ -128,10 +131,10 @@ export default function RegisterHotelPage() {
         pricePerNight: parseFloat(pricePerNight) || 0,
         rating: parseInt(rating) || 0,
         ownerEmail: currentUser.email,
-        thumbnailUrl: 'https://placehold.co/600x400.png', 
-        thumbnailHint: 'hotel exterior',
-        images: ['https://placehold.co/1200x800.png'],
-        imageHints: ['hotel room'],
+        thumbnailUrl: defaultHotelImage, 
+        thumbnailHint: defaultHotelHint,
+        images: [defaultHotelImage],
+        imageHints: [defaultHotelHint],
     };
 
     addHotel({ ...newHotelData, isApproved: false }); 

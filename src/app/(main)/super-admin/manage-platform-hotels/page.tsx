@@ -21,6 +21,9 @@ interface User {
   password?: string; 
 }
 
+const defaultHotelImage = 'https://media.istockphoto.com/id/1197480605/photo/3d-render-of-luxury-hotel-lobby-and-reception.jpg?s=612x612&w=0&k=20&c=h2DMumrFFZDGqPypcK4Whx8mM1EdCKWh8PLY2saLIzo=';
+const defaultHotelHint = 'hotel lobby';
+
 export default function ManagePlatformHotelsPage() {
   const { toast } = useToast();
   const router = useRouter(); 
@@ -34,8 +37,8 @@ export default function ManagePlatformHotelsPage() {
   const [rating, setRatingState] = useState("");
   const [ownerEmail, setOwnerEmail] = useState("");
   const [ownerPassword, setOwnerPassword] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("https://placehold.co/600x400.png");
-  const [thumbnailHint, setThumbnailHint] = useState("hotel exterior");
+  const [thumbnailUrl, setThumbnailUrl] = useState(defaultHotelImage); // Initialize with new default
+  const [thumbnailHint, setThumbnailHint] = useState(defaultHotelHint);
 
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
 
@@ -78,11 +81,9 @@ export default function ManagePlatformHotelsPage() {
         }
     }
     
-    const defaultPlaceholderThumbnail = 'https://placehold.co/600x400.png';
-    const defaultPlaceholderImage = 'https://placehold.co/1200x800.png';
-    const currentThumbnailUrl = thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderThumbnail;
-    const currentImageUrls = [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultPlaceholderImage];
-    const isCustomImage = currentThumbnailUrl !== defaultPlaceholderThumbnail;
+    const currentThumbnailUrl = thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultHotelImage;
+    const currentImageUrls = [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultHotelImage];
+    const isCustomImage = currentThumbnailUrl !== defaultHotelImage; // Check if it's still the default placeholder
 
     const newHotelData: Omit<Hotel, 'id'> = {
       name: hotelName,
@@ -94,9 +95,9 @@ export default function ManagePlatformHotelsPage() {
       ownerEmail: ownerEmail.trim(),
       isApproved: true, 
       thumbnailUrl: currentThumbnailUrl,
-      thumbnailHint: isCustomImage ? "hotel building" : "hotel exterior",
+      thumbnailHint: isCustomImage ? "hotel building" : defaultHotelHint, // Use default hint if default image
       images: currentImageUrls,
-      imageHints: [isCustomImage ? "hotel main view" : "hotel room"],
+      imageHints: [isCustomImage ? "hotel main view" : defaultHotelHint], // Use default hint if default image
       checkInTime: "15:00", 
       checkOutTime: "11:00", 
     };
@@ -108,7 +109,7 @@ export default function ManagePlatformHotelsPage() {
     });
     setHotelName(""); setLocation(""); setDescription(""); setAmenitiesState("");
     setPricePerNight(""); setRatingState(""); setOwnerEmail(""); setOwnerPassword("");
-    setThumbnailUrl("https://placehold.co/600x400.png"); setThumbnailHint("hotel exterior");
+    setThumbnailUrl(defaultHotelImage); setThumbnailHint(defaultHotelHint); // Reset to new default
     fetchAllHotels(); 
     router.push('/hotels/search'); 
   };
@@ -127,9 +128,8 @@ export default function ManagePlatformHotelsPage() {
   };
 
   useEffect(() => {
-    const defaultPlaceholderThumbnail = 'https://placehold.co/600x400.png';
-    const isCustom = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultPlaceholderThumbnail;
-    setThumbnailHint(isCustom ? "hotel building" : "hotel exterior");
+    const isCustom = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultHotelImage;
+    setThumbnailHint(isCustom ? "hotel building" : defaultHotelHint);
   }, [thumbnailUrl]);
 
 
@@ -189,8 +189,8 @@ export default function ManagePlatformHotelsPage() {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="saThumbnailUrl" className="text-gray-300">Thumbnail URL (leave for default placeholder)</Label>
-                <Input id="saThumbnailUrl" placeholder="https://placehold.co/600x400.png" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                {thumbnailUrl && thumbnailUrl !== "https://placehold.co/600x400.png" && (
+                <Input id="saThumbnailUrl" placeholder={defaultHotelImage} value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                {thumbnailUrl && (
                     <div className="mt-2">
                         <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
                              onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400.png/CCCCCC/FFFFFF?text=Invalid+URL"; }} 

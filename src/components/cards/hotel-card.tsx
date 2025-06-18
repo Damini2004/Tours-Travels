@@ -24,6 +24,9 @@ const getRatingLabel = (rating: number): string => {
   return "Not Rated";
 };
 
+const defaultHotelImage = 'https://media.istockphoto.com/id/1197480605/photo/3d-render-of-luxury-hotel-lobby-and-reception.jpg?s=612x612&w=0&k=20&c=h2DMumrFFZDGqPypcK4Whx8mM1EdCKWh8PLY2saLIzo=';
+const defaultHotelHint = 'hotel lobby';
+
 export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
   const ratingLabel = getRatingLabel(hotel.rating);
 
@@ -32,12 +35,12 @@ export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
       <div className="image-wrapper relative">
         <div className="relative w-full h-48">
           <Image
-            src={hotel.thumbnailUrl || 'https://placehold.co/600x400.png'}
+            src={hotel.thumbnailUrl || defaultHotelImage}
             alt={hotel.name}
             layout="fill"
             objectFit="cover"
             className="filter brightness-95 group-hover:brightness-100 transition-filter duration-300 ease-in-out"
-            data-ai-hint={hotel.thumbnailHint || "hotel exterior"}
+            data-ai-hint={hotel.thumbnailHint || defaultHotelHint}
           />
         </div>
         <button
