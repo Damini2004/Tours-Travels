@@ -29,6 +29,8 @@ import { Calendar } from "@/components/ui/calendar";
 const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
 const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
 const getAccessToken = async (): Promise<string> => {
   const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
   const body = new URLSearchParams({
@@ -508,8 +510,8 @@ function FlightResultsClientInternal() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
         <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-foreground mb-2">Searching for Skies...</h2>
-        <p className="text-muted-foreground">Please wait while we find the best flights for you.</p>
+        <h2 className={cn("text-2xl font-headline mb-2 font-semibold", gradientTextClass)}>Searching for Skies...</h2>
+        <p className={gradientTextClass}>Please wait while we find the best flights for you.</p>
         <div className="w-full max-w-4xl mt-8 space-y-4">
           <Skeleton className="h-20 w-full bg-muted" />
           <Skeleton className="h-40 w-full bg-muted" />
@@ -544,7 +546,7 @@ function FlightResultsClientInternal() {
 
   if (currentFlightsToDisplay.length === 0 && !loading) {
     return (
-      <div className="flex flex-col flex-1 bg-slate-100">
+      <div className="flex flex-col flex-1 bg-white">
         <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white py-1 shadow-md sticky top-0 z-30 border-b border-transparent">
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
@@ -692,7 +694,7 @@ function FlightResultsClientInternal() {
               </div>
             </div>
         </header>
-        <div className="flex flex-col items-center justify-center flex-1 p-4 text-center bg-slate-100">
+        <div className="flex flex-col items-center justify-center flex-1 p-4 text-center bg-white">
             <Briefcase className="w-24 h-24 text-muted-foreground mb-6" />
             <h2 className="text-2xl font-headline text-foreground mb-2">No Flights Found</h2>
             <p className="text-muted-foreground max-w-md mb-8">
@@ -704,7 +706,7 @@ function FlightResultsClientInternal() {
   }
 
   return (
-    <div className="flex flex-col flex-1 bg-slate-100">
+    <div className="flex flex-col flex-1 bg-white">
       <header ref={headerRef} className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white py-1 shadow-md sticky top-0 z-30 border-b border-transparent">
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
@@ -859,12 +861,10 @@ function FlightResultsClientInternal() {
         > 
           <div className="bg-white shadow-lg border border-gray-200 rounded-lg p-4 text-gray-800">
             <Collapsible open={isAppliedFiltersOpen} onOpenChange={setIsAppliedFiltersOpen} defaultOpen className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                    <CollapsibleTrigger className="flex-1 text-left">
-                        <h3 className="text-md font-headline font-semibold text-gray-800">Applied Filters</h3>
-                    </CollapsibleTrigger>
-                    <Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700" onClick={clearAllFilters}>Clear All</Button>
-                </div>
+                <CollapsibleTrigger className="flex-1 text-left">
+                    <h3 className={cn("text-md font-headline font-semibold", gradientTextClass)}>Applied Filters</h3>
+                </CollapsibleTrigger>
+                <Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700" onClick={clearAllFilters}>Clear All</Button>
                 <CollapsibleContent className="space-y-2 animate-slide-down">
                     {(stopFilters["0"] && !stopFilters["1"] && !stopFilters["2+"]) && (
                         <div className="flex items-center justify-between p-1.5 bg-blue-50 rounded-md text-xs text-blue-700 border border-blue-200">
@@ -883,8 +883,8 @@ function FlightResultsClientInternal() {
                 </CollapsibleContent>
             </Collapsible>
             <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-blue-600 transition-colors mb-2">
-                <span>Popular Filters</span>
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
+                <span className={cn(gradientTextClass, "font-semibold")}>Popular Filters</span>
                 {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
@@ -894,12 +894,12 @@ function FlightResultsClientInternal() {
                       id={`stop-filter-${stopKey}`}
                       checked={stopFilters[stopKey]}
                       onCheckedChange={() => handleStopFilterChange(stopKey)}
-                      className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:group-hover:bg-teal-700 data-[state=checked]:group-hover:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
+                      className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-teal-700 data-[state=checked]:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
                       aria-label={`Filter by ${stopKey === "0" ? "non-stop" : stopKey === "1" ? "1 stop" : "2+ stops"}`}
                     />
                     <label 
                       htmlFor={`stop-filter-${stopKey}`} 
-                      className="text-sm font-medium text-gray-800 group-hover:bg-gradient-to-br group-hover:from-[#031f2d] group-hover:via-[#0c4d52] group-hover:to-[#155e63] group-hover:bg-clip-text group-hover:text-transparent transition-colors cursor-pointer"
+                      className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
                     >
                       {stopKey === "0" ? "Non-stop" : stopKey === "1" ? "1 Stop" : "2+ Stops"}
                     </label>
@@ -909,19 +909,19 @@ function FlightResultsClientInternal() {
             </Collapsible>
             <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isDepartureAirportsOpen} onOpenChange={setIsDepartureAirportsOpen} className="mb-4">
-                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-blue-600 transition-colors mb-2">
-                    <span>Departure Airports</span>
+                <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
+                    <span className={cn(gradientTextClass, "font-semibold")}>Departure Airports</span>
                     {isDepartureAirportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
                     <div className="flex items-center gap-2.5 group">
                         <Checkbox 
                           id="dep-airport-1" 
-                          className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:group-hover:bg-teal-700 data-[state=checked]:group-hover:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
+                          className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-teal-700 data-[state=checked]:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
                         />
                         <label 
                           htmlFor="dep-airport-1" 
-                          className="text-sm font-medium text-gray-800 group-hover:bg-gradient-to-br group-hover:from-[#031f2d] group-hover:via-[#0c4d52] group-hover:to-[#155e63] group-hover:bg-clip-text group-hover:text-transparent transition-colors cursor-pointer"
+                           className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
                         >
                           Hindon Airport (DZKm)
                         </label>
@@ -929,11 +929,11 @@ function FlightResultsClientInternal() {
                     <div className="flex items-center gap-2.5 group">
                         <Checkbox 
                           id="dep-airport-2" 
-                          className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:group-hover:bg-teal-700 data-[state=checked]:group-hover:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
+                          className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-teal-700 data-[state=checked]:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
                         />
                         <label 
                           htmlFor="dep-airport-2" 
-                          className="text-sm font-medium text-gray-800 group-hover:bg-gradient-to-br group-hover:from-[#031f2d] group-hover:via-[#0c4d52] group-hover:to-[#155e63] group-hover:bg-clip-text group-hover:text-transparent transition-colors cursor-pointer"
+                           className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
                         >
                           Indira Gandhi Intl Airport
                         </label>
@@ -942,8 +942,8 @@ function FlightResultsClientInternal() {
             </Collapsible>
             <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline font-semibold text-gray-800 hover:text-blue-600 transition-colors mb-2">
-                <span>One Way Price</span>
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
+                <span className={cn(gradientTextClass, "font-semibold")}>One Way Price</span>
                 {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
@@ -956,9 +956,9 @@ function FlightResultsClientInternal() {
                     className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-blue-600"
                     disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
-                <div className="flex justify-between text-xs text-gray-500">
-                  <span>₹{priceRange[0]}</span>
-                  <span>₹{priceRange[1]}</span>
+                <div className="flex justify-between text-xs">
+                  <span className={gradientTextClass}>₹{priceRange[0]}</span>
+                  <span className={gradientTextClass}>₹{priceRange[1]}</span>
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -980,8 +980,8 @@ function FlightResultsClientInternal() {
               </SheetHeader>
               <div className="space-y-5">
                  <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
-                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 hover:text-blue-600 transition-colors">
-                        <span>Popular Filters</span>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold transition-colors">
+                        <span className={cn(gradientTextClass, "font-semibold")}>Popular Filters</span>
                         {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2.5 mt-2.5 animate-slide-down">
@@ -991,12 +991,12 @@ function FlightResultsClientInternal() {
                             id={`stop-filter-mobile-${stop}`}
                             checked={stopFilters[stop]}
                             onCheckedChange={() => handleStopFilterChange(stop)}
-                            className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:group-hover:bg-teal-700 data-[state=checked]:group-hover:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
+                            className="border-gray-400 group-hover:border-teal-700 data-[state=checked]:bg-teal-700 data-[state=checked]:border-teal-700 focus:ring-blue-500 w-4 h-4 rounded transition-colors"
                             aria-label={`Filter by ${stop === "0" ? "non-stop" : stop === "1" ? "1 stop" : "2+ stops"}`}
                             />
                             <label 
                               htmlFor={`stop-filter-mobile-${stop}`} 
-                              className="text-xs font-medium text-gray-800 group-hover:bg-gradient-to-br group-hover:from-[#031f2d] group-hover:via-[#0c4d52] group-hover:to-[#155e63] group-hover:bg-clip-text group-hover:text-transparent transition-colors cursor-pointer"
+                               className={cn("text-xs font-medium cursor-pointer", gradientTextClass)}
                             >
                               {stop === "0" ? "Non-stop" : stop === "1" ? "1 Stop" : "2+ Stops"}
                             </label>
@@ -1006,8 +1006,8 @@ function FlightResultsClientInternal() {
                 </Collapsible>
                 <Separator className="bg-gray-200"/>
                 <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 hover:text-blue-600 transition-colors">
-                    <span>One Way Price</span>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold transition-colors">
+                    <span className={cn(gradientTextClass, "font-semibold")}>One Way Price</span>
                     {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
@@ -1020,9 +1020,9 @@ function FlightResultsClientInternal() {
                         className="[&>span:first-child]:bg-blue-600 [&>span:first-child>span]:bg-white [&>span:first-child>span]:border-blue-600"
                         disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>₹{priceRange[0]}</span>
-                      <span>₹{priceRange[1]}</span>
+                    <div className="flex justify-between text-xs">
+                      <span className={gradientTextClass}>₹{priceRange[0]}</span>
+                      <span className={gradientTextClass}>₹{priceRange[1]}</span>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
@@ -1078,7 +1078,7 @@ function FlightResultsClientInternal() {
             ))}
           </div>
           <div className="mb-4 p-2 bg-white border border-gray-200 rounded-md text-center">
-                <p className="text-sm bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium">
+                <p className={cn("text-sm font-medium", gradientTextClass)}>
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
@@ -1153,7 +1153,7 @@ function FlightResultsClientInternal() {
                             </div>
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
-                                <div className="text-xl md:text-2xl font-extrabold text-center md:text-right bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">
+                                <div className={cn("text-xl md:text-2xl font-extrabold text-center md:text-right", gradientTextClass)}>
                                     ₹{pricePerAdult.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </div>
                                 {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
@@ -1178,10 +1178,10 @@ function FlightResultsClientInternal() {
                         </div>
                         <div className="mt-3 border-t border-gray-200 pt-2">
                            <div className="flex justify-between items-center">
-                             <Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700">Add to compare +</Button>
+                             <Button variant="link" className={cn("text-xs p-0 h-auto font-medium", gradientTextClass)}>Add to compare +</Button>
                              <Collapsible>
                                 <CollapsibleTrigger
-                                    className="text-blue-600 hover:text-blue-700 text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
+                                    className={cn("text-xs font-semibold flex items-center gap-1 transition-colors duration-300", gradientTextClass)}
                                     onClick={() => setExpandedFlight(expandedFlight === `${flight.id}-${displayItineraryIndex}` ? null : `${flight.id}-${displayItineraryIndex}`)}
                                     aria-expanded={expandedFlight === `${flight.id}-${displayItineraryIndex}`}
                                     aria-controls={`flight-details-${flight.id}-${displayItineraryIndex}`}
@@ -1197,22 +1197,24 @@ function FlightResultsClientInternal() {
                                     {itinerary.segments.map((segment, segIdx) => (
                                     <div
                                         key={segment.id}
-                                        className="text-xxs text-gray-500 border-l-2 border-blue-600/70 pl-2 py-1"
+                                        className="border-l-2 border-blue-600/70 pl-2 py-1"
                                     >
-                                        <div className="flex items-center gap-1 font-medium text-gray-800">
+                                        <div className="flex items-center gap-1 font-medium">
                                         <MapPin className="w-3 h-3 text-blue-600" />
-                                        <span>
+                                        <span className={cn("text-xxs", gradientTextClass)}>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
                                             {format(new Date(segment.arrival.at), "HH:mm")} ({segment.arrival.iataCode})
                                         </span>
                                         </div>
-                                        <div className="text-xxs mt-0.5 ml-[0.875rem]">Flight: {segment.carrierCode} {segment.number}</div>
+                                        <div className={cn("text-xxs mt-0.5 ml-[0.875rem]", gradientTextClass)}>Flight: {segment.carrierCode} {segment.number}</div>
                                         <div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
                                         <Clock className="w-3 h-3 text-blue-600" />
-                                        Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
+                                        <span className={cn("text-xxs", gradientTextClass)}>
+                                            Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
+                                        </span>
                                         </div>
                                         {segIdx < itinerary.segments.length - 1 && itinerary.segments[segIdx + 1] && (
-                                        <div className="mt-1 text-gray-500 ml-[0.875rem]">
+                                        <div className={cn("mt-1 text-gray-500 ml-[0.875rem]", gradientTextClass)}>
                                             Layover at: {itinerary.segments[segIdx].arrival.iataCode} for {
                                                 (() => {
                                                     const arrivalTime = new Date(segment.arrival.at).getTime();
@@ -1233,7 +1235,7 @@ function FlightResultsClientInternal() {
                            </div>
                         </div>
                         <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-gray-200">
-                            <p className="text-xs bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium">
+                            <p className={cn("text-xs font-medium", gradientTextClass)}>
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
@@ -1265,8 +1267,8 @@ export default function FlightResultsClient() {
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
         <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
-        <h2 className="text-2xl font-headline text-foreground mb-2">Loading Flight Details...</h2>
-        <p className="text-muted-foreground">One moment please.</p>
+        <h2 className={cn("text-2xl font-headline mb-2 font-semibold", gradientTextClass)}>Loading Flight Details...</h2>
+        <p className={gradientTextClass}>One moment please.</p>
       </div>
     }>
       <TooltipProvider>
@@ -1275,4 +1277,4 @@ export default function FlightResultsClient() {
     </Suspense>
   );
 }
-
+    
