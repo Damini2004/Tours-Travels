@@ -23,7 +23,7 @@ export default function RemoveListingsPage() {
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-          <Trash2Icon className="mr-3 h-8 w-8 text-primary" /> Remove Listings
+          <Trash2Icon className="mr-3 h-8 w-8 text-sky-400" /> Remove Listings
         </h1>
         <p className="text-gray-300">Manage and remove hotel or flight listings from the platform.</p>
       </div>

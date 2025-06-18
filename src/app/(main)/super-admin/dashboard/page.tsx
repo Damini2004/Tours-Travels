@@ -56,7 +56,7 @@ export default function SuperAdminDashboardPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-120px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <Loader2 className="h-12 w-12 animate-spin text-sky-400" />
       </div>
     );
   }
@@ -66,7 +66,7 @@ export default function SuperAdminDashboardPage() {
       <div className="py-10 px-4 md:px-8 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-lg">
         <div className="container mx-auto">
             <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-            <ShieldCheckIcon className="mr-3 h-10 w-10 text-primary" /> SUPER ADMIN PLATFORM OVERVIEW
+            <ShieldCheckIcon className="mr-3 h-10 w-10 text-sky-400" /> SUPER ADMIN PLATFORM OVERVIEW
             </h1>
             <p className="text-gray-300 font-medium mt-2 text-lg">Central hub for platform management and insights.</p>
         </div>
@@ -75,7 +75,7 @@ export default function SuperAdminDashboardPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="font-headline text-2xl md:text-3xl font-bold flex items-center text-white">
-            <LayoutDashboard className="mr-3 h-7 w-7 text-primary" /> Key Metrics
+            <LayoutDashboard className="mr-3 h-7 w-7 text-sky-400" /> Key Metrics
           </h2>
           <p className="text-gray-300">Platform overview and key statistics.</p>
         </div>

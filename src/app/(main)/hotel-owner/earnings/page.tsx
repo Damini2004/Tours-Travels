@@ -14,7 +14,7 @@ export default function EarningsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-          <DollarSign className="mr-3 h-8 w-8 text-primary" /> Earnings & Payouts
+          <DollarSign className="mr-3 h-8 w-8 text-[#0c4d52]" /> Earnings & Payouts
         </h1>
         <p className="text-muted-foreground">Track your revenue and manage payouts for your properties.</p>
       </div>

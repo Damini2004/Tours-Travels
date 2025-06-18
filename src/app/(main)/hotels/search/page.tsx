@@ -13,8 +13,15 @@ import Link from 'next/link';
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { getHotels } from '@/lib/hotel-data';
 
+<<<<<<< HEAD
 function HotelSearchForm() {
 const searchParams = useSearchParams();
+=======
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
+export default function HotelSearchResultsPage() {
+  const searchParams = useSearchParams();
+>>>>>>> 04e13cb (over the place of this color use this color bg-gradient-to-br from-[#031)
   const locationQuery = searchParams.get('location');
   const checkInDate = searchParams.get('checkInDate');
   const guests = searchParams.get('guests');
@@ -60,7 +67,7 @@ const searchParams = useSearchParams();
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="font-headline text-3xl font-bold flex items-center">
-            <Loader2 className="mr-3 h-8 w-8 animate-spin text-primary" /> Searching Hotels in {displayLocation}
+            <Loader2 className="mr-3 h-8 w-8 animate-spin text-[#0c4d52]" /> Searching Hotels in {displayLocation}
           </h1>
           <p className="text-muted-foreground">Loading available hotels...</p>
         </div>
@@ -77,7 +84,7 @@ const searchParams = useSearchParams();
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-headline text-3xl font-bold flex items-center">
-          <HotelIcon className="mr-3 h-8 w-8 text-primary" /> Hotel Results in {displayLocation}
+          <HotelIcon className="mr-3 h-8 w-8 text-[#0c4d52]" /> Hotel Results in {displayLocation}
         </h1>
         {checkInDate && <p className="text-muted-foreground">Check-in: {checkInDate}</p>}
         {guests && <p className="text-muted-foreground">Guests: {guests}</p>}
@@ -90,7 +97,7 @@ const searchParams = useSearchParams();
           <AlertTitle>No Approved Hotels Found</AlertTitle>
           <AlertDescription>
             We couldn&apos;t find any approved hotels in {displayLocation} with the current criteria. 
-            <Button variant="link" asChild className="p-1 text-primary">
+            <Button variant="link" asChild className={`p-1 ${gradientTextClass}`}>
               <Link href="/">Try adjusting your search</Link>
             </Button>
           </AlertDescription>

@@ -67,7 +67,7 @@ export default function ManageBookingsPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <Loader2Icon className="h-12 w-12 animate-spin text-[#0c4d52] mb-4" />
         <p className="text-muted-foreground">Loading bookings for your hotels...</p>
       </div>
     );
@@ -88,7 +88,7 @@ export default function ManageBookingsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-          <ListOrdered className="mr-3 h-8 w-8 text-primary" /> Manage Bookings
+          <ListOrdered className="mr-3 h-8 w-8 text-[#0c4d52]" /> Manage Bookings
         </h1>
         <p className="text-muted-foreground">View and manage reservations for your properties.</p>
       </div>
@@ -117,7 +117,7 @@ export default function ManageBookingsPage() {
                             <CardDescription className="flex items-center mt-1"><HotelIcon className="mr-2 h-4 w-4 text-muted-foreground"/>Hotel: {booking.hotelName}</CardDescription>
                         </div>
                         <span className={`mt-2 sm:mt-0 px-2 py-1 text-xs rounded-full font-semibold ${
-                            booking.status === 'Confirmed' ? 'bg-primary/20 text-primary' 
+                            booking.status === 'Confirmed' ? 'bg-teal-100 text-teal-700' 
                             : booking.status === 'Pending' ? 'bg-yellow-500/20 text-yellow-700'
                             : 'bg-muted text-muted-foreground'
                         }`}>

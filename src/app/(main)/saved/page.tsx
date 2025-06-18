@@ -92,7 +92,7 @@ export default function SavedItemsPage() {
   if (isAuthLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <Loader2Icon className="h-12 w-12 animate-spin text-[#0c4d52] mb-4" />
         <p className="text-muted-foreground">Checking authentication...</p>
       </div>
     );

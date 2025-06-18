@@ -16,6 +16,8 @@ import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
 export default function FlightDetailPage() {
   const params = useParams();
   const flightId = params.flightId as string;
@@ -87,7 +89,7 @@ export default function FlightDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center"><PlaneIcon className="mr-2 h-6 w-6 text-primary" /> Flight Itinerary</CardTitle>
+              <CardTitle className="font-headline text-2xl flex items-center"><PlaneIcon className="mr-2 h-6 w-6 text-[#0c4d52]" /> Flight Itinerary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
@@ -96,7 +98,7 @@ export default function FlightDetailPage() {
                   <p className="text-sm text-muted-foreground">{flight.departureAirport}</p>
                   <p className="text-sm">{format(new Date(flight.departureTime), 'EEE, MMM d, yyyy - HH:mm')}</p>
                 </div>
-                <PlaneIcon className="h-8 w-8 text-primary mx-4" />
+                <PlaneIcon className="h-8 w-8 text-[#0c4d52] mx-4" />
                 <div>
                   <p className="font-medium text-lg text-right">{flight.to}</p>
                   <p className="text-sm text-muted-foreground text-right">{flight.arrivalAirport}</p>
@@ -114,12 +116,12 @@ export default function FlightDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center"><InfoIcon className="mr-2 h-6 w-6 text-primary" /> Amenities & Info</CardTitle>
+              <CardTitle className="font-headline text-2xl flex items-center"><InfoIcon className="mr-2 h-6 w-6 text-[#0c4d52]" /> Amenities & Info</CardTitle>
             </CardHeader>
             <CardContent>
               {flight.amenities && flight.amenities.length > 0 ? (
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  {flight.amenities.map(amenity => <li key={amenity}><CheckCircleIcon className="inline mr-2 h-4 w-4 text-primary" />{amenity}</li>)}
+                  {flight.amenities.map(amenity => <li key={amenity}><CheckCircleIcon className="inline mr-2 h-4 w-4 text-[#0c4d52]" />{amenity}</li>)}
                 </ul>
               ) : (
                 <p className="text-sm text-muted-foreground">No specific amenities listed for this flight.</p>
@@ -134,7 +136,7 @@ export default function FlightDetailPage() {
               <CardTitle className="font-headline text-xl">Price</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-primary mb-4">${flight.price.toFixed(2)}</p>
+              <p className={`text-3xl font-bold mb-4 ${gradientTextClass}`}>${flight.price.toFixed(2)}</p>
               <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">Book Now</Button>
                <Button 
                 variant="outline" 

@@ -23,6 +23,7 @@ interface CurrentUser {
   role: string;
 }
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 const BOOKINGS_DB_KEY = 'appBookingsDB';
 
 export default function HotelDetailPage() {
@@ -267,7 +268,7 @@ export default function HotelDetailPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                   {hotel.amenities.map(amenity => (
                     <div key={amenity} className="flex items-center">
-                        <CheckCircleIcon className="mr-2 h-4 w-4 text-primary shrink-0" />
+                        <CheckCircleIcon className="mr-2 h-4 w-4 text-[#0c4d52] shrink-0" />
                         <span>{amenity}</span>
                     </div>
                   ))}
@@ -281,14 +282,14 @@ export default function HotelDetailPage() {
           {hotel.roomTypes && hotel.roomTypes.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center"><BedDoubleIcon className="mr-2 h-6 w-6 text-primary" /> Room Options</CardTitle>
+              <CardTitle className="font-headline text-2xl flex items-center"><BedDoubleIcon className="mr-2 h-6 w-6 text-[#0c4d52]" /> Room Options</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {hotel.roomTypes.map((room, index) => (
                 <div key={index}>
                   <div className="flex justify-between items-center">
                     <h4 className="font-medium">{room.name}</h4>
-                    <p className="font-semibold text-primary">${room.price.toFixed(2)}</p>
+                    <p className="font-semibold text-[#0c4d52]">${room.price.toFixed(2)}</p>
                   </div>
                   <ul className="list-disc list-inside text-xs text-muted-foreground pl-2">
                     {room.features.map(feature => <li key={feature}>{feature}</li>)}
@@ -308,7 +309,7 @@ export default function HotelDetailPage() {
               <CardTitle className="font-headline text-xl">Book Your Stay</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-primary mb-1">${hotel.pricePerNight.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">/ night</span></p>
+              <p className={`text-3xl font-bold mb-1 ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">/ night</span></p>
               <p className="text-xs text-muted-foreground mb-4">(Price for standard room, may vary)</p>
               <div className="space-y-2 mb-4">
                   <p className="text-sm flex items-center"><CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Check-in: {hotel.checkInTime || 'N/A'}</p>

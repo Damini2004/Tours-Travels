@@ -54,7 +54,7 @@ export default function MyHotelsPage() {
   if (isLoading && typeof window !== 'undefined' && localStorage.getItem("currentUser")) { // Only show loader if user might exist
      return (
       <div className="container mx-auto px-4 py-8 flex justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#0c4d52]" />
       </div>
     );
   }
@@ -76,7 +76,7 @@ export default function MyHotelsPage() {
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
           <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-            <ListChecksIcon className="mr-3 h-8 w-8 text-primary" /> My Hotels
+            <ListChecksIcon className="mr-3 h-8 w-8 text-[#0c4d52]" /> My Hotels
           </h1>
           <p className="text-muted-foreground">Manage your listed properties, rooms, and availability.</p>
         </div>

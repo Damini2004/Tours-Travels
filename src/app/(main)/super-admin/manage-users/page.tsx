@@ -71,7 +71,7 @@ export default function ManageUsersPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-120px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <Loader2 className="h-12 w-12 animate-spin text-sky-400" />
       </div>
     );
   }
@@ -80,7 +80,7 @@ export default function ManageUsersPage() {
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-          <UserCogIcon className="mr-3 h-8 w-8 text-primary" /> Manage Users
+          <UserCogIcon className="mr-3 h-8 w-8 text-sky-400" /> Manage Users
         </h1>
         <p className="text-gray-300">View, edit, or suspend user accounts.</p>
       </div>
@@ -119,7 +119,7 @@ export default function ManageUsersPage() {
                         <Badge 
                             variant={'outline'}
                             className={
-                                user.role === 'super_admin' ? 'border-primary text-primary bg-primary/10' : 
+                                user.role === 'super_admin' ? 'border-sky-400 text-sky-400 bg-sky-400/10' : 
                                 user.role === 'hotel_owner' ? 'border-accent text-accent bg-accent/10' : 
                                 'border-gray-600 text-gray-300 bg-gray-700/30'
                             }
@@ -128,7 +128,7 @@ export default function ManageUsersPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" className="mr-2 text-gray-400 hover:text-primary" disabled>
+                        <Button variant="ghost" size="icon" className="mr-2 text-gray-400 hover:text-sky-400" disabled>
                           <EditIcon className="h-4 w-4" />
                           <span className="sr-only">Edit User</span>
                         </Button>

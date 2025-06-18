@@ -168,7 +168,7 @@ export default function RegisterHotelPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-          <HotelBuildingIcon className="mr-3 h-8 w-8 text-primary" /> Register New Hotel
+          <HotelBuildingIcon className="mr-3 h-8 w-8 text-[#0c4d52]" /> Register New Hotel
         </h1>
         <p className="text-muted-foreground">Add your property and submit it for approval.</p>
       </div>

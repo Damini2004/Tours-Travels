@@ -137,14 +137,14 @@ export default function ManagePlatformHotelsPage() {
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-          <HotelBuildingIcon className="mr-3 h-8 w-8 text-primary" /> Manage Platform Hotels
+          <HotelBuildingIcon className="mr-3 h-8 w-8 text-sky-400" /> Manage Platform Hotels
         </h1>
         <p className="text-gray-300">Add new hotels, view, and manage existing hotel listings.</p>
       </div>
 
       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center text-white text-xl font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-primary" />Add New Hotel (Super Admin)</CardTitle>
+          <CardTitle className="flex items-center text-white text-xl font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-sky-400" />Add New Hotel (Super Admin)</CardTitle>
           <CardDescription className="text-gray-300">Hotels added here are automatically approved. If owner email is new, an owner account will be created.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -152,44 +152,44 @@ export default function ManagePlatformHotelsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="saHotelName" className="text-gray-300">Hotel Name *</Label>
-                    <Input id="saHotelName" placeholder="Luxury Palace" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saHotelName" placeholder="Luxury Palace" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="saLocation" className="text-gray-300">Location (Full Address) *</Label>
-                    <Input id="saLocation" placeholder="1 Royal Way, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saLocation" placeholder="1 Royal Way, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="saPricePerNight" className="text-gray-300">Price Per Night (USD) *</Label>
-                    <Input id="saPricePerNight" type="number" placeholder="200" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saPricePerNight" type="number" placeholder="200" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="saRating" className="text-gray-300">Rating (1-5) *</Label>
-                    <Input id="saRating" type="number" placeholder="5" min="1" max="5" required value={rating} onChange={(e) => setRatingState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saRating" type="number" placeholder="5" min="1" max="5" required value={rating} onChange={(e) => setRatingState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="saOwnerEmail" className="flex items-center text-gray-300"><KeyRoundIcon className="mr-1.5 h-4 w-4 text-gray-400"/>Owner's Email *</Label>
-                    <Input id="saOwnerEmail" type="email" placeholder="owner@example.com" required value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saOwnerEmail" type="email" placeholder="owner@example.com" required value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="saOwnerPassword" className="text-gray-300">Owner's Password *</Label>
-                    <Input id="saOwnerPassword" type="password" placeholder="Set a password for the owner" required value={ownerPassword} onChange={(e) => setOwnerPassword(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                    <Input id="saOwnerPassword" type="password" placeholder="Set a password for the owner" required value={ownerPassword} onChange={(e) => setOwnerPassword(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="saDescription" className="text-gray-300">Description</Label>
-              <Textarea id="saDescription" placeholder="A brief description of the hotel..." value={description} onChange={(e) => setDescription(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+              <Textarea id="saDescription" placeholder="A brief description of the hotel..." value={description} onChange={(e) => setDescription(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="saAmenities" className="text-gray-300">Amenities (comma-separated)</Label>
-              <Input id="saAmenities" placeholder="Pool, Gym, Spa" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+              <Input id="saAmenities" placeholder="Pool, Gym, Spa" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="saThumbnailUrl" className="text-gray-300">Thumbnail URL (leave for default placeholder)</Label>
-                <Input id="saThumbnailUrl" placeholder="https://placehold.co/600x400.png" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-primary" />
+                <Input id="saThumbnailUrl" placeholder="https://placehold.co/600x400.png" value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                 {thumbnailUrl && thumbnailUrl !== "https://placehold.co/600x400.png" && (
                     <div className="mt-2">
                         <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
@@ -198,7 +198,7 @@ export default function ManagePlatformHotelsPage() {
                     </div>
                 )}
             </div>
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white">
               Add Hotel to Platform
             </Button>
           </form>
@@ -207,12 +207,12 @@ export default function ManagePlatformHotelsPage() {
 
       <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
-            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-primary" />All Listed Hotels</CardTitle>
+            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-sky-400" />All Listed Hotels</CardTitle>
             <CardDescription className="text-gray-300">Total hotels on platform: {allHotels.length}. Approved: {allHotels.filter(h=>h.isApproved).length}. Pending: {allHotels.filter(h=>!h.isApproved).length}</CardDescription>
         </CardHeader>
         <CardContent>
             {isLoading ? (
-                 <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+                 <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
             ) : allHotels.length === 0 ? (
                 <p className="text-gray-400">No hotels found on the platform yet.</p>
             ) : (

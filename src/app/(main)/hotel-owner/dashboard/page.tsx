@@ -14,7 +14,7 @@ export default function HotelOwnerDashboardPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center">
-          <LayoutDashboard className="mr-3 h-8 w-8 text-primary" /> Hotel Owner Dashboard
+          <LayoutDashboard className="mr-3 h-8 w-8 text-[#0c4d52]" /> Hotel Owner Dashboard
         </h1>
         <p className="text-muted-foreground">Overview of your hotel properties and performance.</p>
       </div>

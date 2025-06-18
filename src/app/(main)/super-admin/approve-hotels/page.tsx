@@ -58,7 +58,7 @@ export default function ApproveHotelsPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-120px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <Loader2 className="h-12 w-12 animate-spin text-sky-400" />
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function ApproveHotelsPage() {
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-          <FileCheckIcon className="mr-3 h-8 w-8 text-primary" /> Approve Hotel Registrations
+          <FileCheckIcon className="mr-3 h-8 w-8 text-sky-400" /> Approve Hotel Registrations
         </h1>
         <p className="text-gray-300">Review and approve or reject new hotel submissions.</p>
       </div>

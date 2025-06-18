@@ -11,8 +11,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+<<<<<<< HEAD
 function LoginForm() {
 const router = useRouter();
+=======
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
+export default function LoginPage() {
+  const router = useRouter();
+>>>>>>> 04e13cb (over the place of this color use this color bg-gradient-to-br from-[#031)
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
@@ -94,7 +101,7 @@ const router = useRouter();
     <div className="container mx-auto px-4 py-16 flex justify-center items-center min-h-[calc(100vh-128px)]">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <LogInIcon className="mx-auto h-10 w-10 text-primary mb-2" />
+          <LogInIcon className="mx-auto h-10 w-10 text-[#0c4d52] mb-2" />
           <CardTitle className="font-headline text-2xl">Welcome Back!</CardTitle>
           <CardDescription>Log in to access your account and bookings.</CardDescription>
         </CardHeader>
@@ -128,12 +135,12 @@ const router = useRouter();
           </form>
         </CardContent>
         <CardFooter className="flex flex-col items-center text-sm">
-          <Link href="#" className="text-primary hover:underline mb-2">
+          <Link href="#" className={`${gradientTextClass} hover:opacity-80 mb-2`}>
             Forgot password?
           </Link>
           <p className="text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-primary hover:underline font-medium">
+            <Link href="/signup" className={`${gradientTextClass} hover:opacity-80 font-medium`}>
               Sign Up
             </Link>
           </p>

@@ -1,9 +1,12 @@
+
 "use client"; 
 
 import React from 'react';
 import PopularArticles from './PopularArticles'; 
 import ExclusiveOffer from "./ExclusiveOffer"; 
 import Image from 'next/image'; // Import next/image
+
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 
 const articles = [
   {
@@ -75,7 +78,7 @@ export default function InspirationPage() {
                 <span className="bg-card text-card-foreground px-2 py-1 rounded">Malaysia</span>
               </div>
               <h2 className="text-2xl font-headline font-bold mb-2 text-foreground">The Best Kuala Lumpur Restaurants</h2> {/* Changed text-white to text-foreground */}
-              <a href="#" className="text-primary hover:underline">Read more</a>
+              <a href="#" className={`${gradientTextClass} hover:opacity-80`}>Read more</a>
             </div>
 
             <div className="space-y-10">
@@ -93,7 +96,7 @@ export default function InspirationPage() {
                   </div>
                   <div className="flex flex-col justify-between h-full">
                     <h3 className="font-semibold text-base mb-1 leading-tight text-foreground">{article.title}</h3> {/* Changed text-white to text-foreground */}
-                    <a href="#" className="text-primary hover:underline text-sm mt-auto">Read more</a>
+                    <a href="#" className={`${gradientTextClass} hover:opacity-80 text-sm mt-auto`}>Read more</a>
                   </div>
                 </div>
               ))}
@@ -116,7 +119,7 @@ export default function InspirationPage() {
                   </div>
                 <div className="flex flex-col justify-between h-full">
                   <h3 className="font-semibold text-base mb-1 leading-tight text-foreground">{article.title}</h3> {/* Changed text-white to text-foreground */}
-                  <a href="#" className="text-primary hover:underline text-sm mt-auto">Read more</a>
+                  <a href="#" className={`${gradientTextClass} hover:opacity-80 text-sm mt-auto`}>Read more</a>
                 </div>
               </div>
             ))}

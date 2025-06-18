@@ -176,14 +176,14 @@ export function FlightBooking() {
                 <div className="p-4 md:p-6 space-y-4">
                     <div className="h-6 bg-gray-200 rounded w-1/2"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3">
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-2"></div> 
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-1 flex items-center justify-center"><ArrowLeftRight className="w-5 h-5 text-gray-300"/></div>
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-2"></div>
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-1"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div> 
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-1 flex items-center justify-center"><ArrowLeftRight className="w-5 h-5 text-gray-300"/></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-1"></div>
                     </div>
                      <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-4"></div>
-                        <div className="h-[68px] bg-gray-200 rounded md:col-span-2"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-4"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
                     </div>
                      <div className="h-20 bg-gray-200 rounded w-full"></div>
                     <div className="flex justify-center mt-6">
@@ -198,7 +198,7 @@ export function FlightBooking() {
   const LocationPopover = ({ type }: { type: "from" | "to" }) => (
     <Popover open={state[`${type}Open`]} onOpenChange={(open) => updateState({ [`${type}Open`]: open })}>
       <PopoverTrigger asChild>
-        <button className="border border-gray-300 rounded-lg p-2 hover:border-primary text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
+        <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
             <div className="text-xs text-gray-500 mb-0.5">{type === "from" ? "From" : "To"}</div>
             <div className="font-bold text-lg text-slate-900 leading-tight truncate">{state[type].city}</div>
             <div className="text-xs text-gray-600 truncate">{state[type].code}</div>
@@ -213,7 +213,7 @@ export function FlightBooking() {
               placeholder="Search city/airport/code"
               value={state[`${type}Search`]}
               onChange={(e) => updateState({ [`${type}Search`]: e.target.value })}
-              className="pl-8 text-sm h-10 bg-white border-gray-300 text-slate-900 placeholder-gray-400 focus:border-primary"
+              className="pl-8 text-sm h-10 bg-white border-gray-300 text-slate-900 placeholder-gray-400 focus:border-sky-300"
             />
           </div>
         </div>
@@ -246,7 +246,7 @@ export function FlightBooking() {
   const DatePopover = ({ type }: { type: "departure" | "return" }) => (
     <Popover open={state[`${type}Open`]} onOpenChange={(open) => updateState({ [`${type}Open`]: open })}>
       <PopoverTrigger asChild>
-         <button className="border border-gray-300 rounded-lg p-2 hover:border-primary text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
+         <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
             <div className="text-xs text-gray-500 mb-0.5">{type === "departure" ? "Departure" : "Return"}</div>
              {type === "return" && !state.return ? (
                 <div className="text-sm text-gray-400 py-1">Tap to select</div> 
@@ -294,7 +294,7 @@ export function FlightBooking() {
                     className={cn(
                       "relative p-1.5 rounded w-10 h-10 flex flex-col items-center justify-center",
                       !isDisabled && "hover:bg-gray-100",
-                      isSelected && !isDisabled && "bg-primary text-white hover:bg-primary/90", 
+                      isSelected && !isDisabled && "bg-sky-500 text-white hover:bg-sky-500/90", 
                       isDisabled && "text-gray-400 cursor-not-allowed"
                     )}
                     onClick={() => !isDisabled && handleDate(date, type)}
@@ -309,7 +309,7 @@ export function FlightBooking() {
           <div className="flex justify-end mt-4">
             <Button
               onClick={() => updateState({ [`${type}Open`]: false })}
-              className="bg-primary hover:bg-primary/90 text-white px-4 py-1 rounded text-sm"
+              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-1 rounded text-sm"
             >
               Done
             </Button>
@@ -363,9 +363,9 @@ export function FlightBooking() {
                       value={type}
                       checked={state.tripType === type}
                       onChange={(e) => updateState({ tripType: e.target.value as typeof state.tripType })}
-                      className="w-3.5 h-3.5 text-primary border-gray-300 focus:ring-primary"
+                      className="w-3.5 h-3.5 text-sky-300 border-gray-300 focus:ring-sky-300"
                     />
-                    <span className="ml-1 text-xs font-medium text-slate-700">{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
+                    <span className={cn("ml-1 text-xs font-medium", state.tripType === type ? "text-white" : "text-slate-700")}>{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
                   </label>
                 ))}
               </div>
@@ -391,7 +391,7 @@ export function FlightBooking() {
                 <div className={cn("md:col-span-4", state.tripType !== "roundTrip" && "md:col-start-3")}>
                     <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                         <PopoverTrigger asChild>
-                            <button className="border border-gray-300 rounded-lg p-2 hover:border-primary text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
+                            <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
                                 <div className="text-xs text-gray-500 mb-0.5">Travellers & Class</div>
                                 <div className="font-bold text-lg text-slate-900 leading-tight">{totalPassengers()} Traveller{totalPassengers() > 1 ? "s" : ""}</div>
                                 <div className="text-xs text-gray-600 truncate">{state.travelClass}</div>
@@ -423,7 +423,7 @@ export function FlightBooking() {
                                         className={cn(
                                             "w-8 h-8 rounded text-xs font-medium border",
                                             state.passengers[item.key as keyof PassengerCounts] === num
-                                            ? "bg-primary text-white border-primary"
+                                            ? "bg-sky-500 text-white border-sky-500"
                                             : "bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-800"
                                         )}
                                         >
@@ -443,7 +443,7 @@ export function FlightBooking() {
                                     onClick={() => updateState({ travelClass: c })}
                                     className={cn(
                                     "px-3 py-1.5 rounded text-xs font-medium border",
-                                    state.travelClass === c ? "bg-primary text-white border-primary" : "bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-800"
+                                    state.travelClass === c ? "bg-sky-500 text-white border-sky-500" : "bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-800"
                                     )}
                                 >
                                     {c}
@@ -454,7 +454,7 @@ export function FlightBooking() {
                             <div className="flex justify-end pt-2">
                             <Button
                                 onClick={applyTravellers}
-                                className="bg-primary hover:bg-primary/90 text-white px-6 py-1.5 rounded-md text-sm"
+                                className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-1.5 rounded-md text-sm"
                                 disabled={totalPassengers() === 0}
                             >
                                 Apply
@@ -484,13 +484,13 @@ export function FlightBooking() {
                         className={cn(
                         "border rounded-md p-2.5 text-center cursor-pointer transition-all duration-200",
                         state.specialFare === fare.id
-                            ? "border-primary bg-primary/10 shadow-md ring-1 ring-primary"
+                            ? "border-sky-300 bg-sky-300/10 shadow-md ring-1 ring-sky-300"
                             : "border-gray-300 bg-white hover:border-gray-400 hover:shadow-sm"
                         )}
                     >
                         <RadioGroupItem value={fare.id} id={`fare-${fare.id}`} className="sr-only peer" />
-                        <div className="font-medium text-xs text-slate-800 peer-data-[state=checked]:text-primary">{fare.label}</div>
-                        <div className="text-xxs text-gray-500 peer-data-[state=checked]:text-primary/80 mt-0.5">{fare.subLabel}</div>
+                        <div className={cn("font-medium text-xs text-slate-800", state.specialFare === fare.id && "text-white")}>{fare.label}</div>
+                        <div className={cn("text-xxs text-gray-500 mt-0.5", state.specialFare === fare.id && "text-sky-100/80")}>{fare.subLabel}</div>
                     </Label>
                     ))}
                 </RadioGroup>
@@ -511,4 +511,3 @@ export function FlightBooking() {
     </div>
   );
 }
-

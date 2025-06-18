@@ -53,7 +53,7 @@ export default function MyBookingsPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-        <Loader2Icon className="h-12 w-12 animate-spin text-primary mb-4" />
+        <Loader2Icon className="h-12 w-12 animate-spin text-[#0c4d52] mb-4" />
         <p className="text-muted-foreground">Loading your bookings...</p>
       </div>
     );
@@ -79,7 +79,7 @@ export default function MyBookingsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex flex-col sm:flex-row justify-between items-center">
         <div className="text-center sm:text-left mb-4 sm:mb-0">
-            <BriefcaseIcon className="mx-auto sm:mx-0 h-12 w-12 text-primary mb-2" />
+            <BriefcaseIcon className="mx-auto sm:mx-0 h-12 w-12 text-[#0c4d52] mb-2" />
             <h1 className="font-headline text-3xl md:text-4xl font-bold">My Bookings</h1>
             <p className="text-muted-foreground">View and manage your hotel reservations.</p>
         </div>
@@ -125,7 +125,7 @@ export default function MyBookingsPage() {
               <CardHeader>
                 <div className="flex justify-between items-start">
                     <CardTitle className="font-headline text-xl flex items-center">
-                        <HotelIcon className="mr-2 h-5 w-5 text-primary"/> {booking.hotelName}
+                        <HotelIcon className="mr-2 h-5 w-5 text-[#0c4d52]"/> {booking.hotelName}
                     </CardTitle>
                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                         booking.status === 'Confirmed' ? 'bg-green-100 text-green-700' 

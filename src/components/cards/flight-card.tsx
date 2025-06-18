@@ -16,6 +16,8 @@ interface FlightCardProps {
   onToggleSave: (flightId: string) => void;
 }
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
 export function FlightCard({ flight, isSaved, onToggleSave }: FlightCardProps) {
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -46,7 +48,7 @@ export function FlightCard({ flight, isSaved, onToggleSave }: FlightCardProps) {
             <span className="font-medium">{flight.from}</span>
             <span className="text-xs text-muted-foreground">{format(new Date(flight.departureTime), 'HH:mm')}</span>
           </div>
-          <ArrowRightIcon className="h-5 w-5 text-primary mx-2" />
+          <ArrowRightIcon className="h-5 w-5 text-[#0c4d52] mx-2" />
           <div className="flex flex-col items-end">
             <span className="font-medium">{flight.to}</span>
             <span className="text-xs text-muted-foreground">{format(new Date(flight.arrivalTime), 'HH:mm')}</span>
@@ -59,7 +61,7 @@ export function FlightCard({ flight, isSaved, onToggleSave }: FlightCardProps) {
         </div>
 
         <div className="flex items-center justify-between pt-2">
-            <p className="text-xl font-semibold text-primary">
+            <p className={`text-xl font-semibold ${gradientTextClass}`}>
                 ${flight.price.toFixed(2)}
             </p>
              <Button
