@@ -55,28 +55,27 @@ const ExclusiveOffers = () => {
   const [activeTab, setActiveTab] = useState("Hotels"); 
 
   return (
-    <div className="bg-white text-gray-800 font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] px-2.5 md:px-[50px] py-[30px] pb-[50px] md:pb-[100px] min-h-[30vh] md:min-h-[70vh] lg:min-h-[auto] box-border"> {/* Adjusted pb and min-height for white bg */}
+    <div className="bg-white text-gray-800 font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] px-2.5 md:px-[50px] pt-[30px] pb-12 md:pb-16 min-h-[auto] box-border">
       <div className="header flex flex-col md:flex-row justify-between items-start md:items-center mb-5 md:mb-8 md:mx-0 lg:mx-[50px]">
         <h2 className="text-2xl md:text-3xl lg:text-[45px] text-gray-900 font-semibold">
           Today's top <em>exclusive offers</em>
         </h2>
         <div className="filters flex flex-wrap gap-1 md:gap-2 mt-3 md:mt-0">
-          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-transparent border border-primary rounded-xl text-primary text-xs md:text-sm cursor-pointer transition-colors duration-300 hover:bg-primary hover:text-primary-foreground">
-            Bonus Dining & Drinks
-          </button>
-          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-transparent border border-primary rounded-xl text-primary text-xs md:text-sm cursor-pointer transition-colors duration-300 hover:bg-primary hover:text-primary-foreground">
-            Family Friendly
-          </button>
-          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-transparent border border-primary rounded-xl text-primary text-xs md:text-sm cursor-pointer transition-colors duration-300 hover:bg-primary hover:text-primary-foreground">
-            Sun & Beach
-          </button>
-          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-transparent border border-accent rounded-xl text-accent text-xs md:text-sm cursor-pointer transition-colors duration-300 hover:bg-accent hover:text-accent-foreground font-bold view-all">
+          {["Bonus Dining & Drinks", "Family Friendly", "Sun & Beach"].map((filterName) => (
+            <button 
+              key={filterName}
+              className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent rounded-xl text-xs md:text-sm cursor-pointer transition-opacity duration-300 hover:opacity-90"
+            >
+              {filterName}
+            </button>
+          ))}
+          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent rounded-xl text-xs md:text-sm cursor-pointer transition-opacity duration-300 hover:opacity-90 font-bold view-all">
             View all
           </button>
         </div>
       </div>
 
-      <div className="offer-list flex overflow-x-auto gap-4 md:gap-6 mt-5 scrollbar-hide pb-4"> {/* Added pb-4 for scrollbar spacing if visible */}
+      <div className="offer-list flex overflow-x-auto gap-4 md:gap-6 mt-5 scrollbar-hide pb-4">
         {offers.map((offer) => (
           <div 
             className="offer-card bg-white border border-gray-200 w-full max-w-[320px] sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-[550px] flex-shrink-0 flex flex-col justify-between h-full shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1" 
@@ -105,11 +104,11 @@ const ExclusiveOffers = () => {
             <div className="offer-info p-3.5 md:p-4 lg:p-5 text-gray-700">
               <p className="location text-xs text-muted-foreground mb-1">{offer.location}</p>
               <p className="hotel text-xs text-muted-foreground mb-1">{offer.hotel}</p>
-              <p className="title font-bold my-2 text-sm md:text-base lg:text-base leading-snug text-gray-900 h-[4.2em] overflow-hidden"> {/* approx 3 lines */}
+              <p className="title font-bold my-2 text-sm md:text-base lg:text-base leading-snug text-gray-900 h-[4.2em] overflow-hidden">
                 {offer.title}
               </p>
               <div className="rating flex items-center gap-1.5 md:gap-2.5 bg-secondary px-2.5 py-1 md:px-3 md:py-1.5 rounded-full w-fit my-2.5 font-semibold text-secondary-foreground">
-                <span className="score bg-primary text-primary-foreground font-bold px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-lg text-xs md:text-sm">
+                <span className="score bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white font-bold px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-lg text-xs md:text-sm">
                   {offer.rating}
                 </span>
                 <span className="text-xs md:text-sm">{offer.ratingLabel}</span>
@@ -119,9 +118,9 @@ const ExclusiveOffers = () => {
                   {offer.nights} nights from <strong className="text-base text-gray-800">{offer.price}</strong> /room
                 </p>
                 <p className="my-1.5 text-xs md:text-sm text-gray-600">
-                  Valued up to <s className="text-gray-500">{offer.originalPrice}</s> <span className="discount text-primary font-bold">-{offer.discount}</span>
+                  Valued up to <s className="text-gray-500">{offer.originalPrice}</s> <span className="discount text-teal-600 font-bold">-{offer.discount}</span>
                 </p>
-                <button className="view-offer mt-3 w-full md:w-auto bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 cursor-pointer rounded-md font-semibold text-sm md:text-base transition-colors duration-300 ease-in-out hover:bg-primary/90">
+                <button className="view-offer mt-3 w-full md:w-auto bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white px-3 py-1.5 md:px-4 md:py-2 cursor-pointer rounded-md font-semibold text-sm md:text-base transition-opacity duration-300 ease-in-out hover:opacity-90">
                   View offer
                 </button>
               </div>
