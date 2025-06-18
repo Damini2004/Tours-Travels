@@ -175,15 +175,13 @@ export function FlightBooking() {
                 <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] h-12"></div>
                 <div className="p-4 md:p-6 space-y-4">
                     <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3">
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div> 
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-1 flex items-center justify-center"><ArrowLeftRight className="w-5 h-5 text-gray-300"/></div>
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-1"></div>
-                    </div>
-                     <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-                        <div className="h-[76px] bg-gray-200 rounded md:col-span-4"></div>
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
+                        <div className="h-[76px] bg-gray-200 rounded md:col-span-3"></div>
                     </div>
                      <div className="h-20 bg-gray-200 rounded w-full"></div>
                     <div className="flex justify-center mt-6">
@@ -253,9 +251,9 @@ export function FlightBooking() {
              ) : (
                 <>
                     <div className="font-bold text-lg text-slate-900 leading-tight">
-                        {format(state[type]!, "d")} <span className="font-normal text-sm">{format(state[type]!, "MMM")}</span> 
+                        {state[type] ? format(state[type]!, "d") : ""} <span className="font-normal text-sm">{state[type] ? format(state[type]!, "MMM") : ""}</span> 
                     </div>
-                    <div className="text-xs text-gray-600">{format(state[type]!, "EEE")}</div>
+                    <div className="text-xs text-gray-600">{state[type] ? format(state[type]!, "EEE") : ""}</div>
                 </>
              )}
             <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 absolute right-2 top-1/2 -translate-y-1/2" />
@@ -365,14 +363,14 @@ export function FlightBooking() {
                       onChange={(e) => updateState({ tripType: e.target.value as typeof state.tripType })}
                       className="w-3.5 h-3.5 text-sky-300 border-gray-300 focus:ring-sky-300"
                     />
-                    <span className={cn("ml-1 text-xs font-medium", state.tripType === type ? "text-white" : "text-slate-700")}>{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
+                    <span className={cn("ml-1 text-xs font-medium", state.tripType === type ? "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent" : "text-slate-700")}>{type === "oneWay" ? "One Way" : type === "roundTrip" ? "Round Trip" : "Multi City"}</span>
                   </label>
                 ))}
               </div>
               <span className="text-xs text-gray-500 hidden sm:block">Book International and Domestic Flights</span>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 items-stretch">
                 <div className="md:col-span-2"><LocationPopover type="from" /></div>
                 <div className="md:col-span-1 flex items-center justify-center">
                     <Button variant="outline" size="icon" onClick={handleSwap} className="p-2 hover:bg-gray-100 rounded-full h-10 w-10 shrink-0 border-gray-300 text-gray-600">
@@ -380,15 +378,11 @@ export function FlightBooking() {
                     </Button>
                 </div>
                 <div className="md:col-span-2"><LocationPopover type="to" /></div>
-                <div className="md:col-span-1"><DatePopover type="departure" /></div>
-            </div>
-
-             <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-stretch">
-                {state.tripType === "roundTrip" ? (
+                <div className="md:col-span-2"><DatePopover type="departure" /></div>
+                {state.tripType === "roundTrip" && (
                     <div className="md:col-span-2"><DatePopover type="return" /></div>
-                ) : <div className="hidden md:block md:col-span-2"></div>}
-
-                <div className={cn("md:col-span-4", state.tripType !== "roundTrip" && "md:col-start-3")}>
+                )}
+                <div className={cn("md:col-span-3")}>
                     <Popover open={state.travellersOpen} onOpenChange={(open) => updateState({ travellersOpen: open })}>
                         <PopoverTrigger asChild>
                             <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
@@ -489,8 +483,8 @@ export function FlightBooking() {
                         )}
                     >
                         <RadioGroupItem value={fare.id} id={`fare-${fare.id}`} className="sr-only peer" />
-                        <div className={cn("font-medium text-xs text-slate-800", state.specialFare === fare.id && "text-white")}>{fare.label}</div>
-                        <div className={cn("text-xxs text-gray-500 mt-0.5", state.specialFare === fare.id && "text-sky-100/80")}>{fare.subLabel}</div>
+                        <div className={cn("font-medium text-xs text-slate-800", state.specialFare === fare.id && "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent")}>{fare.label}</div>
+                        <div className={cn("text-xxs text-gray-500 mt-0.5", state.specialFare === fare.id && "text-sky-500/80")}>{fare.subLabel}</div>
                     </Label>
                     ))}
                 </RadioGroup>
@@ -511,3 +505,4 @@ export function FlightBooking() {
     </div>
   );
 }
+
