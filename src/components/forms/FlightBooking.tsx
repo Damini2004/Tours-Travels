@@ -175,7 +175,7 @@ export function FlightBooking() {
                 <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] h-12"></div>
                 <div className="p-4 md:p-6 space-y-4">
                     <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-stretch">
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div> 
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-1 flex items-center justify-center"><ArrowLeftRight className="w-5 h-5 text-gray-300"/></div>
                         <div className="h-[76px] bg-gray-200 rounded md:col-span-2"></div>
@@ -370,7 +370,7 @@ export function FlightBooking() {
               <span className="text-xs text-gray-500 hidden sm:block">Book International and Domestic Flights</span>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-stretch">
                 <div className="md:col-span-2"><LocationPopover type="from" /></div>
                 <div className="md:col-span-1 flex items-center justify-center">
                     <Button variant="outline" size="icon" onClick={handleSwap} className="p-2 hover:bg-gray-100 rounded-full h-10 w-10 shrink-0 border-gray-300 text-gray-600">
@@ -505,4 +505,3 @@ export function FlightBooking() {
     </div>
   );
 }
-
