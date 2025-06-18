@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label"; 
 
-interface Location { city: string; code: string; airport: string; }
+interface Location { city: string; code: string; airport: string; country: string; }
 interface PassengerCounts { adults: number; children: number; infants: number; }
 
 const services = [
@@ -26,14 +26,14 @@ const services = [
 ];
 
 const popularCities: Location[] = [
-  { city: "Mumbai", code: "BOM", airport: "Chhatrapati Shivaji International Airport" },
-  { city: "New Delhi", code: "DEL", airport: "Indira Gandhi International Airport" },
-  { city: "Bangkok", code: "BKK", airport: "Bangkok Suvarnabhumi Airport" },
-  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru" },
-  { city: "Pune", code: "PNQ", airport: "Pune Airport" },
-  { city: "Chennai", code: "MAA", airport: "Chennai International Airport" },
-  { city: "Kolkata", code: "CCU", airport: "Netaji Subhas Chandra Bose International Airport" },
-  { city: "Hyderabad", code: "HYD", airport: "Rajiv Gandhi International Airport" },
+  { city: "Mumbai", code: "BOM", airport: "Chhatrapati Shivaji International Airport", country: "India" },
+  { city: "New Delhi", code: "DEL", airport: "Indira Gandhi International Airport", country: "India" },
+  { city: "Bangkok", code: "BKK", airport: "Bangkok Suvarnabhumi Airport", country: "Thailand" },
+  { city: "Bengaluru", code: "BLR", airport: "Kempegowda International Airport Bengaluru", country: "India" },
+  { city: "Pune", code: "PNQ", airport: "Pune Airport", country: "India" },
+  { city: "Chennai", code: "MAA", airport: "Chennai International Airport", country: "India" },
+  { city: "Kolkata", code: "CCU", airport: "Netaji Subhas Chandra Bose International Airport", country: "India" },
+  { city: "Hyderabad", code: "HYD", airport: "Rajiv Gandhi International Airport", country: "India" },
 ];
 
 const travelClasses = ["Economy", "Premium Economy", "Business", "First Class"];
@@ -116,7 +116,7 @@ export function FlightBooking() {
 
   const filteredCities = (type: "from" | "to") =>
     popularCities.filter((c) =>
-      [c.city, c.code, c.airport].some((v) => v.toLowerCase().includes(state[`${type}Search`].toLowerCase()))
+      [c.city, c.code, c.airport, c.country].some((v) => v.toLowerCase().includes(state[`${type}Search`].toLowerCase()))
     );
 
   const mapClass = (c: string) =>
@@ -170,7 +170,7 @@ export function FlightBooking() {
 
   if (!isClient) {
     return (
-        <div className="w-full max-w-5xl mx-auto">
+        <div className="w-full max-w-screen-xl mx-auto">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
                 <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] h-12"></div>
                 <div className="p-4 md:p-6 space-y-4">
@@ -199,7 +199,7 @@ export function FlightBooking() {
         <button className="border border-gray-300 rounded-lg p-2 hover:border-sky-300 text-left w-full h-[76px] bg-white relative flex flex-col justify-center">
             <div className="text-xs text-gray-500 mb-0.5">{type === "from" ? "From" : "To"}</div>
             <div className="font-bold text-lg text-slate-900 leading-tight truncate">{state[type].city}</div>
-            <div className="text-xs text-gray-600 truncate">{state[type].code}</div>
+            <div className="text-xs text-gray-600 truncate">{state[type].code}, {state[type].country}</div>
             <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 absolute right-2 top-1/2 -translate-y-1/2" />
         </button>
       </PopoverTrigger>
@@ -226,7 +226,7 @@ export function FlightBooking() {
                   onClick={() => handleCity(city, type)}
                 >
                   <div>
-                    <div className="font-medium text-sm text-slate-800">{city.city}</div>
+                    <div className="font-medium text-sm text-slate-800">{city.city}, {city.country}</div>
                     <div className="text-xs text-gray-500">{city.airport}</div>
                   </div>
                   <div className="text-sm font-medium text-gray-700">{city.code}</div>
@@ -318,7 +318,7 @@ export function FlightBooking() {
   );
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-screen-xl mx-auto">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] flex justify-center px-4 py-2">
           <div className="flex overflow-x-auto scrollbar-hide space-x-3">
@@ -505,3 +505,5 @@ export function FlightBooking() {
     </div>
   );
 }
+
+    
