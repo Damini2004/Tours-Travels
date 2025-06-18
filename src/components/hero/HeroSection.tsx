@@ -31,7 +31,7 @@ const HeroSection = () => {
         <div className="relative z-10 container mx-auto px-4 md:px-6 flex items-center justify-between w-full">
           {/* Left Side container for FlightBooking, allowing it to be positioned by its wrapper */}
           <div className="flex-1"> {/* Occupies available space, pushing carousel to right */}
-            <div className="relative w-full max-w-5xl mx-auto"> {/* Centering and max-width for the content area of form */}
+            <div className="relative w-full max-w-screen-xl mx-auto"> {/* Changed max-w-5xl to max-w-screen-xl */}
               {/* This div absolutely positions the FlightBooking form */}
               <div className="absolute -top-52 left-1/2 transform -translate-x-1/2 z-20 w-full px-2 sm:px-0">
                 <FlightBooking />
