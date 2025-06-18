@@ -5,7 +5,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MapPinIcon, HeartIcon, StarIcon, HotelIcon as HotelBuildingIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button"; // Import Button for the "View offer"
+import { Button } from "@/components/ui/button"; 
+import Link from "next/link"; // Added for View Offer button link
 
 const offers = [
   {
@@ -18,7 +19,6 @@ const offers = [
     originalPrice: "₹6,85,564",
     discount: "52%",
     rating: 9.4,
-    // ratingLabel: "Exceptional", // Will be generated
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
     tag: "Booked 30 times in 3 days",
     imageHint: "maldives overwater villa"
@@ -33,7 +33,6 @@ const offers = [
     originalPrice: "₹3,01,134",
     discount: "64%",
     rating: 8.8,
-    // ratingLabel: "Excellent",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
     imageHint: "mauritius beachfront suite"
   },
@@ -47,7 +46,6 @@ const offers = [
     originalPrice: "₹1,05,500",
     discount: "38%",
     rating: 8.2,
-    // ratingLabel: "Very Good",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
     tag: "Booked 45 times in 3 days",
     imageHint: "singapore hotel city"
@@ -62,7 +60,6 @@ const offers = [
     originalPrice: "₹3,50,000",
     discount: "47%",
     rating: 9.6,
-    // ratingLabel: "Exceptional",
     image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/iir8p4tz991yxf4fgnno.jpeg",
     tag: "Top Pick",
     imageHint: "bali jungle villa"
@@ -77,7 +74,6 @@ const offers = [
     originalPrice: "₹3,00,000",
     discount: "30%",
     rating: 9.2,
-    // ratingLabel: "Excellent",
     image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/q8p992j0wc29l3j5t63z.jpeg",
     imageHint: "dubai desert resort"
   },
@@ -91,12 +87,11 @@ const offers = [
     originalPrice: "₹4,00,000",
     discount: "37%",
     rating: 9.0,
-    // ratingLabel: "Excellent",
     image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/k947jhm1q3b7wsqi4qam.jpeg",
     tag: "Highly Rated",
     imageHint: "paris hotel eiffel"
   },
-  {
+   {
     id: 7,
     title: "Luxury Santorini Cave Hotel with Caldera Views & Private Plunge Pools",
     location: "Oia, Santorini, Greece",
@@ -186,7 +181,7 @@ const ExclusiveOffers = () => {
           const ratingLabel = getRatingLabel(offer.rating);
           return (
             <div
-              className="bg-card border border-border w-full max-w-[320px] sm:max-w-xs md:max-w-sm lg:max-w-[320px] flex-shrink-0 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-xl transition-transform duration-300 ease-in-out hover:-translate-y-1"
+              className="bg-white border border-gray-200 w-[300px] sm:w-[320px] flex-shrink-0 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
               key={offer.id}
             >
               <div className="image-wrapper relative">
@@ -198,7 +193,7 @@ const ExclusiveOffers = () => {
                 <div className="relative w-full h-48">
                   <Image
                     src={offer.image || defaultHotelImage}
-                    alt={offer.title}
+                    alt={offer.title} 
                     layout="fill"
                     objectFit="cover"
                     className="rounded-t-lg filter brightness-95 group-hover:brightness-100 transition-filter duration-300 ease-in-out"
@@ -219,9 +214,9 @@ const ExclusiveOffers = () => {
                     <MapPinIcon className="mr-1 h-3 w-3 flex-shrink-0" />
                     <span className="truncate">{offer.location}</span>
                 </div>
-                 <p className="text-xs text-muted-foreground mb-1 truncate">{offer.hotel}</p>
+                 <p className="text-xs text-muted-foreground mb-1 truncate font-medium text-gray-700">{offer.hotel}</p>
 
-                <h3 className="font-bold my-1 text-base leading-snug text-foreground h-[3.2em] overflow-hidden">
+                <h3 className="font-semibold my-1 text-sm leading-snug text-gray-800 h-[4.5em] overflow-hidden"> {/* Increased height for longer titles */}
                   {offer.title}
                 </h3>
 
@@ -235,8 +230,8 @@ const ExclusiveOffers = () => {
                 )}
 
                 <div className="price-info mt-auto pt-2">
-                  <p className="my-1 text-xs text-muted-foreground">
-                    {offer.nights} nights from <strong className={`text-base md:text-lg font-bold ${gradientTextClass}`}>{offer.price}</strong> /room
+                  <p className="my-1 text-xs text-gray-600">
+                    {offer.nights} nights from <strong className={`text-base md:text-lg font-bold ${gradientTextClass}`}>{offer.price}</strong> <span className="text-xs text-muted-foreground">/room</span>
                   </p>
                   {offer.originalPrice && (
                     <div className="text-xxs text-muted-foreground mb-2">
@@ -245,10 +240,9 @@ const ExclusiveOffers = () => {
                     </div>
                    )}
                   <Button asChild className="mt-2 w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white px-3 py-1.5 cursor-pointer rounded-md font-semibold text-sm transition-opacity duration-300 ease-in-out hover:opacity-90">
-                    {/* Link href will be added if needed, for now it's a button */}
-                    <a>
+                    <Link href={`#`} > {/* Placeholder Link */}
                         View offer <HotelBuildingIcon className="ml-2 h-4 w-4" />
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -261,3 +255,5 @@ const ExclusiveOffers = () => {
 };
 
 export default ExclusiveOffers;
+
+    
