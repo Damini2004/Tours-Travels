@@ -16,6 +16,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getHotelById } from '@/lib/hotel-data';
 import { format, addDays } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface CurrentUser {
   fullName: string;
@@ -213,7 +214,7 @@ export default function HotelDetailPage() {
   if (!hotel) { 
       return (
         <div className="container mx-auto px-4 py-8 flex justify-center">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <Loader2 className="h-10 w-10 animate-spin text-[#0c4d52]" />
         </div>
       )
   }
@@ -224,12 +225,12 @@ export default function HotelDetailPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
             <h1 className="font-headline text-3xl md:text-4xl font-bold text-foreground">{hotel.name}</h1>
             {hotel.isApproved ? (
-                <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-green-500 text-green-600 bg-green-500/10 py-1 px-3">
-                    <ShieldCheckIcon className="mr-2 h-4 w-4"/> Approved
+                <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-green-500 text-green-600 bg-green-500/10 py-1.5 px-3 flex items-center gap-1.5">
+                    <ShieldCheckIcon className="h-4 w-4"/> Approved
                 </Badge>
             ) : (
-                 <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-yellow-500 text-yellow-600 bg-yellow-500/10 py-1 px-3">
-                    <ShieldAlertIcon className="mr-2 h-4 w-4"/> Pending Approval
+                 <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-yellow-500 text-yellow-600 bg-yellow-500/10 py-1.5 px-3 flex items-center gap-1.5">
+                    <ShieldAlertIcon className="h-4 w-4"/> Pending Approval
                 </Badge>
             )}
         </div>
@@ -250,7 +251,7 @@ export default function HotelDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-6">
         <div className="lg:col-span-2 space-y-6">
           {hotel.images && hotel.images.length > 0 && (
-            <Card className="overflow-hidden shadow-md">
+            <Card className="overflow-hidden shadow-lg">
               <div className="relative w-full aspect-[16/9]">
                 <Image 
                   src={hotel.images[0]} 
@@ -265,25 +266,27 @@ export default function HotelDetailPage() {
             </Card>
           )}
 
-          <Card className="shadow-md">
-            <CardHeader>
+          <Card className="shadow-lg">
+            <CardHeader className="pb-4">
               <CardTitle className="font-headline text-2xl text-foreground">About this hotel</CardTitle>
+              <Separator className="mt-3" />
             </CardHeader>
             <CardContent>
               <p className="text-foreground/80 leading-relaxed">{hotel.description || "No description available."}</p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-md">
-            <CardHeader>
+          <Card className="shadow-lg">
+            <CardHeader className="pb-4">
               <CardTitle className="font-headline text-2xl text-foreground">Amenities</CardTitle>
+               <Separator className="mt-3" />
             </CardHeader>
             <CardContent>
               {hotel.amenities && hotel.amenities.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {hotel.amenities.map(amenity => (
-                    <div key={amenity} className="flex items-center gap-2 p-3 bg-secondary/30 rounded-md text-sm text-foreground/90">
-                        <CheckCircleIcon className="h-5 w-5 text-primary shrink-0" />
+                    <div key={amenity} className="flex items-center gap-2 p-3 bg-slate-100 dark:bg-slate-700/50 rounded-md text-sm text-foreground/90">
+                        <CheckCircleIcon className={cn("h-5 w-5 shrink-0", gradientTextClass)} />
                         <span>{amenity}</span>
                     </div>
                   ))}
@@ -295,27 +298,29 @@ export default function HotelDetailPage() {
           </Card>
           
           {hotel.roomTypes && hotel.roomTypes.length > 0 && (
-          <Card className="shadow-md">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center text-foreground"><BedDoubleIcon className="mr-3 h-6 w-6 text-primary" /> Room Options</CardTitle>
+          <Card className="shadow-lg">
+            <CardHeader className="pb-4">
+              <CardTitle className="font-headline text-2xl flex items-center text-foreground">
+                <BedDoubleIcon className={cn("mr-3 h-6 w-6", gradientTextClass)} /> Room Options
+              </CardTitle>
+               <Separator className="mt-3" />
             </CardHeader>
             <CardContent className="space-y-6">
               {hotel.roomTypes.map((room, index) => (
-                <div key={index} className="border border-border rounded-lg p-4">
+                <div key={index} className="border border-border rounded-lg p-4 hover:shadow-lg hover:border-primary/30 transition-all duration-200">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
                     <h4 className="text-lg font-semibold text-foreground">{room.name}</h4>
                     <p className={`font-bold text-xl ${gradientTextClass}`}>${room.price.toFixed(2)}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">Features:</p>
+                  <p className="text-xs text-muted-foreground/90 mb-1 mt-3">Features:</p>
                   <ul className="space-y-1">
                     {room.features.map(feature => (
                         <li key={feature} className="flex items-center text-sm text-foreground/80">
-                            <CheckCircleIcon className="mr-2 h-4 w-4 text-primary shrink-0" />
+                            <CheckCircleIcon className={cn("mr-2 h-4 w-4 shrink-0", gradientTextClass)} />
                             {feature}
                         </li>
                     ))}
                   </ul>
-                  {index < (hotel.roomTypes?.length ?? 0) - 1 && <Separator className="my-6"/>}
                 </div>
               ))}
             </CardContent>
@@ -347,7 +352,7 @@ export default function HotelDetailPage() {
                   </div>
               </div>
               
-              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-base py-3" onClick={handleBookHotel}>
+              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-base py-3 shadow-md hover:shadow-lg transition-shadow" onClick={handleBookHotel}>
                 Book Now (Simplified)
               </Button>
                <Button 
@@ -368,3 +373,5 @@ export default function HotelDetailPage() {
   );
 }
 
+
+    
