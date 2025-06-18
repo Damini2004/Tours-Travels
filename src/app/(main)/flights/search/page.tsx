@@ -29,7 +29,7 @@ import { Calendar } from "@/components/ui/calendar";
 const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
 const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
 
-const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium";
 
 const getAccessToken = async (): Promise<string> => {
   const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
@@ -884,7 +884,7 @@ function FlightResultsClientInternal() {
             </Collapsible>
             <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
               <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
-                <span className={cn(gradientTextClass, "font-semibold")}>Popular Filters</span>
+                <span className={cn("font-semibold", gradientTextClass)}>Popular Filters</span>
                 {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
@@ -899,7 +899,7 @@ function FlightResultsClientInternal() {
                     />
                     <label 
                       htmlFor={`stop-filter-${stopKey}`} 
-                      className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
+                      className={cn("text-sm cursor-pointer", gradientTextClass)}
                     >
                       {stopKey === "0" ? "Non-stop" : stopKey === "1" ? "1 Stop" : "2+ Stops"}
                     </label>
@@ -910,7 +910,7 @@ function FlightResultsClientInternal() {
             <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isDepartureAirportsOpen} onOpenChange={setIsDepartureAirportsOpen} className="mb-4">
                 <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
-                    <span className={cn(gradientTextClass, "font-semibold")}>Departure Airports</span>
+                    <span className={cn("font-semibold", gradientTextClass)}>Departure Airports</span>
                     {isDepartureAirportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-2.5 mt-1 animate-slide-down">
@@ -921,7 +921,7 @@ function FlightResultsClientInternal() {
                         />
                         <label 
                           htmlFor="dep-airport-1" 
-                           className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
+                           className={cn("text-sm cursor-pointer", gradientTextClass)}
                         >
                           Hindon Airport (DZKm)
                         </label>
@@ -933,7 +933,7 @@ function FlightResultsClientInternal() {
                         />
                         <label 
                           htmlFor="dep-airport-2" 
-                           className={cn("text-sm font-medium cursor-pointer", gradientTextClass)}
+                           className={cn("text-sm cursor-pointer", gradientTextClass)}
                         >
                           Indira Gandhi Intl Airport
                         </label>
@@ -943,7 +943,7 @@ function FlightResultsClientInternal() {
             <Separator className="my-4 bg-gray-200"/>
             <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
               <CollapsibleTrigger className="flex items-center justify-between w-full text-md font-headline transition-colors mb-2">
-                <span className={cn(gradientTextClass, "font-semibold")}>One Way Price</span>
+                <span className={cn("font-semibold", gradientTextClass)}>One Way Price</span>
                 {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
@@ -957,8 +957,8 @@ function FlightResultsClientInternal() {
                     disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
                 <div className="flex justify-between text-xs">
-                  <span className={gradientTextClass}>₹{priceRange[0]}</span>
-                  <span className={gradientTextClass}>₹{priceRange[1]}</span>
+                  <span className={cn(gradientTextClass)}>₹{priceRange[0]}</span>
+                  <span className={cn(gradientTextClass)}>₹{priceRange[1]}</span>
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -981,7 +981,7 @@ function FlightResultsClientInternal() {
               <div className="space-y-5">
                  <Collapsible open={isPopularFiltersOpen} onOpenChange={setIsPopularFiltersOpen} defaultOpen className="mb-4">
                     <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold transition-colors">
-                        <span className={cn(gradientTextClass, "font-semibold")}>Popular Filters</span>
+                        <span className={cn("font-semibold", gradientTextClass)}>Popular Filters</span>
                         {isPopularFiltersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2.5 mt-2.5 animate-slide-down">
@@ -996,7 +996,7 @@ function FlightResultsClientInternal() {
                             />
                             <label 
                               htmlFor={`stop-filter-mobile-${stop}`} 
-                               className={cn("text-xs font-medium cursor-pointer", gradientTextClass)}
+                               className={cn("text-xs cursor-pointer", gradientTextClass)}
                             >
                               {stop === "0" ? "Non-stop" : stop === "1" ? "1 Stop" : "2+ Stops"}
                             </label>
@@ -1007,7 +1007,7 @@ function FlightResultsClientInternal() {
                 <Separator className="bg-gray-200"/>
                 <Collapsible open={isPriceOpen} onOpenChange={setIsPriceOpen} defaultOpen>
                   <CollapsibleTrigger className="flex items-center justify-between w-full text-sm font-semibold transition-colors">
-                    <span className={cn(gradientTextClass, "font-semibold")}>One Way Price</span>
+                    <span className={cn("font-semibold", gradientTextClass)}>One Way Price</span>
                     {isPriceOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="space-y-2.5 mt-3 animate-slide-down px-1">
@@ -1021,14 +1021,14 @@ function FlightResultsClientInternal() {
                         disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
                     <div className="flex justify-between text-xs">
-                      <span className={gradientTextClass}>₹{priceRange[0]}</span>
-                      <span className={gradientTextClass}>₹{priceRange[1]}</span>
+                      <span className={cn(gradientTextClass)}>₹{priceRange[0]}</span>
+                      <span className={cn(gradientTextClass)}>₹{priceRange[1]}</span>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
                 <Separator className="bg-gray-200"/>
                 <div>
-                    <h4 className="text-sm font-semibold text-gray-800 mb-2 block">Sort by:</h4>
+                    <h4 className={cn("text-sm font-semibold text-gray-800 mb-2 block", gradientTextClass)}>Sort by:</h4>
                     <div className="grid grid-cols-2 gap-2">
                         {[
                             {key: "cheapest", label: "Cheapest", icon: Zap},
@@ -1038,7 +1038,7 @@ function FlightResultsClientInternal() {
                         ].map(tab => (
                              <Button key={tab.key} variant={activeSortTab === tab.key ? "default" : "outline"} size="sm" onClick={() => handleSortTabChange(tab.key)} 
                              className={cn("text-xs h-auto py-1.5 px-2.5 flex-col items-center justify-center h-16", 
-                                activeSortTab === tab.key ? "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent" : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                                activeSortTab === tab.key ? "bg-white/10 text-white border-transparent" : "border-gray-300 text-gray-300 hover:bg-white/20 hover:text-white"
                              )}>
                                 <tab.icon className="w-5 h-5 mb-1"/>{tab.label}
                             </Button>
@@ -1066,7 +1066,7 @@ function FlightResultsClientInternal() {
                 key={tab.key}
                 variant="ghost"
                 onClick={() => handleSortTabChange(tab.key)}
-                className={cn("text-xs font-medium h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center transition-colors duration-150",
+                className={cn("text-xs h-auto py-2 px-3 rounded-md flex flex-col items-center justify-center flex-1 text-center transition-colors duration-150",
                   activeSortTab === tab.key ? "bg-white/10 text-white font-semibold shadow-sm hover:bg-white/20" : "text-gray-300 hover:bg-white/20 hover:text-white"
                 )}
               >
@@ -1078,7 +1078,7 @@ function FlightResultsClientInternal() {
             ))}
           </div>
           <div className="mb-4 p-2 bg-white border border-gray-200 rounded-md text-center">
-                <p className={cn("text-sm font-medium", gradientTextClass)}>
+                <p className={cn("text-sm", gradientTextClass)}>
                     ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
@@ -1109,7 +1109,7 @@ function FlightResultsClientInternal() {
                         )}
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                           <div className="flex items-center gap-2 mb-2 md:mb-0 w-full md:w-auto">
-                              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">
+                              <div className={cn("w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center font-bold text-sm shrink-0", gradientTextClass)}>
                                   {itinerary.segments[0].carrierCode}
                               </div>
                               <div>
@@ -1139,7 +1139,7 @@ function FlightResultsClientInternal() {
                                         <div key={i} className="absolute h-1.5 w-1.5 bg-gray-400 rounded-full top-1/2 -translate-y-1/2" style={{left: `${(i+1) * (100/(itinerary.segments.length))}%`}}></div>
                                     ))}
                                 </div>
-                                <div className="text-xs font-medium text-blue-600">
+                                <div className={cn("text-xs font-medium", gradientTextClass)}>
                                     {getStopsLabel(itinerary.segments)}
                                 </div>
                             </div>
@@ -1178,7 +1178,7 @@ function FlightResultsClientInternal() {
                         </div>
                         <div className="mt-3 border-t border-gray-200 pt-2">
                            <div className="flex justify-between items-center">
-                             <Button variant="link" className={cn("text-xs p-0 h-auto font-medium", gradientTextClass)}>Add to compare +</Button>
+                             <Button variant="link" className={cn("text-xs p-0 h-auto", gradientTextClass)}>Add to compare +</Button>
                              <Collapsible>
                                 <CollapsibleTrigger
                                     className={cn("text-xs font-semibold flex items-center gap-1 transition-colors duration-300", gradientTextClass)}
@@ -1199,7 +1199,7 @@ function FlightResultsClientInternal() {
                                         key={segment.id}
                                         className="border-l-2 border-blue-600/70 pl-2 py-1"
                                     >
-                                        <div className="flex items-center gap-1 font-medium">
+                                        <div className="flex items-center gap-1">
                                         <MapPin className="w-3 h-3 text-blue-600" />
                                         <span className={cn("text-xxs", gradientTextClass)}>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
@@ -1235,7 +1235,7 @@ function FlightResultsClientInternal() {
                            </div>
                         </div>
                         <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-gray-200">
-                            <p className={cn("text-xs font-medium", gradientTextClass)}>
+                            <p className={cn("text-xs", gradientTextClass)}>
                                 ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
