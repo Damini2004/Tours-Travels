@@ -64,8 +64,10 @@ const searchParams = useSearchParams();
           </h1>
           <p className="text-muted-foreground">Loading available hotels...</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1,2,3].map(i => <Skeleton key={i} className="h-[400px] w-full rounded-lg bg-card" />)}
+        <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 scrollbar-hide">
+          {[1,2,3].map(i => 
+            <Skeleton key={i} className="h-[420px] w-[300px] sm:w-[320px] rounded-none bg-card flex-shrink-0" />
+          )}
         </div>
       </div>
     );
@@ -94,7 +96,7 @@ const searchParams = useSearchParams();
           </AlertDescription>
         </Alert>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 scrollbar-hide">
           {filteredHotels.map((hotel) => (
             <HotelCard 
               key={hotel.id} 
