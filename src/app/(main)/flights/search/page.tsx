@@ -509,7 +509,7 @@ function FlightResultsClientInternal() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
-        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
+        <Plane className={cn("w-24 h-24 animate-pulse mb-6 text-[#0c4d52]")} />
         <h2 className={cn("text-2xl font-headline mb-2 font-semibold", gradientTextClass)}>Searching for Skies...</h2>
         <p className={gradientTextClass}>Please wait while we find the best flights for you.</p>
         <div className="w-full max-w-4xl mt-8 space-y-4">
@@ -551,10 +551,10 @@ function FlightResultsClientInternal() {
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-1 items-stretch">
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="tripTypeHeaderForm" className="text-xs text-sky-200 block mb-0.5">TRIP TYPE</Label>
                         <Select value={formIsRoundTrip ? "roundTrip" : "oneWay"} onValueChange={(value) => setFormIsRoundTrip(value === "roundTrip")}>
-                            <SelectTrigger id="tripTypeHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium">
+                            <SelectTrigger id="tripTypeHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium">
                                 <SelectValue placeholder="Trip Type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -563,10 +563,10 @@ function FlightResultsClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="formOriginHeaderForm" className="text-xs text-sky-200 block mb-0.5">FROM</Label>
                         <Select value={formOrigin} onValueChange={setFormOrigin}>
-                            <SelectTrigger id="formOriginHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
+                            <SelectTrigger id="formOriginHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium truncate">
                                 <SelectValue placeholder="Origin" />
                             </SelectTrigger>
                             <SelectContent>
@@ -581,10 +581,10 @@ function FlightResultsClientInternal() {
                             <ArrowRightLeft className="w-3.5 h-3.5" />
                         </Button>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="formDestinationHeaderForm" className="text-xs text-sky-200 block mb-0.5">TO</Label>
                          <Select value={formDestination} onValueChange={setFormDestination}>
-                            <SelectTrigger id="formDestinationHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
+                            <SelectTrigger id="formDestinationHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium truncate">
                                 <SelectValue placeholder="Destination" />
                             </SelectTrigger>
                             <SelectContent>
@@ -594,11 +594,11 @@ function FlightResultsClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label className="text-xs text-sky-200 block mb-0.5">DEPART</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium">
                                     <CalendarIconLucide className="mr-1.5 h-3.5 w-3.5 text-sky-200 opacity-70 flex-shrink-0" />
                                     <span className="truncate text-white">
                                         {formDepartureDate ? formatDateForDisplay(formDepartureDate) : "Select Date"}
@@ -616,11 +616,11 @@ function FlightResultsClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className={cn("rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5", !formIsRoundTrip && "opacity-60")}>
+                    <div className={cn("rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2", !formIsRoundTrip && "opacity-60")}>
                         <Label className="text-xs text-sky-200 block mb-0.5">RETURN</Label>
                         <Popover>
                             <PopoverTrigger asChild disabled={!formIsRoundTrip}>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium disabled:opacity-70">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium disabled:opacity-70">
                                     <CalendarIconLucide className="mr-1.5 h-3.5 w-3.5 text-sky-200 opacity-70 flex-shrink-0" />
                                     <span className="truncate">
                                         {formReturnDate && formIsRoundTrip ? <span className="text-white">{formatDateForDisplay(formReturnDate)}</span> : <span className="text-gray-300 opacity-70">Select Return</span>}
@@ -638,11 +638,11 @@ function FlightResultsClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label className="text-xs text-sky-200 block mb-0.5">PASSENGERS &amp; CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium truncate">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium truncate">
                                     {passengerSummary}
                                 </Button>
                             </PopoverTrigger>
@@ -686,7 +686,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-1.5 text-sm lg:px-2 lg:py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -711,10 +711,10 @@ function FlightResultsClientInternal() {
             <div className="max-w-screen-xl mx-auto px-4 space-y-1.5">
               <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-1 items-stretch">
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="tripTypeHeaderForm" className="text-xs text-sky-200 block mb-0.5">TRIP TYPE</Label>
                         <Select value={formIsRoundTrip ? "roundTrip" : "oneWay"} onValueChange={(value) => setFormIsRoundTrip(value === "roundTrip")}>
-                            <SelectTrigger id="tripTypeHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium">
+                            <SelectTrigger id="tripTypeHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium">
                                 <SelectValue />
                             </SelectTrigger>
                              <SelectContent>
@@ -723,10 +723,10 @@ function FlightResultsClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="formOriginHeaderForm" className="text-xs text-sky-200 block mb-0.5">FROM</Label>
                         <Select value={formOrigin} onValueChange={setFormOrigin}>
-                            <SelectTrigger id="formOriginHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
+                            <SelectTrigger id="formOriginHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium truncate">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -741,10 +741,10 @@ function FlightResultsClientInternal() {
                             <ArrowRightLeft className="w-3.5 h-3.5" />
                         </Button>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label htmlFor="formDestinationHeaderForm" className="text-xs text-sky-200 block mb-0.5">TO</Label>
                          <Select value={formDestination} onValueChange={setFormDestination}>
-                            <SelectTrigger id="formDestinationHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-0.5 font-medium truncate">
+                            <SelectTrigger id="formDestinationHeaderForm" className="h-auto text-sm bg-transparent border-0 text-white focus:ring-0 focus:ring-offset-0 px-0 py-1.5 font-medium truncate">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -754,11 +754,11 @@ function FlightResultsClientInternal() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label className="text-xs text-sky-200 block mb-0.5">DEPART</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium">
                                    <CalendarIconLucide className="mr-1.5 h-3.5 w-3.5 text-sky-200 opacity-70 flex-shrink-0" />
                                    <span className="truncate text-white">
                                     {formDepartureDate ? formatDateForDisplay(formDepartureDate) : "Select Date"}
@@ -776,11 +776,11 @@ function FlightResultsClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className={cn("rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5", !formIsRoundTrip && "opacity-60")}>
+                    <div className={cn("rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2", !formIsRoundTrip && "opacity-60")}>
                         <Label className="text-xs text-sky-200 block mb-0.5">RETURN</Label>
                         <Popover>
                             <PopoverTrigger asChild disabled={!formIsRoundTrip}>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium disabled:opacity-70">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium disabled:opacity-70">
                                    <CalendarIconLucide className="mr-1.5 h-3.5 w-3.5 text-sky-200 opacity-70 flex-shrink-0" />
                                     <span className="truncate">
                                      {formReturnDate && formIsRoundTrip ? <span className="text-white">{formatDateForDisplay(formReturnDate)}</span> : <span className="text-gray-300 opacity-70">Select Return</span>}
@@ -798,11 +798,11 @@ function FlightResultsClientInternal() {
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-1.5">
+                    <div className="rounded-md bg-slate-700/60 backdrop-blur-sm flex flex-col justify-between p-2 lg:px-2 lg:py-2">
                         <Label className="text-xs text-sky-200 block mb-0.5">PASSENGERS &amp; CLASS</Label>
                         <Popover open={passengerPopoverOpen} onOpenChange={setPassengerPopoverOpen}>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0.5 w-full justify-start font-medium truncate">
+                                <Button variant="ghost" className="h-auto text-sm bg-transparent border-0 text-white hover:bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-1.5 w-full justify-start font-medium truncate">
                                     {passengerSummary}
                                 </Button>
                             </PopoverTrigger>
@@ -846,7 +846,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-0.5 text-sm lg:px-2 lg:py-0.5"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-1.5 text-sm lg:px-2 lg:py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -1200,7 +1200,7 @@ function FlightResultsClientInternal() {
                                         className="border-l-2 border-blue-600/70 pl-2 py-1"
                                     >
                                         <div className="flex items-center gap-1">
-                                        <MapPin className="w-3 h-3 text-blue-600" />
+                                        <MapPin className={cn("w-3 h-3", gradientTextClass)} />
                                         <span className={cn("text-xxs", gradientTextClass)}>
                                             {format(new Date(segment.departure.at), "HH:mm")} ({segment.departure.iataCode}) →{" "}
                                             {format(new Date(segment.arrival.at), "HH:mm")} ({segment.arrival.iataCode})
@@ -1208,7 +1208,7 @@ function FlightResultsClientInternal() {
                                         </div>
                                         <div className={cn("text-xxs mt-0.5 ml-[0.875rem]", gradientTextClass)}>Flight: {segment.carrierCode} {segment.number}</div>
                                         <div className="flex items-center gap-1 mt-0.5 ml-[0.875rem]">
-                                        <Clock className="w-3 h-3 text-blue-600" />
+                                        <Clock className={cn("w-3 h-3", gradientTextClass)} />
                                         <span className={cn("text-xxs", gradientTextClass)}>
                                             Duration: {segment.duration.replace("PT", "").replace("H", "h ").replace("M", "m")}
                                         </span>
@@ -1266,7 +1266,7 @@ export default function FlightResultsClient() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
-        <Plane className="w-24 h-24 text-primary animate-pulse mb-6" />
+        <Plane className={cn("w-24 h-24 animate-pulse mb-6", gradientTextClass)} />
         <h2 className={cn("text-2xl font-headline mb-2 font-semibold", gradientTextClass)}>Loading Flight Details...</h2>
         <p className={gradientTextClass}>One moment please.</p>
       </div>
@@ -1278,3 +1278,4 @@ export default function FlightResultsClient() {
   );
 }
     
+
