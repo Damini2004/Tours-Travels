@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Hotel, Booking } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { HotelIcon as HotelBuildingIcon, MapPinIcon, StarIcon, CheckCircleIcon, XCircleIcon, BedDoubleIcon, CalendarDaysIcon, HeartIcon, Loader2, ShieldAlertIcon, ShieldCheckIcon } from 'lucide-react';
@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect, useCallback } from 'react';
 import { getHotelById } from '@/lib/hotel-data';
 import { format, addDays } from 'date-fns';
-import { Badge } from '@/components/ui/badge'; // Added import for Badge
+import { Badge } from '@/components/ui/badge';
 
 interface CurrentUser {
   fullName: string;
@@ -25,6 +25,16 @@ interface CurrentUser {
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 const BOOKINGS_DB_KEY = 'appBookingsDB';
+
+const getRatingDescription = (rating: number): string => {
+  if (rating >= 4.8) return "Exceptional";
+  if (rating >= 4.5) return "Excellent";
+  if (rating >= 4.0) return "Very Good";
+  if (rating >= 3.5) return "Good";
+  if (rating >= 3.0) return "Fair";
+  if (rating > 0) return "Okay";
+  return "Not Rated";
+};
 
 export default function HotelDetailPage() {
   const params = useParams();
@@ -109,10 +119,9 @@ export default function HotelDetailPage() {
       return;
     }
 
-    // Simplified booking logic for now
-    const numberOfNights = 2; // Example
-    const guests = 1; // Example
-    const checkIn = addDays(new Date(), 1); // Tomorrow
+    const numberOfNights = 2; 
+    const guests = 1; 
+    const checkIn = addDays(new Date(), 1); 
     const checkOut = addDays(checkIn, numberOfNights);
 
     const newBooking: Booking = {
@@ -151,20 +160,20 @@ export default function HotelDetailPage() {
     }
   };
 
-
   if (isLoadingHotel || isLoadingSaved) {
      return (
       <div className="container mx-auto px-4 py-8">
-        <Skeleton className="h-12 w-3/4 mb-4" />
-        <Skeleton className="h-8 w-1/2 mb-8" />
+        <Skeleton className="h-12 w-3/4 mb-2" />
+        <Skeleton className="h-6 w-1/2 mb-1" />
+        <Skeleton className="h-6 w-1/3 mb-6" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2 space-y-6">
             <Skeleton className="h-96 w-full rounded-lg" />
-            <Skeleton className="h-48 w-full" />
-            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-48 w-full rounded-lg" />
+            <Skeleton className="h-64 w-full rounded-lg" />
           </div>
-          <div>
-            <Skeleton className="h-64 w-full" />
+          <div className="space-y-6">
+            <Skeleton className="h-80 w-full rounded-lg" />
           </div>
         </div>
       </div>
@@ -174,8 +183,8 @@ export default function HotelDetailPage() {
   if (hotel === null) { 
     return (
       <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive">
-          <XCircleIcon className="h-4 w-4" />
+        <Alert variant="destructive" className="max-w-lg mx-auto">
+          <XCircleIcon className="h-5 w-5" />
           <AlertTitle>Hotel Not Found</AlertTitle>
           <AlertDescription>The hotel you are looking for (ID: {hotelId}) does not exist or has been removed.</AlertDescription>
         </Alert>
@@ -186,8 +195,8 @@ export default function HotelDetailPage() {
   if (!isAuthorizedToView) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive">
-          <ShieldAlertIcon className="h-4 w-4" />
+        <Alert variant="destructive" className="max-w-lg mx-auto">
+          <ShieldAlertIcon className="h-5 w-5" />
           <AlertTitle>Access Denied or Hotel Not Available</AlertTitle>
           <AlertDescription>
             This hotel is currently not approved for public viewing, or you do not have permission to view it.
@@ -202,73 +211,79 @@ export default function HotelDetailPage() {
   }
   
   if (!hotel) { 
-      return <div className="container mx-auto px-4 py-8"><Loader2 className="h-8 w-8 animate-spin"/></div>
+      return (
+        <div className="container mx-auto px-4 py-8 flex justify-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      )
   }
-
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <div className="flex justify-between items-start">
-            <div>
-                <h1 className="font-headline text-3xl md:text-4xl font-bold">{hotel.name}</h1>
-                <p className="text-lg text-muted-foreground flex items-center">
-                    <MapPinIcon className="mr-2 h-5 w-5" /> {hotel.location}
-                </p>
-                {!hotel.isApproved && (
-                    <Badge variant="outline" className="mt-1 border-yellow-500 text-yellow-600">Pending Approval</Badge>
-                )}
-                 {hotel.isApproved && (
-                    <Badge variant="outline" className="mt-1 border-green-500 text-green-700 flex items-center">
-                        <ShieldCheckIcon className="mr-1 h-3 w-3"/> Approved
-                    </Badge>
-                )}
-            </div>
-            <div className="flex items-center mt-1">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+            <h1 className="font-headline text-3xl md:text-4xl font-bold text-foreground">{hotel.name}</h1>
+            {hotel.isApproved ? (
+                <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-green-500 text-green-600 bg-green-500/10 py-1 px-3">
+                    <ShieldCheckIcon className="mr-2 h-4 w-4"/> Approved
+                </Badge>
+            ) : (
+                 <Badge variant="outline" className="mt-2 sm:mt-0 text-sm border-yellow-500 text-yellow-600 bg-yellow-500/10 py-1 px-3">
+                    <ShieldAlertIcon className="mr-2 h-4 w-4"/> Pending Approval
+                </Badge>
+            )}
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-md text-muted-foreground flex items-center">
+                <MapPinIcon className="mr-2 h-5 w-5" /> {hotel.location}
+            </p>
+            <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className={`h-6 w-6 ${i < hotel.rating ? 'text-accent fill-accent' : 'text-muted-foreground/50'}`} />
+                <StarIcon key={i} className={`h-5 w-5 ${i < hotel.rating ? 'text-accent fill-accent' : 'text-muted-foreground/30'}`} />
                 ))}
-                <span className="ml-2 text-sm text-muted-foreground">({hotel.rating}.0)</span>
+                <span className="ml-2 text-sm font-medium text-foreground">{hotel.rating.toFixed(1)}</span>
+                <span className="ml-1 text-sm text-muted-foreground">({getRatingDescription(hotel.rating)})</span>
             </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {hotel.images && hotel.images.length > 0 && (
-            <Card className="overflow-hidden">
-              <div className="relative w-full h-96">
+            <Card className="overflow-hidden shadow-md">
+              <div className="relative w-full aspect-[16/9]">
                 <Image 
                   src={hotel.images[0]} 
                   alt={`${hotel.name} primary image`} 
                   layout="fill" 
                   objectFit="cover" 
-                  className="rounded-t-lg" 
-                  data-ai-hint={hotel.imageHints?.[0] || "hotel interior"} 
+                  className="rounded-t-lg"
+                  data-ai-hint={hotel.imageHints?.[0] || "hotel building exterior"}
+                  priority 
                 />
               </div>
             </Card>
           )}
 
-          <Card>
+          <Card className="shadow-md">
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">About this hotel</CardTitle>
+              <CardTitle className="font-headline text-2xl text-foreground">About this hotel</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground leading-relaxed">{hotel.description || "No description available."}</p>
+              <p className="text-foreground/80 leading-relaxed">{hotel.description || "No description available."}</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-md">
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">Amenities</CardTitle>
+              <CardTitle className="font-headline text-2xl text-foreground">Amenities</CardTitle>
             </CardHeader>
             <CardContent>
               {hotel.amenities && hotel.amenities.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {hotel.amenities.map(amenity => (
-                    <div key={amenity} className="flex items-center">
-                        <CheckCircleIcon className="mr-2 h-4 w-4 text-[#0c4d52] shrink-0" />
+                    <div key={amenity} className="flex items-center gap-2 p-3 bg-secondary/30 rounded-md text-sm text-foreground/90">
+                        <CheckCircleIcon className="h-5 w-5 text-primary shrink-0" />
                         <span>{amenity}</span>
                     </div>
                   ))}
@@ -280,53 +295,70 @@ export default function HotelDetailPage() {
           </Card>
           
           {hotel.roomTypes && hotel.roomTypes.length > 0 && (
-          <Card>
+          <Card className="shadow-md">
             <CardHeader>
-              <CardTitle className="font-headline text-2xl flex items-center"><BedDoubleIcon className="mr-2 h-6 w-6 text-[#0c4d52]" /> Room Options</CardTitle>
+              <CardTitle className="font-headline text-2xl flex items-center text-foreground"><BedDoubleIcon className="mr-3 h-6 w-6 text-primary" /> Room Options</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               {hotel.roomTypes.map((room, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center">
-                    <h4 className="font-medium">{room.name}</h4>
-                    <p className="font-semibold text-[#0c4d52]">${room.price.toFixed(2)}</p>
+                <div key={index} className="border border-border rounded-lg p-4">
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                    <h4 className="text-lg font-semibold text-foreground">{room.name}</h4>
+                    <p className={`font-bold text-xl ${gradientTextClass}`}>${room.price.toFixed(2)}</p>
                   </div>
-                  <ul className="list-disc list-inside text-xs text-muted-foreground pl-2">
-                    {room.features.map(feature => <li key={feature}>{feature}</li>)}
+                  <p className="text-sm text-muted-foreground mb-2">Features:</p>
+                  <ul className="space-y-1">
+                    {room.features.map(feature => (
+                        <li key={feature} className="flex items-center text-sm text-foreground/80">
+                            <CheckCircleIcon className="mr-2 h-4 w-4 text-primary shrink-0" />
+                            {feature}
+                        </li>
+                    ))}
                   </ul>
-                  {index < (hotel.roomTypes?.length ?? 0) - 1 && <Separator className="my-3"/>}
+                  {index < (hotel.roomTypes?.length ?? 0) - 1 && <Separator className="my-6"/>}
                 </div>
               ))}
             </CardContent>
           </Card>
           )}
-
         </div>
 
-        <div className="space-y-6">
-          <Card className="shadow-lg">
+        <div className="lg:col-span-1 space-y-6">
+          <Card className="shadow-xl sticky top-24">
             <CardHeader>
-              <CardTitle className="font-headline text-xl">Book Your Stay</CardTitle>
+              <CardTitle className="font-headline text-xl text-foreground">Book Your Stay</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className={`text-3xl font-bold mb-1 ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">/ night</span></p>
-              <p className="text-xs text-muted-foreground mb-4">(Price for standard room, may vary)</p>
-              <div className="space-y-2 mb-4">
-                  <p className="text-sm flex items-center"><CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Check-in: {hotel.checkInTime || 'N/A'}</p>
-                  <p className="text-sm flex items-center"><CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Check-out: {hotel.checkOutTime || 'N/A'}</p>
+            <CardContent className="space-y-4">
+              <div>
+                <p className={`text-4xl font-bold ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)}</p>
+                <p className="text-sm text-muted-foreground">/ night (standard room)</p>
               </div>
-              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handleBookHotel}>
+              
+              <Separator />
+
+              <div className="space-y-2">
+                  <div className="flex items-center text-sm text-foreground/90">
+                    <CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> 
+                    Check-in: <span className="font-medium ml-1">{hotel.checkInTime || 'Flexible'}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-foreground/90">
+                    <CalendarDaysIcon className="mr-2 h-4 w-4 text-muted-foreground" /> 
+                    Check-out: <span className="font-medium ml-1">{hotel.checkOutTime || 'Flexible'}</span>
+                  </div>
+              </div>
+              
+              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-base py-3" onClick={handleBookHotel}>
                 Book Now (Simplified)
               </Button>
                <Button 
                 variant="outline" 
                 size="lg" 
-                className="w-full mt-2"
+                className="w-full text-base py-3"
                 onClick={handleToggleSave}
                 disabled={isLoadingSaved}
               >
-                <HeartIcon className={`mr-2 h-5 w-5 ${isHotelSaved(hotel.id) ? 'fill-accent text-accent' : ''}`} />
-                {isHotelSaved(hotel.id) ? 'Saved' : 'Save Hotel'}
+                <HeartIcon className={`mr-2 h-5 w-5 ${isHotelSaved(hotel.id) ? 'fill-accent text-accent' : 'text-foreground/70'}`} />
+                {isHotelSaved(hotel.id) ? 'Saved to Favorites' : 'Save to Favorites'}
               </Button>
             </CardContent>
           </Card>
@@ -335,3 +367,4 @@ export default function HotelDetailPage() {
     </div>
   );
 }
+
