@@ -37,6 +37,28 @@ export interface Hotel {
   isApproved?: boolean; // Approval status by Super Admin
 }
 
+export interface Property {
+  id: string;
+  title: string;
+  type: string; // e.g., "Entire apartment", "Private room in house"
+  location: string; // e.g., "City, Country"
+  pricePerNight: number;
+  rating: number; // 1-5
+  guests: number; // Max guests
+  bedrooms: number;
+  beds: number;
+  baths: number;
+  amenities: string[];
+  thumbnailUrl?: string;
+  thumbnailHint?: string;
+  images?: string[];
+  imageHints?: string[];
+  hostName?: string;
+  hostAvatarUrl?: string;
+  hostAvatarHint?: string;
+  isSuperhost?: boolean;
+}
+
 export interface SavedItemContextType {
   savedFlights: Flight[];
   savedHotels: Hotel[];
