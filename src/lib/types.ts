@@ -49,11 +49,13 @@ export interface Property {
   beds: number;
   baths: number;
   amenities: string[];
+  description?: string; // Added description field
   thumbnailUrl?: string;
   thumbnailHint?: string;
   images?: string[];
   imageHints?: string[];
-  hostName?: string;
+  hostName?: string; // Name of the host
+  hostEmail?: string; // Email of the host, crucial for linking
   hostAvatarUrl?: string;
   hostAvatarHint?: string;
   isSuperhost?: boolean;
