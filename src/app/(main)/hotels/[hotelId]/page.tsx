@@ -25,6 +25,7 @@ interface CurrentUser {
 }
 
 const BOOKINGS_DB_KEY = 'appBookingsDB';
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 
 const getRatingDescription = (rating: number): string => {
   if (rating >= 4.8) return "Exceptional";
@@ -178,19 +179,12 @@ export default function HotelDetailPage() {
         <Skeleton className="h-6 w-1/2 mb-6" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-                <Skeleton className="h-80 w-full rounded-lg col-span-2 sm:col-span-1" />
-                <div className="space-y-4 hidden sm:block">
-                    <Skeleton className="h-[calc(10rem-0.5rem)] w-full rounded-lg" />
-                    <Skeleton className="h-[calc(10rem-0.5rem)] w-full rounded-lg" />
-                </div>
-            </div>
+            <Skeleton className="h-96 w-full rounded-lg" /> {/* Adjusted skeleton height for gallery */}
             <Skeleton className="h-32 w-full rounded-lg" />
             <Skeleton className="h-40 w-full rounded-lg" />
           </div>
           <div className="lg:col-span-1 space-y-6">
             <Skeleton className="h-72 w-full rounded-lg" />
-            <Skeleton className="h-40 w-full rounded-lg" />
             <Skeleton className="h-40 w-full rounded-lg" />
           </div>
         </div>
@@ -279,24 +273,30 @@ export default function HotelDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Image Gallery, About, Amenities, Rooms */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Image Gallery */}
-            <div className="grid grid-cols-2 grid-rows-2 gap-2 max-h-[500px]">
-                <div className="col-span-2 row-span-2 sm:col-span-1 sm:row-span-2 relative rounded-lg overflow-hidden group">
+            {/* Image Gallery - Updated Structure */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 h-[300px] sm:h-auto sm:max-h-[500px]">
+                {/* Main Image */}
+                <div className="relative rounded-lg overflow-hidden group w-full h-full">
                     <Image src={mainImage} alt={`${hotel.name} main view`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={mainImageHint} />
                     <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">+{hotel.images?.length || 1} Property Photos</div>
                 </div>
-                <div className="hidden sm:block relative rounded-lg overflow-hidden group">
-                    <Image src={secondaryImage1} alt={`${hotel.name} view 2`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={secondaryImage1Hint} />
-                     <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">Room Photos</div>
-                </div>
-                <div className="hidden sm:block relative rounded-lg overflow-hidden group">
-                    <Image src={secondaryImage2} alt={`${hotel.name} view 3`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={secondaryImage2Hint} />
-                     <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">+ Guest Photos</div>
+
+                {/* Secondary Images Container */}
+                <div className="hidden sm:flex sm:flex-col sm:gap-2 w-full h-full">
+                    <div className="relative h-1/2 w-full rounded-lg overflow-hidden group">
+                        <Image src={secondaryImage1} alt={`${hotel.name} view 2`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={secondaryImage1Hint} />
+                        <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">Room Photos</div>
+                    </div>
+                    <div className="relative h-1/2 w-full rounded-lg overflow-hidden group">
+                        <Image src={secondaryImage2} alt={`${hotel.name} view 3`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={secondaryImage2Hint} />
+                        <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">+ Guest Photos</div>
+                    </div>
                 </div>
             </div>
 
+
             {/* About Section */}
-            <Card className="shadow-md">
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle className="font-headline text-xl text-foreground">About {hotel.name}</CardTitle>
                 <Separator className="mt-2"/>
@@ -308,7 +308,7 @@ export default function HotelDetailPage() {
 
             {/* Amenities Section */}
             {hotel.amenities && hotel.amenities.length > 0 && (
-              <Card className="shadow-md">
+              <Card className="shadow-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-xl text-foreground">Amenities</CardTitle>
                   <Separator className="mt-2"/>
@@ -331,7 +331,7 @@ export default function HotelDetailPage() {
 
             {/* Room Options Section */}
             {hotel.roomTypes && hotel.roomTypes.length > 0 && (
-            <Card className="shadow-md">
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle className="font-headline text-xl flex items-center text-foreground">
                   <BedDoubleIcon className="mr-2 h-6 w-6 text-[#0c4d52]" /> Room Options
@@ -340,12 +340,12 @@ export default function HotelDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {hotel.roomTypes.map((room, index) => (
-                  <div key={index} className="border border-border rounded-lg p-4 hover:shadow-md hover:border-[#0c4d52]/30 transition-all duration-200">
+                  <div key={index} className="border border-border rounded-lg p-4 hover:shadow-xl hover:border-[#0c4d52]/30 transition-all duration-200">
                     <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
                       <h4 className="text-lg font-semibold text-foreground">{room.name}</h4>
-                      <p className="text-xl font-bold bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">${room.price.toFixed(2)}</p>
+                      <p className={`text-xl font-bold ${gradientTextClass}`}>${room.price.toFixed(2)}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground/90 mb-1 mt-2">Features:</p>
+                    <p className="text-xs text-muted-foreground/90 mb-1 mt-3">Features:</p>
                     <ul className="list-disc list-inside space-y-1 pl-1">
                       {room.features.map(feature => (
                           <li key={feature} className="flex items-center text-sm text-foreground/80">
@@ -362,7 +362,7 @@ export default function HotelDetailPage() {
 
             {/* Guest Reviews & Location (New Section) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="shadow-md">
+                <Card className="shadow-lg">
                     <CardHeader>
                         <CardTitle className="font-headline text-xl text-foreground">Guest Reviews</CardTitle>
                         <Separator className="mt-2"/>
@@ -377,7 +377,7 @@ export default function HotelDetailPage() {
                         <Button variant="outline" className="mt-4">See All Reviews</Button>
                     </CardContent>
                 </Card>
-                 <Card className="shadow-md">
+                 <Card className="shadow-lg">
                     <CardHeader>
                         <CardTitle className="font-headline text-xl text-foreground">Location</CardTitle>
                          <Separator className="mt-2"/>
@@ -397,7 +397,7 @@ export default function HotelDetailPage() {
 
           {/* Right Column: Booking Card */}
           <div className="lg:col-span-1 space-y-6">
-            <Card className="shadow-lg sticky top-24 bg-card border border-border">
+            <Card className="shadow-xl sticky top-24 bg-card border border-border">
               <CardHeader>
                 <CardTitle className="font-headline text-lg text-foreground">Luxe Twin Room</CardTitle> {/* Example static room */}
                 <CardDescription>Fits 2 Adults</CardDescription>
@@ -413,7 +413,7 @@ export default function HotelDetailPage() {
 
                 <div className="pt-2">
                     <s className="text-sm text-muted-foreground">$ {(hotel.pricePerNight * 1.25).toFixed(2)}</s>
-                    <p className="text-3xl font-bold bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent">${hotel.pricePerNight.toFixed(2)}</p>
+                    <p className={`text-3xl font-bold ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">per night + taxes & fees</p>
                 </div>
                 
@@ -447,4 +447,3 @@ export default function HotelDetailPage() {
   );
 }
 
-    
