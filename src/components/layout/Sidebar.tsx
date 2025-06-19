@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { X, LogInIcon, UserPlusIcon, LogOutIcon, HomeIcon, HotelIcon, PlaneIcon, BriefcaseIcon, StarIcon, MapIcon, LifeBuoyIcon, GemIcon } from 'lucide-react'; // Added more icons
+import { X, LogInIcon, UserPlusIcon, LogOutIcon, HomeIcon, HotelIcon, PlaneIcon, BriefcaseIcon, StarIcon, MapIcon, LifeBuoyIcon, GemIcon, Building2Icon } from 'lucide-react'; // Added Building2Icon for Airbnb
 import type { LucideIcon } from 'lucide-react';
 
 interface NavItem {
   label: string;
   to: string;
-  icon?: LucideIcon; // Made icon optional to match header's navItems
+  icon?: LucideIcon; 
 }
 
 interface CurrentUser {
@@ -35,6 +35,7 @@ const iconMap: { [key: string]: LucideIcon } = {
     'Home': HomeIcon,
     'Hotels': HotelIcon,
     'Flights': PlaneIcon,
+    'Airbnb': Building2Icon, // Added Airbnb icon
     'Tours & Cruises': MapIcon,
     'Ultra Lux': GemIcon,
     'Inspiration': LifeBuoyIcon,
@@ -70,7 +71,6 @@ export function Sidebar({
               <span className="text-black">Hotel&amp;Tour</span>
             </Link>
           </SheetTitle>
-          {/* The explicit SheetClose button that was here is now removed. The default X from SheetContent will handle closing. */}
         </SheetHeader>
         
         <div className="flex-grow overflow-y-auto p-4 space-y-1">

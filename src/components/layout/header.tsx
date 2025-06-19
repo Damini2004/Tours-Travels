@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Menu, Phone, Heart, ChevronDown, Search as SearchIcon, LogInIcon, UserPlusIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListChecksIcon, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon, HotelIcon } from 'lucide-react';
+import { Menu, Phone, Heart, ChevronDown, Search as SearchIcon, LogInIcon, UserPlusIcon, LogOutIcon, UserCircle, BriefcaseIcon, LayoutDashboard, ListChecksIcon, ListOrdered, DollarSign, UsersIcon, ShieldCheckIcon, FileCheckIcon, Trash2Icon, LineChartIcon, HotelIcon, HomeIcon, PlaneIcon, MapIcon, GemIcon, LifeBuoyIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ const navItems = [
   { label: 'Home', to: '/' },
   { label: 'Hotels', to: '/hotels/search' }, 
   { label: 'Flights', to: '/flights/search' }, 
+  { label: 'Airbnb', to: '/airbnb' }, // Added Airbnb
   { label: 'Tours & Cruises', to: '/tours' },
   { label: 'Ultra Lux', to: '/ultra-lux' },
   { label: 'Inspiration', to: '/inspiration' },
