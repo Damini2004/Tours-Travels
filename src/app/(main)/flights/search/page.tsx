@@ -26,8 +26,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 
 
-const CLIENT_ID = "uAVfFRadqZNTpCPuD7vLIRtvqOXgcnQD";
-const CLIENT_SECRET = "99hFf5XQGW7dzzPF";
+const CLIENT_ID = "vprUAkpZepjHvwh6EG9eabPzjAJgYgml";
+const CLIENT_SECRET = "wREmJOtkAw1TElA7";
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium";
 
@@ -701,7 +701,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 lg:py-2"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 lg:py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -861,7 +861,7 @@ function FlightResultsClientInternal() {
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 lg:py-2"
+                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -1293,5 +1293,6 @@ export default function FlightResultsClient() {
   );
 }
     
+
 
 
