@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useSearchParams } from 'next/navigation';
@@ -97,8 +98,8 @@ export default function HotelSearchResultsPage() {
         </div>
 
         {/* Top Banner */}
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-6">
-            Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80">View More</Button>
+        <div className={`p-4 bg-card border border-border rounded-lg text-sm mb-6 ${gradientTextClass}`}>
+            Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className={`p-0 h-auto ${gradientTextClass} font-semibold hover:opacity-80`}>View More</Button>
         </div>
 
         {/* Breadcrumbs */}
