@@ -98,8 +98,10 @@ export default function HotelSearchResultsPage() {
         </div>
 
         {/* Top Banner */}
-        <div className={`p-4 bg-card border border-border rounded-lg text-sm mb-6 ${gradientTextClass}`}>
-            Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className={`p-0 h-auto ${gradientTextClass} font-semibold hover:opacity-80`}>View More</Button>
+        <div className={`p-4 bg-card border border-border rounded-lg text-sm mb-6`}>
+            <span className={`${gradientTextClass}`}>
+                Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className={`p-0 h-auto ${gradientTextClass} font-semibold hover:opacity-80`}>View More</Button>
+            </span>
         </div>
 
         {/* Breadcrumbs */}
@@ -122,7 +124,7 @@ export default function HotelSearchResultsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <h3 className={`font-semibold ${gradientTextClass}`}>Applied Filters</h3>
-                <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80">Clear</Button>
+                <Button className="px-3 py-1 text-xs h-auto bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">Clear</Button>
               </CardHeader>
               <CardContent>
                 <div className="relative">
