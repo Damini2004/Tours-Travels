@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useSearchParams } from 'next/navigation';
@@ -73,7 +72,7 @@ export default function HotelSearchResultsPage() {
         </div>
         <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 scrollbar-hide">
           {[1,2,3].map(i => 
-            <Skeleton key={i} className="h-[420px] w-[300px] sm:w-[320px] rounded-none bg-card flex-shrink-0" />
+            <Skeleton key={i} className="h-[420px] w-[300px] sm:w-[320px] rounded-lg bg-card flex-shrink-0" />
           )}
         </div>
       </div>
@@ -105,12 +104,13 @@ export default function HotelSearchResultsPage() {
       ) : (
         <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 scrollbar-hide">
           {filteredHotels.map((hotel) => (
-            <HotelCard 
-              key={hotel.id} 
-              hotel={hotel}
-              isSaved={isHotelSaved(hotel.id)}
-              onToggleSave={handleToggleSave}
-            />
+            <div key={hotel.id} className="w-[300px] sm:w-[320px] flex-shrink-0">
+              <HotelCard 
+                hotel={hotel}
+                isSaved={isHotelSaved(hotel.id)}
+                onToggleSave={handleToggleSave}
+              />
+            </div>
           ))}
         </div>
       )}

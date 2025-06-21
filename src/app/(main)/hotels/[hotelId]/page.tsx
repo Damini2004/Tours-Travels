@@ -402,22 +402,8 @@ export default function HotelDetailPage() {
                   <Separator className="mt-2"/>
               </CardHeader>
               <CardContent>
-                <div className="relative h-48 w-full bg-slate-200 dark:bg-slate-700 rounded-md overflow-hidden">
-                  <Image 
-                      src="https://placehold.co/600x400.png"
-                      alt={`Map showing location of ${hotel.name}`}
-                      layout="fill"
-                      objectFit="cover"
-                      className="opacity-50"
-                      data-ai-hint="city map"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                      <Button variant="secondary" asChild>
-                          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.location)}`} target="_blank" rel="noopener noreferrer">
-                              View on Google Maps
-                          </a>
-                      </Button>
-                  </div>
+                <div className="relative h-80 w-full rounded-md overflow-hidden">
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59541.78416258662!2d79.03785467147829!3d21.138006841011272!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c12f2934c151%3A0x7827bb77056c2a2b!2sZUDIO%20-%20Landmark%20Complex%2C%20Nagpur!5e0!3m2!1sen!2sin!4v1750480189584!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <p className="text-sm text-foreground/90 mt-3 font-semibold">{hotel.name}</p>
                 <p className="text-xs text-muted-foreground">{hotel.location}</p>
@@ -472,7 +458,7 @@ export default function HotelDetailPage() {
             <Separator className="my-12" />
             <div className="space-y-6">
               <h2 className="font-headline text-2xl font-bold text-foreground">You might also like</h2>
-              <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 -mx-4 px-4 scrollbar-hide">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {similarHotels.map(similarHotel => (
                   <HotelCard 
                     key={similarHotel.id} 

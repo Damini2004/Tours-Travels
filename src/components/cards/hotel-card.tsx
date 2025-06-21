@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -31,7 +30,7 @@ export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
   const ratingLabel = getRatingLabel(hotel.rating);
 
   return (
-    <div className="bg-white border border-gray-200 w-[300px] sm:w-[320px] flex-shrink-0 flex flex-col justify-between h-full shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1">
+    <div className="group bg-white border border-gray-200 w-full flex flex-col justify-between h-full shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1 rounded-lg overflow-hidden">
       <div className="image-wrapper relative">
         <div className="relative w-full h-48">
           <Image
@@ -39,14 +38,14 @@ export function HotelCard({ hotel, isSaved, onToggleSave }: HotelCardProps) {
             alt={hotel.name}
             layout="fill"
             objectFit="cover"
-            className="filter brightness-95 group-hover:brightness-100 transition-filter duration-300 ease-in-out"
+            className="group-hover:scale-105 transition-transform duration-300 ease-in-out"
             data-ai-hint={hotel.thumbnailHint || defaultHotelHint}
           />
         </div>
         <button
-          onClick={() => onToggleSave(hotel.id)}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSave(hotel.id); }}
           aria-label={isSaved ? "Unsave hotel" : "Save hotel"}
-          className="save absolute top-2.5 right-2.5 text-muted-foreground bg-transparent border-none rounded-full p-1.5 text-xl cursor-pointer transition-colors duration-300 hover:text-destructive z-10"
+          className="save absolute top-2.5 right-2.5 text-muted-foreground bg-card/70 backdrop-blur-sm border-none rounded-full p-1.5 text-xl cursor-pointer transition-colors duration-300 hover:text-destructive z-10"
         >
           <HeartIcon className={cn("h-5 w-5", isSaved && "fill-accent text-accent")} />
         </button>
