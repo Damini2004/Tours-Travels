@@ -25,11 +25,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { HotelListItem } from '@/components/cards/HotelListItem'; // New component
+import { HotelListItem } from '@/components/cards/HotelListItem';
 import { Badge } from '@/components/ui/badge';
 import { useState, useEffect, useCallback } from 'react';
 import { getHotels } from '@/lib/hotel-data';
+<<<<<<< HEAD
 >>>>>>> 2e2f781 (After clicking on search button of hotel search bar this type of hotel m)
+=======
+import { HotelSearchForm } from '@/components/forms/hotel-search-form';
+>>>>>>> 882a1b1 (Hotel Results in All Locations Showing 4 approved hotels matching your c)
 
 export default function HotelSearchResultsPage() {
   const searchParams = useSearchParams();
@@ -87,6 +91,10 @@ export default function HotelSearchResultsPage() {
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <HotelSearchForm />
+        </div>
+
         {/* Top Banner */}
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-6">
             Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className="p-0 h-auto">View More</Button>

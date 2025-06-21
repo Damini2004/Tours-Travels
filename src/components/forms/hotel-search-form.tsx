@@ -60,13 +60,13 @@ export function HotelSearchForm() {
   if (!isClient) {
     return (
         <div className="w-full p-4 mb-8">
-            <div className="h-28 bg-gradient-to-r from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-xl animate-pulse"></div>
+            <div className="h-28 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-xl animate-pulse"></div>
         </div>
     );
   }
 
   return (
-    <div className="w-full shadow-lg p-3 rounded-xl bg-gradient-to-r from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+    <div className="w-full shadow-lg p-3 rounded-xl bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
         <form onSubmit={handleSubmit} className="space-y-2">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 items-end">
             
