@@ -1,8 +1,8 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon, UsersIcon, SearchIcon, MinusIcon, PlusIcon } from 'lucide-react';
 import { format, parseISO, isValid } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from '@/lib/utils';
 
 export function HotelSearchForm() {
   const router = useRouter();
@@ -58,79 +59,62 @@ export function HotelSearchForm() {
 
   if (!isClient) {
     return (
-        <Card className="w-full shadow-lg p-4 mb-8">
-            <div className="h-40 bg-muted/30 rounded-md animate-pulse"></div>
-        </Card>
+        <div className="w-full p-4 mb-8">
+            <div className="h-28 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-xl animate-pulse"></div>
+        </div>
     );
   }
 
   return (
-    <Card className="w-full shadow-lg p-4">
-      <CardContent className="p-0">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
+    <div className="w-full shadow-lg p-3 rounded-xl bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63]">
+        <form onSubmit={handleSubmit} className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 items-end">
             
-            <div className="lg:col-span-2 space-y-1">
-              <Label htmlFor="location" className="text-sm font-medium text-muted-foreground">Location</Label>
+            <div className="lg:col-span-3 space-y-1">
+              <Label htmlFor="location" className="text-xs font-medium text-gray-300 px-1">Location</Label>
               <Input
                 id="location"
-                placeholder="City, Property name or Location"
+                placeholder="City, Property or Location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 required
-                className="h-12 text-base"
+                className="h-11 text-base bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:bg-white/20 focus:border-sky-300"
               />
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="checkin-date" className="text-sm font-medium text-muted-foreground">Check-in</Label>
+            <div className="lg:col-span-2 space-y-1">
+              <Label htmlFor="checkin-date" className="text-xs font-medium text-gray-300 px-1">Check-in</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
-                    <div className="flex items-center">
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkInDate ? (
-                            <div>
-                                <p className="text-base font-semibold leading-none">{format(checkInDate, 'dd')}</p>
-                                <p className="text-xs text-muted-foreground">{format(checkInDate, 'MMM yy, EEE')}</p>
-                            </div>
-                        ) : <span>Pick a date</span>}
-                    </div>
+                  <Button variant="outline" className="w-full h-11 justify-start text-left font-normal bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white">
+                     <CalendarIcon className="mr-2 h-4 w-4" />
+                     {checkInDate ? format(checkInDate, 'dd MMM yy') : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={checkInDate} onSelect={setCheckInDate} initialFocus disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))} /></PopoverContent>
               </Popover>
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="checkout-date" className="text-sm font-medium text-muted-foreground">Check-out</Label>
+            <div className="lg:col-span-2 space-y-1">
+              <Label htmlFor="checkout-date" className="text-xs font-medium text-gray-300 px-1">Check-out</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                   <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
-                     <div className="flex items-center">
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOutDate ? (
-                            <div>
-                                <p className="text-base font-semibold leading-none">{format(checkOutDate, 'dd')}</p>
-                                <p className="text-xs text-muted-foreground">{format(checkOutDate, 'MMM yy, EEE')}</p>
-                            </div>
-                        ) : <span>Pick a date</span>}
-                    </div>
+                   <Button variant="outline" className="w-full h-11 justify-start text-left font-normal bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white">
+                     <CalendarIcon className="mr-2 h-4 w-4" />
+                     {checkOutDate ? format(checkOutDate, 'dd MMM yy') : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={checkOutDate} onSelect={setCheckOutDate} disabled={(date) => checkInDate ? date <= checkInDate : date < new Date(new Date().setHours(0,0,0,0))} /></PopoverContent>
               </Popover>
             </div>
             
-            <div className="space-y-1">
-              <Label htmlFor="guests-rooms" className="text-sm font-medium text-muted-foreground">Rooms & Guests</Label>
+            <div className="lg:col-span-2 space-y-1">
+              <Label htmlFor="guests-rooms" className="text-xs font-medium text-gray-300 px-1">Rooms & Guests</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
+                  <Button variant="outline" className="w-full h-11 justify-start text-left font-normal bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white">
                     <UsersIcon className="mr-2 h-4 w-4" />
-                    <div>
-                        <p className="text-base font-semibold leading-none">{rooms} Room, {adults} Adults</p>
-                    </div>
+                    <span>{rooms} Room, {adults} Adults</span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-64 p-4">
@@ -155,13 +139,12 @@ export function HotelSearchForm() {
                 </PopoverContent>
               </Popover>
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4">
-            <div className="space-y-1 w-full md:w-1/3">
-              <Label htmlFor="price-range" className="text-sm font-medium text-muted-foreground">Price per night</Label>
+
+            <div className="lg:col-span-2 space-y-1">
+              <Label htmlFor="price-range" className="text-xs font-medium text-gray-300 px-1">Price per night</Label>
               <Select value={priceRange} onValueChange={setPriceRange}>
-                <SelectTrigger id="price-range" className="h-11">
-                  <SelectValue placeholder="Select a price range" />
+                <SelectTrigger id="price-range" className="w-full h-11 bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white [&>svg]:text-white">
+                  <SelectValue placeholder="Select a price" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="0-1500">₹0 - ₹1500</SelectItem>
@@ -171,12 +154,12 @@ export function HotelSearchForm() {
                 </SelectContent>
               </Select>
             </div>
-            <Button type="submit" className="w-full md:w-auto h-12 text-base px-10 bg-accent text-accent-foreground hover:bg-accent/90">
+
+            <Button type="submit" className="w-full lg:col-span-1 h-11 text-base px-10 bg-accent text-accent-foreground hover:bg-accent/90">
                 <SearchIcon className="mr-2 h-5 w-5" /> Search
             </Button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
