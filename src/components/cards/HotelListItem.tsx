@@ -93,13 +93,13 @@ export function HotelListItem({ hotel }: HotelListItemProps) {
             <div>
               <div className="flex items-center justify-end gap-2">
                 <span className={`font-semibold ${gradientTextClass}`}>{ratingDescription}</span>
-                <span className="bg-primary text-primary-foreground text-sm font-bold px-2 py-0.5 rounded-md">{hotel.rating.toFixed(1)}</span>
+                <span className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white text-sm font-bold px-2 py-0.5 rounded-md">{hotel.rating.toFixed(1)}</span>
               </div>
               <p className="text-xs text-muted-foreground">({reviewCount} Ratings)</p>
             </div>
             
             <div className="flex flex-col items-end">
-              <Badge variant="secondary" className="mb-2">Last Minute Deal</Badge>
+              <Badge variant="default" className="mb-2 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent">Last Minute Deal</Badge>
               <s className="text-muted-foreground">${originalPrice.toFixed(2)}</s>
               <p className={`text-2xl font-bold ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)}</p>
               <p className="text-xs text-muted-foreground">+ ${ (hotel.pricePerNight * 0.1).toFixed(2) } taxes & fees</p>
