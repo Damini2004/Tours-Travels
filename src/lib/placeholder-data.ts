@@ -1,5 +1,5 @@
 
-import type { Flight, Hotel, Property } from './types';
+import type { Flight, Hotel, Property, Review } from './types';
 
 const newDefaultHotelImage = 'https://media.istockphoto.com/id/1197480605/photo/3d-render-of-luxury-hotel-lobby-and-reception.jpg?s=612x612&w=0&k=20&c=h2DMumrFFZDGqPypcK4Whx8mM1EdCKWh8PLY2saLIzo=';
 const newDefaultHotelHint = 'hotel lobby';
@@ -82,6 +82,24 @@ export const placeholderHotels: Hotel[] = [
     ],
     ownerEmail: 'super.admin@example.com', // Or a generic super admin email
     isApproved: true,
+    reviews: [
+      {
+        reviewerName: 'John Smith',
+        reviewerAvatarUrl: 'https://placehold.co/50x50.png',
+        reviewerAvatarHint: 'man portrait',
+        date: '2024-07-15',
+        rating: 5,
+        comment: 'Absolutely stunning hotel with top-notch service. The views from our room were incredible. Can\'t wait to come back!'
+      },
+      {
+        reviewerName: 'Emily Jones',
+        reviewerAvatarUrl: 'https://placehold.co/50x50.png',
+        reviewerAvatarHint: 'woman portrait',
+        date: '2024-06-28',
+        rating: 4,
+        comment: 'Great location and beautiful rooms. The pool area was a bit crowded, but overall a fantastic stay.'
+      }
+    ],
   },
   {
     id: 'HT002',
@@ -106,6 +124,24 @@ export const placeholderHotels: Hotel[] = [
     ],
     ownerEmail: 'bob@example.com', // Assuming bob@example.com is a hotel owner
     isApproved: true,
+    reviews: [
+      {
+        reviewerName: 'Kenji Tanaka',
+        reviewerAvatarUrl: 'https://placehold.co/50x50.png',
+        reviewerAvatarHint: 'asian man portrait',
+        date: '2024-07-20',
+        rating: 5,
+        comment: 'A truly authentic Japanese experience. The onsen was so relaxing and the staff were incredibly polite and helpful. The garden is beautiful.'
+      },
+      {
+        reviewerName: 'Sarah Miller',
+        reviewerAvatarUrl: 'https://placehold.co/50x50.png',
+        reviewerAvatarHint: 'woman travel blogger',
+        date: '2024-07-10',
+        rating: 4,
+        comment: 'Loved the traditional breakfast and the tatami room was very comfortable. A bit far from the main subway station, but worth it for the peace and quiet.'
+      }
+    ],
   },
   {
     id: 'HT003',
@@ -130,6 +166,16 @@ export const placeholderHotels: Hotel[] = [
     ],
     ownerEmail: 'super.admin@example.com',
     isApproved: true,
+    reviews: [
+       {
+        reviewerName: 'David Lee',
+        reviewerAvatarUrl: 'https://placehold.co/50x50.png',
+        reviewerAvatarHint: 'man portrait casual',
+        date: '2024-05-12',
+        rating: 5,
+        comment: 'The direct beach access is unbeatable. We spent all day by the water. The staff were amazing and the food at the restaurant was delicious. Highly recommend for families.'
+      }
+    ],
   },
 ];
 

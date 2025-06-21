@@ -1,4 +1,13 @@
 
+export interface Review {
+  reviewerName: string;
+  reviewerAvatarUrl?: string;
+  reviewerAvatarHint?: string;
+  date: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Flight {
   id: string;
   airline: string;
@@ -35,6 +44,7 @@ export interface Hotel {
   roomTypes?: { name: string; price: number; features: string[] }[];
   ownerEmail?: string; // Email of the Hotel Owner
   isApproved?: boolean; // Approval status by Super Admin
+  reviews?: Review[];
 }
 
 export interface Property {

@@ -1,9 +1,8 @@
-
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import type { Hotel, Booking } from '@/lib/types';
+import type { Hotel, Booking, Review } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -13,10 +12,12 @@ import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect, useCallback } from 'react';
-import { getHotelById } from '@/lib/hotel-data';
+import { getHotelById, getHotels } from '@/lib/hotel-data';
 import { format, addDays } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { HotelCard } from '@/components/cards/hotel-card';
 
 interface CurrentUser {
   fullName: string;
@@ -57,6 +58,7 @@ export default function HotelDetailPage() {
   const { toast } = useToast();
   
   const [hotel, setHotel] = useState<Hotel | null | undefined>(undefined); 
+  const [similarHotels, setSimilarHotels] = useState<Hotel[]>([]);
   const [isLoadingHotel, setIsLoadingHotel] = useState(true);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isAuthorizedToView, setIsAuthorizedToView] = useState(false);
@@ -77,6 +79,10 @@ export default function HotelDetailPage() {
       setIsLoadingHotel(true);
       const foundHotel = getHotelById(hotelId);
       setHotel(foundHotel);
+      if (foundHotel) {
+        const allDbHotels = getHotels();
+        setSimilarHotels(allDbHotels.filter(h => h.id !== hotelId).slice(0, 4));
+      }
       setIsLoadingHotel(false);
     }
   }, [hotelId]);
@@ -103,19 +109,18 @@ export default function HotelDetailPage() {
     }
   }, [hotel, currentUser]);
 
-  const handleToggleSave = () => {
-    if (!hotel) return;
-    if (isHotelSaved(hotel.id)) {
-      removeHotelFromSaved(hotel.id);
+  const handleToggleSave = (hotelToToggle: Hotel) => {
+    if (isHotelSaved(hotelToToggle.id)) {
+      removeHotelFromSaved(hotelToToggle.id);
       toast({
         title: "Hotel Unsaved",
-        description: `${hotel.name} removed from your saved items.`,
+        description: `${hotelToToggle.name} removed from your saved items.`,
       });
     } else {
-      addHotelToSaved(hotel);
+      addHotelToSaved(hotelToToggle);
       toast({
         title: "Hotel Saved!",
-        description: `${hotel.name} added to your saved items.`,
+        description: `${hotelToToggle.name} added to your saved items.`,
       });
     }
   };
@@ -179,7 +184,7 @@ export default function HotelDetailPage() {
         <Skeleton className="h-6 w-1/2 mb-6" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <Skeleton className="h-96 w-full rounded-lg" /> {/* Adjusted skeleton height for gallery */}
+            <Skeleton className="h-96 w-full rounded-lg" />
             <Skeleton className="h-32 w-full rounded-lg" />
             <Skeleton className="h-40 w-full rounded-lg" />
           </div>
@@ -273,15 +278,12 @@ export default function HotelDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Image Gallery, About, Amenities, Rooms */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Image Gallery - Updated Structure */}
+            {/* Image Gallery */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 h-[300px] sm:h-auto sm:max-h-[500px]">
-                {/* Main Image */}
                 <div className="relative rounded-lg overflow-hidden group w-full h-full">
                     <Image src={mainImage} alt={`${hotel.name} main view`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={mainImageHint} />
                     <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">+{hotel.images?.length || 1} Property Photos</div>
                 </div>
-
-                {/* Secondary Images Container */}
                 <div className="hidden sm:flex sm:flex-col sm:gap-2 w-full h-full">
                     <div className="relative h-1/2 w-full rounded-lg overflow-hidden group">
                         <Image src={secondaryImage1} alt={`${hotel.name} view 2`} layout="fill" objectFit="cover" className="transform group-hover:scale-105 transition-transform duration-300" data-ai-hint={secondaryImage1Hint} />
@@ -293,7 +295,6 @@ export default function HotelDetailPage() {
                     </div>
                 </div>
             </div>
-
 
             {/* About Section */}
             <Card className="shadow-lg">
@@ -360,58 +361,81 @@ export default function HotelDetailPage() {
             </Card>
             )}
 
-            {/* Guest Reviews & Location (New Section) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="font-headline text-xl text-foreground">Guest Reviews</CardTitle>
-                        <Separator className="mt-2"/>
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-center text-center">
-                         <div className="flex items-baseline gap-2 mb-2">
-                            <span className="text-4xl font-bold text-[#0c4d52]">{hotel.rating.toFixed(1)}</span>
-                            <span className="text-lg text-muted-foreground">/ 5</span>
+             {/* Detailed Guest Reviews */}
+            {hotel.reviews && hotel.reviews.length > 0 && (
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="font-headline text-xl text-foreground">Guest Reviews</CardTitle>
+                <Separator className="mt-2"/>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {hotel.reviews.map((review, index) => (
+                  <div key={index} className="flex gap-4">
+                    <Avatar>
+                      <AvatarImage src={review.reviewerAvatarUrl} alt={review.reviewerName} data-ai-hint={review.reviewerAvatarHint} />
+                      <AvatarFallback>{review.reviewerName.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-semibold text-sm text-foreground">{review.reviewerName}</p>
+                          <p className="text-xs text-muted-foreground">{format(new Date(review.date), 'MMMM d, yyyy')}</p>
                         </div>
-                        <p className="text-lg font-semibold text-foreground">{getRatingDescription(hotel.rating)}</p>
-                        <p className="text-sm text-muted-foreground">(Based on user ratings)</p>
-                        <Button variant="outline" className="mt-4">See All Reviews</Button>
-                    </CardContent>
-                </Card>
-                 <Card className="shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="font-headline text-xl text-foreground">Location</CardTitle>
-                         <Separator className="mt-2"/>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-40 bg-slate-200 dark:bg-slate-700 rounded-md flex items-center justify-center mb-3">
-                            <MapPinIcon className="h-12 w-12 text-muted-foreground" /> 
-                            {/* Placeholder for map */}
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <StarIcon key={i} className={`h-4 w-4 ${i < review.rating ? 'text-[#0c4d52] fill-[#0c4d52]' : 'text-gray-300'}`} />
+                          ))}
                         </div>
-                        <p className="text-sm text-foreground/90 mb-1">{hotel.name}</p>
-                        <p className="text-xs text-muted-foreground">{hotel.location}</p>
-                        <Button variant="outline" className="mt-3 w-full">See on Map</Button>
-                    </CardContent>
-                </Card>
-            </div>
+                      </div>
+                      <p className="text-sm text-foreground/80 mt-2">{review.comment}</p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            )}
+
+            {/* Location Card */}
+            <Card className="shadow-lg">
+              <CardHeader>
+                <CardTitle className="font-headline text-xl text-foreground">Location</CardTitle>
+                  <Separator className="mt-2"/>
+              </CardHeader>
+              <CardContent>
+                <div className="relative h-48 w-full bg-slate-200 dark:bg-slate-700 rounded-md overflow-hidden">
+                  <Image 
+                      src="https://placehold.co/600x400.png"
+                      alt={`Map showing location of ${hotel.name}`}
+                      layout="fill"
+                      objectFit="cover"
+                      className="opacity-50"
+                      data-ai-hint="city map"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                      <Button variant="secondary" asChild>
+                          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.location)}`} target="_blank" rel="noopener noreferrer">
+                              View on Google Maps
+                          </a>
+                      </Button>
+                  </div>
+                </div>
+                <p className="text-sm text-foreground/90 mt-3 font-semibold">{hotel.name}</p>
+                <p className="text-xs text-muted-foreground">{hotel.location}</p>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Right Column: Booking Card */}
           <div className="lg:col-span-1 space-y-6">
             <Card className="shadow-xl sticky top-24 bg-card border border-border">
               <CardHeader>
-                <CardTitle className="font-headline text-lg text-foreground">Luxe Twin Room</CardTitle> {/* Example static room */}
-                <CardDescription>Fits 2 Adults</CardDescription>
+                <CardTitle className="font-headline text-lg text-foreground">Book Your Stay</CardTitle> 
+                <CardDescription>Select a room to see final price.</CardDescription>
                  <Separator className="mt-2"/>
               </CardHeader>
               <CardContent className="space-y-3">
-                 <ul className="space-y-1.5 text-sm text-foreground/80">
-                    <li className="flex items-center"><CheckCircleIcon className="mr-2 h-4 w-4 text-[#0c4d52]"/>Complimentary Meal Upgrade</li>
-                    <li className="flex items-center"><CheckCircleIcon className="mr-2 h-4 w-4 text-[#0c4d52]"/>20% off Food & Beverage</li>
-                    <li className="flex items-center"><CheckCircleIcon className="mr-2 h-4 w-4 text-[#0c4d52]"/>Free Cancellation (24hrs prior)</li>
-                 </ul>
-                 <Button variant="link" className="p-0 h-auto text-sm text-[#0c4d52]">View All Details</Button>
-
                 <div className="pt-2">
+                    <p className='text-xs text-muted-foreground'>Starting from</p>
                     <s className="text-sm text-muted-foreground">$ {(hotel.pricePerNight * 1.25).toFixed(2)}</s>
                     <p className={`text-3xl font-bold ${gradientTextClass}`}>${hotel.pricePerNight.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">per night + taxes & fees</p>
@@ -431,19 +455,37 @@ export default function HotelDetailPage() {
                     "w-full text-base py-3 border-input",
                     isHotelSaved(hotel.id) ? "border-[#0c4d52] text-[#0c4d52] hover:bg-[#0c4d52]/10" : "text-foreground/70 hover:border-muted-foreground/50"
                   )}
-                  onClick={handleToggleSave}
+                  onClick={() => handleToggleSave(hotel)}
                   disabled={isLoadingSaved}
                 >
                   <HeartIcon className={`mr-2 h-5 w-5 ${isHotelSaved(hotel.id) ? 'fill-[#0c4d52] text-[#0c4d52]' : 'text-foreground/70'}`} />
                   {isHotelSaved(hotel.id) ? 'Saved' : 'Save this hotel'}
                 </Button>
-                <p className="text-xs text-center text-muted-foreground mt-1">15 More Options</p>
               </CardContent>
             </Card>
           </div>
         </div>
+
+        {/* Similar Properties Section */}
+        {similarHotels.length > 0 && (
+          <>
+            <Separator className="my-12" />
+            <div className="space-y-6">
+              <h2 className="font-headline text-2xl font-bold text-foreground">You might also like</h2>
+              <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 -mx-4 px-4 scrollbar-hide">
+                {similarHotels.map(similarHotel => (
+                  <HotelCard 
+                    key={similarHotel.id} 
+                    hotel={similarHotel} 
+                    isSaved={isHotelSaved(similarHotel.id)} 
+                    onToggleSave={() => handleToggleSave(similarHotel)} 
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 }
-
