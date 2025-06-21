@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
@@ -276,7 +277,7 @@ export default function HotelDetailPage() {
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column: Image Gallery, About, Amenities, Rooms */}
+          {/* Left Column: Image Gallery, About, Amenities, Rooms, Reviews */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 h-[300px] sm:h-auto sm:max-h-[500px]">
@@ -361,7 +362,7 @@ export default function HotelDetailPage() {
             </Card>
             )}
 
-             {/* Detailed Guest Reviews */}
+            {/* Detailed Guest Reviews */}
             {hotel.reviews && hotel.reviews.length > 0 && (
             <Card className="shadow-lg">
               <CardHeader>
