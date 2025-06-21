@@ -35,6 +35,8 @@ import { getHotels } from '@/lib/hotel-data';
 import { HotelSearchForm } from '@/components/forms/hotel-search-form';
 >>>>>>> 882a1b1 (Hotel Results in All Locations Showing 4 approved hotels matching your c)
 
+const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
+
 export default function HotelSearchResultsPage() {
   const searchParams = useSearchParams();
 >>>>>>> 04e13cb (over the place of this color use this color bg-gradient-to-br from-[#031)
@@ -89,51 +91,51 @@ export default function HotelSearchResultsPage() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">
+    <div className="bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <HotelSearchForm />
         </div>
 
         {/* Top Banner */}
-        <div className="p-4 bg-white/10 border border-white/20 rounded-lg text-sm text-gray-200 mb-6">
-            Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className="p-0 h-auto text-sky-300 hover:text-sky-200">View More</Button>
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 mb-6">
+            Here are the best options for hotels in {displayLocation}. The {filteredHotels.length} options listed below start from just Rs.142 and suit the wide range of requirements you may have. Take your pick from the best hotels in {displayLocation} from the list below and get set for an unforgettable stay! Scroll down for more options of hotels in {displayLocation}. <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80">View More</Button>
         </div>
 
         {/* Breadcrumbs */}
-        <div className="text-sm text-gray-300 mb-4">
+        <div className="text-sm text-muted-foreground mb-4">
             Home › Hotels in India › Hotels in {displayLocation}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Sidebar for Filters */}
           <aside className="lg:col-span-1 space-y-6">
-            <Card className="bg-white/5 border border-white/10">
+            <Card>
               <CardContent className="p-4">
-                <Button className="w-full bg-white/10 hover:bg-white/20 text-white">
+                <Button className="w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">
                   <MapIcon className="mr-2 h-4 w-4" />
                   Explore on Map
                 </Button>
               </CardContent>
             </Card>
             
-            <Card className="bg-white/5 border border-white/10">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <h3 className="font-semibold text-white">Applied Filters</h3>
-                <Button variant="link" className="p-0 h-auto text-sky-300 hover:text-sky-200">Clear</Button>
+                <h3 className="font-semibold">Applied Filters</h3>
+                <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80">Clear</Button>
               </CardHeader>
               <CardContent>
                 <div className="relative">
-                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input placeholder="Search for locality / hotel name" className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:bg-white/20 focus:border-sky-300" />
+                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search for locality / hotel name" className="pl-10" />
                 </div>
-                {locationQuery && <Badge className="mt-2 bg-sky-500/20 text-sky-200 border-sky-400/50">{locationQuery}</Badge>}
+                {locationQuery && <Badge className="mt-2" variant="secondary">{locationQuery}</Badge>}
               </CardContent>
             </Card>
 
-            <Card className="bg-white/5 border border-white/10">
+            <Card>
               <CardHeader>
-                <h3 className="font-semibold text-white">Suggested For You</h3>
+                <h3 className="font-semibold">Suggested For You</h3>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 {[
@@ -147,9 +149,9 @@ export default function HotelSearchResultsPage() {
                   <div key={item.label} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Checkbox id={item.label.toLowerCase().replace(/ /g, '-')} defaultChecked={item.checked}/>
-                      <Label htmlFor={item.label.toLowerCase().replace(/ /g, '-')} className="font-normal text-gray-200">{item.label}</Label>
+                      <Label htmlFor={item.label.toLowerCase().replace(/ /g, '-')} className="font-normal text-foreground">{item.label}</Label>
                     </div>
-                    {item.count > 0 && <span className="text-gray-400">({item.count})</span>}
+                    {item.count > 0 && <span className="text-muted-foreground">({item.count})</span>}
                   </div>
                 ))}
               </CardContent>
@@ -159,16 +161,16 @@ export default function HotelSearchResultsPage() {
           {/* Right Content Area for Results */}
           <main className="lg:col-span-3">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4">
-              <h1 className="text-2xl font-bold text-white">Hotels in {displayLocation}</h1>
-              <Button variant="outline" className="text-white border-white/50 hover:bg-white/10 hover:text-white">Explore Travel Tips →</Button>
+              <h1 className={`text-2xl font-bold ${gradientTextClass}`}>Hotels in {displayLocation}</h1>
+              <Button className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">Explore Travel Tips →</Button>
             </div>
 
-            <Card className="mb-6 bg-white/5 border-white/10">
+            <Card className="mb-6">
               <CardContent className="p-2 flex flex-wrap items-center gap-4 text-sm">
-                <span className="font-semibold text-gray-200">Sort By</span>
-                <Separator orientation="vertical" className="h-6 bg-white/20" />
+                <span className="font-semibold text-foreground">Sort By</span>
+                <Separator orientation="vertical" className="h-6" />
                 {sortOptions.map((opt, index) => (
-                  <Button key={opt} variant={index === 0 ? "secondary" : "ghost"} size="sm" className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-gray-300 hover:bg-white/10 hover:text-white">
+                  <Button key={opt} variant={index === 0 ? "default" : "ghost"} size="sm" className={index === 0 ? "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white" : ""}>
                     {opt}
                   </Button>
                 ))}
@@ -176,10 +178,10 @@ export default function HotelSearchResultsPage() {
             </Card>
 
             {filteredHotels.length === 0 ? (
-                <Alert className="bg-white/5 border-white/10 text-gray-200">
+                <Alert>
                 <SearchIcon className="h-4 w-4" />
-                <AlertTitle className="text-white">No Approved Hotels Found</AlertTitle>
-                <AlertDescription className="text-gray-300">
+                <AlertTitle>No Approved Hotels Found</AlertTitle>
+                <AlertDescription>
                     We couldn't find any approved hotels in {displayLocation} with the current criteria. 
                 </AlertDescription>
                 </Alert>
