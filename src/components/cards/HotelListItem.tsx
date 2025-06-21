@@ -84,7 +84,9 @@ export function HotelListItem({ hotel }: HotelListItemProps) {
               {hotel.description || 'No description available.'}
             </p>
             <div className="mt-auto pt-4">
-               <Button variant="default" className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">View More</Button>
+               <Button asChild variant="default" className="bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white">
+                <Link href={`/hotels/${hotel.id}`}>View More</Link>
+               </Button>
             </div>
           </div>
 
@@ -106,7 +108,9 @@ export function HotelListItem({ hotel }: HotelListItemProps) {
               <p className="text-xs text-muted-foreground">Per Night</p>
             </div>
 
-            <Button className="w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white mt-4 font-bold">Login to Book Now & Pay Later!</Button>
+            <Button asChild className="w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white mt-4 font-bold">
+              <Link href={`/hotels/${hotel.id}`}>Login to Book Now</Link>
+            </Button>
           </div>
         </div>
       </CardContent>
