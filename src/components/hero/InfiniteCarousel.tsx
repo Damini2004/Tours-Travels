@@ -79,7 +79,7 @@ export default function InfiniteCarousel() {
           }
           
           /* Recalculate for responsive: Note JS constants don't update in pure CSS.
-             If imageWidth and gap change for mobile, the animation might need JS adjustment
+             If imageWidth/gap change for mobile, the animation might need JS adjustment
              or more complex CSS media queries for animation properties.
              For simplicity, if imageWidth/gap are fixed, this animation duration change is okay.
           */

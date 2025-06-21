@@ -78,5 +78,3 @@ const VerticalCarousel = () => {
 };
 
 export default VerticalCarousel;
-
-    
