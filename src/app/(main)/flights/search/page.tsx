@@ -695,13 +695,13 @@ function FlightResultsClientInternal() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <Button onClick={() => setPassengerPopoverOpen(false)} className="w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white">Done</Button>
+                                <Button onClick={() => setPassengerPopoverOpen(false)} className="w-full mt-3 bg-accent hover:bg-accent/90 text-accent-foreground">Done</Button>
                             </PopoverContent>
                         </Popover>
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 lg:py-1.5"
+                        className="bg-accent hover:bg-accent/90 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-accent-foreground font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 lg:py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -855,13 +855,13 @@ function FlightResultsClientInternal() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <Button onClick={() => setPassengerPopoverOpen(false)} className="w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white">Done</Button>
+                                <Button onClick={() => setPassengerPopoverOpen(false)} className="w-full mt-3 bg-accent hover:bg-accent/90 text-accent-foreground">Done</Button>
                             </PopoverContent>
                         </Popover>
                     </div>
                     <Button 
                         onClick={handleHeaderSearch} 
-                        className="bg-orange-500 hover:bg-orange-600 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-white font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 py-1.5"
+                        className="bg-accent hover:bg-accent/90 hover:shadow-md hover:-translate-y-px transition-all duration-150 text-accent-foreground font-bold rounded-lg h-full text-center leading-tight px-2 py-2 text-sm lg:px-2 py-1.5"
                     >
                         SEARCH
                     </Button>
@@ -1293,6 +1293,7 @@ export default function FlightResultsClient() {
   );
 }
     
+
 
 
 
