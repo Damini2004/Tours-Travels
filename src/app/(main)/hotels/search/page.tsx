@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useSearchParams } from 'next/navigation';
@@ -121,7 +120,7 @@ export default function HotelSearchResultsPage() {
             
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <h3 className="font-semibold">Applied Filters</h3>
+                <h3 className={`font-semibold ${gradientTextClass}`}>Applied Filters</h3>
                 <Button variant="link" className="p-0 h-auto text-primary hover:text-primary/80">Clear</Button>
               </CardHeader>
               <CardContent>
@@ -135,7 +134,7 @@ export default function HotelSearchResultsPage() {
 
             <Card>
               <CardHeader>
-                <h3 className="font-semibold">Suggested For You</h3>
+                <h3 className={`font-semibold ${gradientTextClass}`}>Suggested For You</h3>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
                 {[
@@ -149,7 +148,7 @@ export default function HotelSearchResultsPage() {
                   <div key={item.label} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Checkbox id={item.label.toLowerCase().replace(/ /g, '-')} defaultChecked={item.checked}/>
-                      <Label htmlFor={item.label.toLowerCase().replace(/ /g, '-')} className="font-normal text-foreground">{item.label}</Label>
+                      <Label htmlFor={item.label.toLowerCase().replace(/ /g, '-')} className={`font-normal ${gradientTextClass}`}>{item.label}</Label>
                     </div>
                     {item.count > 0 && <span className="text-muted-foreground">({item.count})</span>}
                   </div>
