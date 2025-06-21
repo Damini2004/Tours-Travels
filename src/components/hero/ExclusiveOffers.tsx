@@ -6,7 +6,7 @@ import Image from "next/image";
 import { MapPinIcon, HeartIcon, StarIcon, HotelIcon as HotelBuildingIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button"; 
-import Link from "next/link"; // Added for View Offer button link
+import Link from "next/link";
 
 const offers = [
   {
@@ -176,12 +176,12 @@ const ExclusiveOffers = () => {
         </div>
       </div>
 
-      <div className="offer-list flex overflow-x-auto gap-4 md:gap-6 mt-5 scrollbar-hide pb-4">
+      <div className="offer-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
         {offers.map((offer) => {
           const ratingLabel = getRatingLabel(offer.rating);
           return (
             <div
-              className="bg-white border border-gray-200 w-[300px] sm:w-[320px] flex-shrink-0 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
+              className="bg-white border border-gray-200 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
               key={offer.id}
             >
               <div className="image-wrapper relative">
@@ -216,7 +216,7 @@ const ExclusiveOffers = () => {
                 </div>
                  <p className="text-xs text-muted-foreground mb-1 truncate font-medium text-gray-700">{offer.hotel}</p>
 
-                <h3 className="font-semibold my-1 text-sm leading-snug text-gray-800 h-[4.5em] overflow-hidden"> {/* Increased height for longer titles */}
+                <h3 className="font-semibold my-1 text-sm leading-snug text-gray-800 h-[4.5em] overflow-hidden">
                   {offer.title}
                 </h3>
 
@@ -240,7 +240,7 @@ const ExclusiveOffers = () => {
                     </div>
                    )}
                   <Button asChild className="mt-2 w-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white px-3 py-1.5 cursor-pointer rounded-md font-semibold text-sm transition-opacity duration-300 ease-in-out hover:opacity-90">
-                    <Link href={`#`} > {/* Placeholder Link */}
+                    <Link href={`#`} >
                         View offer <HotelBuildingIcon className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -255,5 +255,3 @@ const ExclusiveOffers = () => {
 };
 
 export default ExclusiveOffers;
-
-    
