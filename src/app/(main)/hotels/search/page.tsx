@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { getHotels } from '@/lib/hotel-data';
+import { HotelSearchForm } from '@/components/forms/hotel-search-form';
+import { Separator } from '@/components/ui/separator';
 
 <<<<<<< HEAD
 function HotelSearchForm() {
@@ -82,6 +84,11 @@ export default function HotelSearchResultsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
+        <HotelSearchForm />
+      </div>
+      <Separator className="my-8" />
+      
+      <div className="mb-8">
         <h1 className="font-headline text-3xl font-bold flex items-center">
           <HotelIcon className="mr-3 h-8 w-8 text-[#0c4d52]" /> Hotel Results in {displayLocation}
         </h1>
@@ -108,7 +115,7 @@ export default function HotelSearchResultsPage() {
               <HotelCard 
                 hotel={hotel}
                 isSaved={isHotelSaved(hotel.id)}
-                onToggleSave={handleToggleSave}
+                onToggleSave={() => handleToggleSave(hotel.id)}
               />
             </div>
           ))}
