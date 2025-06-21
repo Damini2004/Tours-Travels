@@ -1,11 +1,11 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { MapPinIcon, HeartIcon, StarIcon, HotelIcon as HotelBuildingIcon } from "lucide-react";
+import { MapPinIcon, HeartIcon, StarIcon, HotelIcon as HotelBuildingIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const offers = [
@@ -150,9 +150,20 @@ const getRatingLabel = (rating: number): string => {
 
 const ExclusiveOffers = () => {
   const [savedOffers, setSavedOffers] = useState<Record<number, boolean>>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleSaveOffer = (offerId: number) => {
     setSavedOffers(prev => ({ ...prev, [offerId]: !prev[offerId] }));
+  };
+  
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
@@ -161,7 +172,7 @@ const ExclusiveOffers = () => {
         <h2 className="text-2xl md:text-3xl lg:text-[45px] text-gray-900 font-semibold">
           Today's top <em className={`${gradientTextClass} not-italic`}>exclusive offers</em>
         </h2>
-        <div className="filters flex flex-wrap gap-1 md:gap-2 mt-3 md:mt-0">
+        <div className="filters flex flex-wrap items-center gap-1 md:gap-2 mt-3 md:mt-0">
           {["Bonus Dining & Drinks", "Family Friendly", "Sun & Beach"].map((filterName) => (
             <button
               key={filterName}
@@ -173,15 +184,23 @@ const ExclusiveOffers = () => {
           <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent rounded-xl text-xs md:text-sm cursor-pointer transition-opacity duration-300 hover:opacity-90 font-bold view-all">
             View all
           </button>
+           <div className="hidden md:flex items-center gap-2 ml-4">
+            <Button variant="outline" size="icon" className="rounded-full border-gray-300 hover:bg-gray-100" onClick={() => scroll('left')}>
+                <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" className="rounded-full border-gray-300 hover:bg-gray-100" onClick={() => scroll('right')}>
+                <ChevronRight className="h-4 w-4" />
+            </Button>
+        </div>
         </div>
       </div>
 
-      <div className="offer-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+      <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-6 mt-5 -mx-4 px-4 pb-4">
         {offers.map((offer) => {
           const ratingLabel = getRatingLabel(offer.rating);
           return (
             <div
-              className="bg-white border border-gray-200 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
+              className="w-[85vw] sm:w-[45vw] lg:w-[31%] flex-shrink-0 bg-white border border-gray-200 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
               key={offer.id}
             >
               <div className="image-wrapper relative">
