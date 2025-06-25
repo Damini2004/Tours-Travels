@@ -14,7 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sidebar } from './Sidebar'; // New Sidebar component
+import { Sidebar } from './Sidebar';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CountryCurrencyLanguageSwitcher } from './CountryCurrencyLanguageSwitcher';
+import { useToast } from "@/hooks/use-toast";
+import { cn } from '@/lib/utils';
+
 
 interface CurrentUser {
   fullName: string;
@@ -36,13 +41,41 @@ export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { toast } = useToast();
 
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [activePath, setActivePath] = useState(pathname);
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [siteSettings, setSiteSettings] = useState({
+    country: 'IN',
+    currency: 'INR',
+    language: 'ENG',
+    flag: '🇮🇳'
+  });
+  const countryData = [
+      { code: 'IN', name: 'India', currency: 'INR', flag: '🇮🇳' },
+      { code: 'AE', name: 'United Arab Emirates', currency: 'AED', flag: '🇦🇪' },
+      { code: 'US', name: 'United States', currency: 'USD', flag: '🇺🇸' },
+      { code: 'GB', name: 'United Kingdom', currency: 'GBP', flag: '🇬🇧' },
+    ];
+
+  const handleSettingsApply = (newSettings: { country: string, currency: string, language: string }) => {
+    const country = countryData.find(c => c.code === newSettings.country);
+    
+    setSiteSettings({ ...newSettings, flag: country?.flag || '🌐' });
+    setIsPopoverOpen(false); // Close the popover on apply
+    toast({
+        title: "Settings Updated",
+        description: `Region set to ${country?.name}.`,
+    });
+  };
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    setActivePath(pathname);
+  }, [pathname]);
 
   const loadUser = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -166,11 +199,21 @@ export function Header() {
         </div>
 
         <div className="items-center gap-3 text-sm hidden md:flex">
-          <div className="flex items-center gap-1 cursor-pointer">
-            <span role="img" aria-label="flag">🇮🇳</span>
-            <span>INR</span>
-            <ChevronDown className="text-base" />
-          </div>
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <PopoverTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#005aa7] px-2">
+                    <span role="img" aria-label="flag">{siteSettings.flag}</span>
+                    <span className="font-medium">{siteSettings.currency}</span>
+                    <ChevronDown className="h-4 w-4" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+                <CountryCurrencyLanguageSwitcher 
+                    onApply={handleSettingsApply}
+                    initialSettings={siteSettings}
+                />
+            </PopoverContent>
+          </Popover>
           <Link href="/saved" className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#005aa7]" aria-label="Trip Plans">
             <Heart className="text-lg" />
             <span className="hidden lg:inline">Trip Plans</span>
@@ -270,14 +313,22 @@ export function Header() {
 
       <nav className="hidden md:flex items-center justify-center gap-x-6 py-2.5 border-t border-gray-200">
         {navItems.map((item) => {
-          const isActive = pathname === item.to || (item.to !== '/' && pathname.startsWith(item.to));
+          if (!isClient) {
+            return (
+              <div key={item.label} className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
+            );
+          }
+          const isActive = activePath === item.to || (item.to !== '/' && activePath.startsWith(item.to));
           return (
             <Link
               key={item.label}
               href={item.to}
-              className={`text-sm font-medium px-2 py-1 rounded-sm transition-colors ${
-                isActive ? 'text-[#005aa7] border-b-2 border-[#005aa7]' : 'text-[#1a1a1a] hover:text-[#005aa7]'
-              }`}
+              className={cn(
+                "text-sm font-medium px-2 py-1 rounded-sm transition-colors",
+                isActive 
+                  ? 'text-[#005aa7] border-b-2 border-[#005aa7]' 
+                  : 'text-[#1a1a1a] hover:text-transparent hover:bg-gradient-to-br hover:from-[#031f2d] hover:via-[#0c4d52] hover:to-[#155e63] hover:bg-clip-text'
+              )}
             >
               {item.label}
             </Link>
