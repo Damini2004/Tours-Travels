@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { useSettings, currencySymbols } from '@/context/SettingsContext';
 
 
 const CLIENT_ID = "vprUAkpZepjHvwh6EG9eabPzjAJgYgml";
@@ -138,6 +139,8 @@ function FlightResultsClientInternal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const headerRef = useRef<HTMLElement>(null);
+  const { settings } = useSettings();
+  const currencySymbol = currencySymbols[settings.currency] || '₹';
 
   const [flights, setFlights] = useState<FlightOffer[]>([]);
   const [filteredFlights, setFilteredFlights] = useState<FlightOffer[]>([]);
@@ -292,6 +295,7 @@ function FlightResultsClientInternal() {
         travelClass: queryTravelClass,
         nonStop: queryNonStop === "true" ? "true" : undefined,
         max: "25",
+        currencyCode: settings.currency, // Use currency from context
       };
 
       try {
@@ -319,7 +323,7 @@ function FlightResultsClientInternal() {
     };
 
     fetchFlights();
-  }, [queryOrigin, queryDestination, queryDepartureDate, queryReturnDate, queryAdults, queryChildren, queryInfants, queryTravelClass, queryNonStop, formIsRoundTrip, formReturnDate]); 
+  }, [queryOrigin, queryDestination, queryDepartureDate, queryReturnDate, queryAdults, queryChildren, queryInfants, queryTravelClass, queryNonStop, formIsRoundTrip, formReturnDate, settings.currency]); 
 
   useEffect(() => {
     let tempFiltered = [...flights];
@@ -972,8 +976,8 @@ function FlightResultsClientInternal() {
                     disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                 />
                 <div className="flex justify-between text-xs">
-                  <span className={cn(gradientTextClass)}>₹{priceRange[0]}</span>
-                  <span className={cn(gradientTextClass)}>₹{priceRange[1]}</span>
+                  <span className={cn(gradientTextClass)}>{currencySymbol}{priceRange[0]}</span>
+                  <span className={cn(gradientTextClass)}>{currencySymbol}{priceRange[1]}</span>
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -1036,8 +1040,8 @@ function FlightResultsClientInternal() {
                         disabled={flights.length === 0 || initialMinPrice >= initialMaxPrice}
                     />
                     <div className="flex justify-between text-xs">
-                      <span className={cn(gradientTextClass)}>₹{priceRange[0]}</span>
-                      <span className={cn(gradientTextClass)}>₹{priceRange[1]}</span>
+                      <span className={cn(gradientTextClass)}>{currencySymbol}{priceRange[0]}</span>
+                      <span className={cn(gradientTextClass)}>{currencySymbol}{priceRange[1]}</span>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
@@ -1072,9 +1076,9 @@ function FlightResultsClientInternal() {
           </div>
           <div className="hidden lg:flex items-stretch gap-1 mb-5 p-1 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] rounded-lg shadow-sm">
             {[
-              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? `₹${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
-              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length > 0 ? `₹${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
+              { key: "cheapest", label: "Cheapest", icon: Zap, price: filteredFlights.length > 0 ? `${currencySymbol}${parseFloat(filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "nonStopFirst", label: "Non Stop First", icon: Plane, price: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? `${currencySymbol}${parseFloat(filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).length > 0 ? filteredFlights.filter(f => f.itineraries[0].segments.length - 1 === 0).sort((a,b) => parseFloat(a.price.total) - parseFloat(b.price.total))[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" },
+              { key: "youMayPrefer", label: "You May Prefer", icon: Heart, price: filteredFlights.length > 0 ? `${currencySymbol}${parseFloat(filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.price.total).toFixed(0)}` : "N/A", duration: filteredFlights.length > 0 ? filteredFlights.slice().sort((a,b) => (parseDuration(a.itineraries[0].duration) + (a.itineraries[0].segments.length - 1)*300) - (parseDuration(b.itineraries[0].duration) + (b.itineraries[0].segments.length - 1)*300) )[0]?.itineraries[0].duration.replace("PT","").replace("H","h ").replace("M","m") : "" }, 
               { key: "otherSort", label: "Other Sort", icon: MoreHorizontal, price: "", duration: "" }
             ].map(tab => (
               <Button
@@ -1094,7 +1098,7 @@ function FlightResultsClientInternal() {
           </div>
           <div className="mb-4 p-2 bg-white border border-gray-200 rounded-md text-center">
                 <p className={cn("text-sm", gradientTextClass)}>
-                    ✨ Get FLAT ₹189 OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
+                    ✨ Get FLAT {currencySymbol}{Math.floor(Math.random()*200).toFixed(0)} OFF using MMTSUPER | Upto 10% Off on UPI payment using code AVALUPI
                 </p>
             </div>
           <div className="space-y-4">
@@ -1169,7 +1173,7 @@ function FlightResultsClientInternal() {
                           </div>
                           <div className="flex flex-col items-center md:items-end justify-between gap-2 w-full md:w-auto md:min-w-[150px] mt-3 md:mt-0">
                                 <div className={cn("text-xl md:text-2xl font-extrabold text-center md:text-right", gradientTextClass)}>
-                                    ₹{pricePerAdult.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {currencySymbol}{pricePerAdult.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </div>
                                 {parseInt(queryAdults) > 0 && <p className="text-xxs text-gray-500 -mt-1">per adult</p> }
                                 {queryIsRoundTrip && !selectedOutbound ? (
@@ -1250,8 +1254,8 @@ function FlightResultsClientInternal() {
                            </div>
                         </div>
                         <div className="mt-2 text-center p-1.5 rounded-md bg-white border border-gray-200">
-                            <p className={cn("text-xs", gradientTextClass)}>
-                                ✨ Get FLAT ₹{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
+                            <p className={cn("text-sm", gradientTextClass)}>
+                                ✨ Get FLAT {currencySymbol}{Math.floor(parseFloat(flight.price.total) * 0.02 + Math.random()*50).toFixed(0)} OFF using SpecificCard | Upto 10% Off on UPI
                             </p>
                         </div>
                       </div>
@@ -1293,7 +1297,3 @@ export default function FlightResultsClient() {
   );
 }
     
-
-
-
-

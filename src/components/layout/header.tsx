@@ -19,6 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CountryCurrencyLanguageSwitcher } from './CountryCurrencyLanguageSwitcher';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from '@/lib/utils';
+import { useSettings } from '@/context/SettingsContext';
 
 
 interface CurrentUser {
@@ -47,13 +48,9 @@ export function Header() {
   const [isClient, setIsClient] = useState(false);
   const [activePath, setActivePath] = useState(pathname);
 
+  const { settings, setSettings } = useSettings();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [siteSettings, setSiteSettings] = useState({
-    country: 'IN',
-    currency: 'INR',
-    language: 'ENG',
-    flag: '🇮🇳'
-  });
+  
   const countryData = [
       { code: 'IN', name: 'India', currency: 'INR', flag: '🇮🇳' },
       { code: 'AE', name: 'United Arab Emirates', currency: 'AED', flag: '🇦🇪' },
@@ -64,7 +61,7 @@ export function Header() {
   const handleSettingsApply = (newSettings: { country: string, currency: string, language: string }) => {
     const country = countryData.find(c => c.code === newSettings.country);
     
-    setSiteSettings({ ...newSettings, flag: country?.flag || '🌐' });
+    setSettings({ ...newSettings, flag: country?.flag || '🌐' });
     setIsPopoverOpen(false); // Close the popover on apply
     toast({
         title: "Settings Updated",
@@ -202,15 +199,15 @@ export function Header() {
           <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
             <PopoverTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#005aa7] px-2">
-                    <span role="img" aria-label="flag">{siteSettings.flag}</span>
-                    <span className="font-medium">{siteSettings.currency}</span>
+                    <span role="img" aria-label="flag">{settings.flag}</span>
+                    <span className="font-medium">{settings.currency}</span>
                     <ChevronDown className="h-4 w-4" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="end">
                 <CountryCurrencyLanguageSwitcher 
                     onApply={handleSettingsApply}
-                    initialSettings={siteSettings}
+                    initialSettings={settings}
                 />
             </PopoverContent>
           </Popover>

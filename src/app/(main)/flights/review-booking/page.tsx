@@ -13,6 +13,8 @@ import { format, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSettings, currencySymbols } from '@/context/SettingsContext';
+
 
 interface SegmentDetail {
     departureAt: string;
@@ -27,6 +29,8 @@ interface SegmentDetail {
 
 function ReviewBookingContent() {
     const searchParams = useSearchParams();
+    const { settings } = useSettings();
+    const currencySymbol = currencySymbols[settings.currency] || '₹';
 
     const flightId = searchParams.get('flightId');
     const fareName = searchParams.get('fareName');
@@ -209,7 +213,7 @@ function ReviewBookingContent() {
                                 </div>
                                 <div className="flex justify-between items-center mb-3">
                                     <span className="text-xs text-gray-500">Cancellation Penalty :</span>
-                                    <span className="text-sm font-semibold text-gray-800">₹ {cancellationFeeNow !== null ? cancellationFeeNow.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}</span>
+                                    <span className="text-sm font-semibold text-gray-800">{currencySymbol} {cancellationFeeNow !== null ? cancellationFeeNow.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}</span>
                                 </div>
                                 <div className="my-4">
                                     <div className="relative h-1.5 bg-gray-200 rounded-full">
@@ -219,10 +223,10 @@ function ReviewBookingContent() {
                                         <div className="absolute top-1/2 -translate-y-1/2 left-[calc(100%-0.625rem)] w-2.5 h-2.5 bg-white border-2 border-red-500 rounded-full z-10"></div>
 
                                         <div className="absolute -top-4 left-[calc(60%-1.5rem)] text-center w-12 text-xs font-semibold text-gray-700">
-                                            ₹{cancellationFeeNow !== null ? cancellationFeeNow.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}
+                                            {currencySymbol}{cancellationFeeNow !== null ? cancellationFeeNow.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}
                                         </div>
                                          <div className="absolute -top-4 right-[0.5rem] text-center w-12 text-xs font-semibold text-gray-700">
-                                            ₹{cancellationFeeLater !== null ? cancellationFeeLater.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}
+                                            {currencySymbol}{cancellationFeeLater !== null ? cancellationFeeLater.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '...'}
                                         </div>
                                     </div>
                                     <div className="flex justify-between text-xxs text-gray-500 mt-1.5 px-1">
@@ -245,16 +249,16 @@ function ReviewBookingContent() {
                             <CardContent className="space-y-2 text-sm pb-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600 flex items-center"><PlusCircle className="w-3.5 h-3.5 inline mr-1.5 text-gray-400" />Base Fare</span>
-                                    <span className="font-medium text-gray-800">₹ {clientBaseFare !== null ? clientBaseFare.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
+                                    <span className="font-medium text-gray-800">{currencySymbol} {clientBaseFare !== null ? clientBaseFare.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600 flex items-center"><PlusCircle className="w-3.5 h-3.5 inline mr-1.5 text-gray-400" />Taxes and Surcharges</span>
-                                    <span className="font-medium text-gray-800">₹ {clientTaxesAndSurcharges !== null ? clientTaxesAndSurcharges.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
+                                    <span className="font-medium text-gray-800">{currencySymbol} {clientTaxesAndSurcharges !== null ? clientTaxesAndSurcharges.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
                                 </div>
                                 <Separator className="my-3 bg-gray-200" />
                                 <div className="flex justify-between text-base">
                                     <span className="font-semibold text-gray-800">Total Amount</span>
-                                    <span className="font-bold text-gray-800">₹ {clientTotalFare !== null ? clientTotalFare.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
+                                    <span className="font-bold text-gray-800">{currencySymbol} {clientTotalFare !== null ? clientTotalFare.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '...'}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -298,5 +302,3 @@ export default function ReviewBookingPage() {
         </Suspense>
     )
 }
-
-    

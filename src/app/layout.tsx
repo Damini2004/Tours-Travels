@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { SettingsProvider } from '@/context/SettingsContext';
 
 export const metadata: Metadata = {
   title: 'Hotel&Tour',
@@ -23,11 +24,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased min-h-screen flex flex-col bg-background text-foreground">
-        {children}
-        <Toaster />
+        <SettingsProvider>
+            {children}
+            <Toaster />
+        </SettingsProvider>
       </body>
     </html>
   );
 }
-
-    
