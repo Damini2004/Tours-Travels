@@ -32,27 +32,29 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [settings, setSettingsState] = useState<SiteSettings>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const storedSettings = localStorage.getItem('siteSettings');
-        if (storedSettings) {
-          const parsed = JSON.parse(storedSettings);
-          // Basic validation
-          if(parsed.country && parsed.currency && parsed.language && parsed.flag) {
-            return parsed;
-          }
-        }
-      } catch (e) {
-        console.error("Failed to parse settings from localStorage", e);
-      }
-    }
-    return defaultSettings;
-  });
+  // Initialize with default settings. This ensures the server and client initial render match.
+  const [settings, setSettingsState] = useState<SiteSettings>(defaultSettings);
 
+  // This effect runs only on the client, after the initial render.
+  useEffect(() => {
+    try {
+      const storedSettings = localStorage.getItem('siteSettings');
+      if (storedSettings) {
+        const parsed = JSON.parse(storedSettings);
+        // Basic validation
+        if(parsed.country && parsed.currency && parsed.language && parsed.flag) {
+          setSettingsState(parsed); // Re-render on client with stored settings.
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse settings from localStorage", e);
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount.
+
+  // This effect saves settings to localStorage whenever they change, but only on the client.
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('siteSettings', JSON.stringify(settings));
+        localStorage.setItem('siteSettings', JSON.stringify(settings));
     }
   }, [settings]);
   

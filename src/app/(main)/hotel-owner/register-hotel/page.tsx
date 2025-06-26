@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { addHotel } from '@/lib/hotel-data';
 import type { Hotel } from '@/lib/types';
+import Image from 'next/image';
 
 interface CurrentUser {
   fullName: string;
@@ -39,6 +40,9 @@ export default function RegisterHotelPage() {
   const [checkOutTime, setCheckOutTime] = useState("");
   const [pricePerNight, setPricePerNight] = useState("");
   const [rating, setRating] = useState("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
@@ -55,6 +59,15 @@ export default function RegisterHotelPage() {
     }
   }, []);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setImageFiles(files);
+      imagePreviews.forEach(url => URL.revokeObjectURL(url));
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setImagePreviews(newPreviews);
+    }
+  };
 
   const handleSerpApiSearch = async () => {
     if (!serpApiQuery.trim()) {
@@ -110,7 +123,7 @@ export default function RegisterHotelPage() {
   };
 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser || currentUser.role !== 'hotel_owner') {
         toast({ variant: "destructive", title: "Unauthorized", description: "You must be logged in as a hotel owner." });
@@ -119,6 +132,25 @@ export default function RegisterHotelPage() {
     if (!hotelName || !location || !pricePerNight || !rating) {
         toast({ variant: "destructive", title: "Missing Information", description: "Please fill in all required fields (Name, Location, Price, Rating)." });
         return;
+    }
+    setIsSubmitting(true);
+
+    const fileToDataUri = (file: File): Promise<string> =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+    let imageUris: string[] = [];
+    try {
+      imageUris = await Promise.all(imageFiles.map(file => fileToDataUri(file)));
+    } catch (error) {
+      console.error("Error converting images to data URIs", error);
+      toast({ variant: "destructive", title: "Image Error", description: "Could not process uploaded images." });
+      setIsSubmitting(false);
+      return;
     }
 
     const newHotelData: Omit<Hotel, 'id' | 'isApproved'> = {
@@ -131,10 +163,10 @@ export default function RegisterHotelPage() {
         pricePerNight: parseFloat(pricePerNight) || 0,
         rating: parseInt(rating) || 0,
         ownerEmail: currentUser.email,
-        thumbnailUrl: defaultHotelImage, 
-        thumbnailHint: defaultHotelHint,
-        images: [defaultHotelImage],
-        imageHints: [defaultHotelHint],
+        thumbnailUrl: imageUris.length > 0 ? imageUris[0] : defaultHotelImage, 
+        thumbnailHint: imageUris.length > 0 ? 'uploaded hotel' : defaultHotelHint,
+        images: imageUris.length > 0 ? imageUris : [defaultHotelImage],
+        imageHints: imageUris.length > 0 ? imageUris.map(() => 'uploaded hotel') : [defaultHotelHint],
     };
 
     addHotel({ ...newHotelData, isApproved: false }); 
@@ -153,6 +185,9 @@ export default function RegisterHotelPage() {
     setRating("");
     setSerpApiQuery("");
     setSerpApiResults([]);
+    setImageFiles([]);
+    setImagePreviews([]);
+    setIsSubmitting(false);
   };
 
   if (!currentUser && typeof window !== 'undefined') { 
@@ -233,42 +268,42 @@ export default function RegisterHotelPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="hotelName">Hotel Name *</Label>
-              <Input id="hotelName" placeholder="e.g., The Grand Palace Hotel" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} />
+              <Input id="hotelName" placeholder="e.g., The Grand Palace Hotel" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} disabled={isSubmitting} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="location">Location (Full Address) *</Label>
-              <Input id="location" placeholder="e.g., 123 Main St, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} />
+              <Input id="location" placeholder="e.g., 123 Main St, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} disabled={isSubmitting} />
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="pricePerNight">Price Per Night (USD) *</Label>
-                    <Input id="pricePerNight" type="number" placeholder="e.g., 150" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} />
+                    <Input id="pricePerNight" type="number" placeholder="e.g., 150" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} disabled={isSubmitting} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="rating">Rating (1-5) *</Label>
-                    <Input id="rating" type="number" placeholder="e.g., 4" min="1" max="5" required value={rating} onChange={(e) => setRating(e.target.value)} />
+                    <Input id="rating" type="number" placeholder="e.g., 4" min="1" max="5" required value={rating} onChange={(e) => setRating(e.target.value)} disabled={isSubmitting} />
                 </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Tell us about your hotel..." value={description} onChange={(e) => setDescription(e.target.value)} />
+              <Textarea id="description" placeholder="Tell us about your hotel..." value={description} onChange={(e) => setDescription(e.target.value)} disabled={isSubmitting} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="amenities">Amenities (comma-separated)</Label>
-              <Input id="amenities" placeholder="e.g., Free Wi-Fi, Pool, Gym" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} />
+              <Input id="amenities" placeholder="e.g., Free Wi-Fi, Pool, Gym" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} disabled={isSubmitting} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="checkInTime">Check-in Time</Label>
-                    <Input id="checkInTime" type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} />
+                    <Input id="checkInTime" type="time" value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} disabled={isSubmitting} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="checkOutTime">Check-out Time</Label>
-                    <Input id="checkOutTime" type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} />
+                    <Input id="checkOutTime" type="time" value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} disabled={isSubmitting} />
                 </div>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="images">Hotel Images (Placeholder)</Label>
+                <Label htmlFor="images">Hotel Images</Label>
                 <div className="flex items-center justify-center w-full">
                     <Label 
                         htmlFor="dropzone-file" 
@@ -277,15 +312,27 @@ export default function RegisterHotelPage() {
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <UploadIcon className="w-8 h-8 mb-2 text-muted-foreground" />
                             <p className="mb-1 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-muted-foreground">SVG, PNG, JPG or GIF (Not functional)</p>
+                            <p className="text-xs text-muted-foreground">PNG, JPG, GIF (Max 5MB)</p>
                         </div>
-                        <Input id="dropzone-file" type="file" className="hidden" multiple disabled/>
+                        <Input id="dropzone-file" type="file" className="hidden" multiple onChange={handleImageChange} disabled={isSubmitting} accept="image/*"/>
                     </Label>
-                </div> 
-                 <p className="text-xs text-muted-foreground mt-1">Image upload is a placeholder. Default images will be used.</p>
+                </div>
+                {imagePreviews.length > 0 && (
+                  <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative aspect-square">
+                        <Image src={preview} alt={`Preview ${index + 1}`} layout="fill" objectFit="cover" className="rounded-md" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                 <p className="text-xs text-muted-foreground mt-1">
+                   {imageFiles.length === 0 ? "If no images are uploaded, a default placeholder will be used." : `${imageFiles.length} image(s) selected.`}
+                 </p>
             </div>
-            <Button type="submit" className="w-full">
-              Submit for Approval
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isSubmitting ? 'Submitting...' : 'Submit for Approval'}
             </Button>
           </form>
         </CardContent>
