@@ -143,6 +143,7 @@ function FlightResultsClientInternal() {
   const currencySymbol = currencySymbols[settings.currency] || '₹';
 
   const [flights, setFlights] = useState<FlightOffer[]>([]);
+  const [dictionaries, setDictionaries] = useState<FlightOffersResponse['dictionaries']>(undefined);
   const [filteredFlights, setFilteredFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -301,6 +302,7 @@ function FlightResultsClientInternal() {
       try {
         const token = await getAccessToken();
         const response = await getFlightOffers(token, apiQuery);
+        setDictionaries(response.dictionaries);
         
         const validPrices = response.data
             .map(f => parseFloat(f.price.total))
@@ -477,7 +479,11 @@ function FlightResultsClientInternal() {
         params.set('departureDate', itinerary.segments[0].departure.at);
         params.set('arrivalDate', itinerary.segments[itinerary.segments.length - 1].arrival.at);
         params.set('duration', itinerary.duration);
-        params.set('airlineName', selectedFlight.validatingAirlineCodes[0] || itinerary.segments[0].carrierCode);
+        
+        const airlineCode = itinerary.segments[0].carrierCode;
+        const airlineName = dictionaries?.carriers?.[airlineCode] || selectedFlight.validatingAirlineCodes[0] || airlineCode;
+        params.set('airlineName', airlineName);
+
         params.set('flightNumber', itinerary.segments.map(s => s.number).join(', '));
         params.set('stops', (itinerary.segments.length - 1).toString());
         
@@ -1133,7 +1139,7 @@ function FlightResultsClientInternal() {
                               </div>
                               <div>
                                   <div className="text-sm font-semibold text-gray-800">
-                                      {flight.dictionaries?.carriers?.[itinerary.segments[0].carrierCode] || `${itinerary.segments[0].carrierCode} Airlines`} 
+                                      {dictionaries?.carriers?.[itinerary.segments[0].carrierCode] || `${itinerary.segments[0].carrierCode} Airlines`} 
                                   </div>
                                   <div className="text-xxs text-gray-500">
                                       {itinerary.segments.map(s => `${s.carrierCode}-${s.number}`).join(', ')}
