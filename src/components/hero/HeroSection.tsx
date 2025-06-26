@@ -30,17 +30,17 @@ const HeroSection = () => {
         {/* Main Content: FlightBooking on left, VerticalCarousel on right */}
         <div className="relative z-10 container mx-auto px-4 md:px-6 flex items-center justify-between w-full">
           {/* Left Side container for FlightBooking, allowing it to be positioned by its wrapper */}
-          <div className="flex-1"> {/* Occupies available space, pushing carousel to right */}
+          <div className="flex-1 z-20"> {/* Occupies available space, pushing carousel to right */}
             <div className="relative w-full max-w-screen-xl mx-auto"> {/* Changed max-w-5xl to max-w-screen-xl */}
               {/* This div absolutely positions the FlightBooking form */}
-              <div className="absolute -top-52 left-1/2 transform -translate-x-1/2 z-20 w-full px-2 sm:px-0">
+              <div className="absolute -top-52 left-1/2 transform -translate-x-1/2 w-full px-2 sm:px-0">
                 <FlightBooking />
               </div>
             </div>
           </div>
 
           {/* Right Side - Vertical Carousel */}
-          <div className="hidden lg:flex justify-end ml-8"> {/* ml-8 for spacing from form area */}
+          <div className="hidden lg:flex justify-end ml-8 z-10"> {/* ml-8 for spacing from form area */}
             <VerticalCarousel />
           </div>
         </div>
