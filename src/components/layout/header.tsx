@@ -38,6 +38,13 @@ const navItems = [
   { label: 'Inspiration', to: '/inspiration' },
 ];
 
+const translations: Record<string, { login: string, signup: string }> = {
+    ENG: { login: 'Log in', signup: 'Sign Up' },
+    ARA: { login: 'تسجيل الدخول', signup: 'اشتراك' },
+    HIN: { login: 'लॉग इन करें', signup: 'साइन अप करें' },
+};
+
+
 export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
@@ -279,10 +286,10 @@ export function Header() {
           ) : isClient ? (
             <>
               <Button onClick={() => router.push('/login')} variant="outline" className="bg-[#1a1a1a] text-white px-4 py-1.5 rounded-md hover:bg-gray-100 text-sm h-auto">
-                Log in
+                {translations[settings.language]?.login || 'Log in'}
               </Button>
               <Button onClick={() => router.push('/signup')} className="bg-[#1a1a1a] text-white px-4 py-1.5 rounded-md hover:bg-[#333] text-sm h-auto">
-                Sign Up
+                {translations[settings.language]?.signup || 'Sign Up'}
               </Button>
             </>
           ) : (
