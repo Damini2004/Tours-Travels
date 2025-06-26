@@ -8,12 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Plane, Calendar, Clock, Briefcase, Gift, Tag, PlusCircle, ChevronDown, CheckCircle, Info, Settings2, CreditCard, User, Percent, ShoppingBag, FileText } from 'lucide-react';
+import { Plane, Calendar, Clock, Briefcase, Gift, Tag, PlusCircle, ChevronDown, CheckCircle, Info, Settings2, CreditCard, User, Percent, ShoppingBag, FileText, UserPlus, ShieldCheck, Plus, AlertCircle } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSettings, currencySymbols } from '@/context/SettingsContext';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 
 interface SegmentDetail {
@@ -237,6 +241,117 @@ function ReviewBookingContent() {
                                      <p className="text-xxs text-gray-400 mt-2">Cancel Between (IST)</p>
                                 </div>
                                  <p className="text-xs text-gray-500 mt-2">Note: These are airline charges. Sky Explorer convenience fee is non-refundable.</p>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="shadow-lg border-gray-200">
+                           <CardHeader className="pb-3 pt-4 px-4 md:px-5">
+                               <CardTitle className="text-base font-bold text-gray-800">Important Information</CardTitle>
+                           </CardHeader>
+                           <CardContent className="px-4 md:px-5 pb-4 text-xs text-gray-600 space-y-3">
+                               <div className="flex items-start gap-2">
+                                   <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-px" />
+                                   <p>Carry no more than 1 check-in baggage and 1 hand baggage per passenger. If violated, airline may levy extra charges.</p>
+                               </div>
+                               <div className="flex items-start gap-2">
+                                   <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-px" />
+                                   <p><span className="font-semibold">Unaccompanied Minors Travelling:</span> Children below 18 years travelling alone may be classified as Unaccompanied Minors (UMNR) and can be subject to airline-specific UMNR rules, forms, and extra charges. Please check the respective airline website for exact requirements.</p>
+                               </div>
+                           </CardContent>
+                        </Card>
+
+                        <Card className="shadow-lg border-gray-200">
+                            <CardHeader className="pb-3 pt-4 px-4 md:px-5 flex-row justify-between items-center">
+                                <CardTitle className="text-base font-bold text-gray-800 flex items-center gap-2"><ShieldCheck className="text-green-500 w-6 h-6" />Trip Secure</CardTitle>
+                                <div className="text-right">
+                                    <p className="font-semibold text-gray-800">$2.90 / Traveller</p>
+                                    <p className="text-xxs text-gray-500">(18% GST included)</p>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="px-4 md:px-5 pb-4">
+                                <Alert variant="default" className="bg-green-50 border-green-200 text-green-800 mb-4">
+                                    <AlertTitle className="font-semibold">TRIP SECURE INCLUDED</AlertTitle>
+                                    <AlertDescription className="text-xs">
+                                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2">
+                                            <span className="flex items-center"><CheckCircle className="w-3.5 h-3.5 mr-1.5"/>24x7 Support</span>
+                                            <span className="flex items-center"><CheckCircle className="w-3.5 h-3.5 mr-1.5"/>Missed Flight up to ₹3,000</span>
+                                            <span className="flex items-center"><CheckCircle className="w-3.5 h-3.5 mr-1.5"/>Delayed/lost baggage Assistance up to ₹3,000</span>
+                                            <span className="flex items-center"><CheckCircle className="w-3.5 h-3.5 mr-1.5"/>Trip Cancellation</span>
+                                        </div>
+                                        <Button variant="link" size="sm" className="p-0 h-auto text-green-800 font-semibold text-xs mt-2 hover:underline">View All Benefits</Button>
+                                    </AlertDescription>
+                                </Alert>
+                                <div className="flex items-center justify-between mb-4">
+                                    <Label htmlFor="trip-secure-switch" className="font-semibold text-gray-800">Yes, Secure my trip.</Label>
+                                    <Switch id="trip-secure-switch" defaultChecked />
+                                </div>
+                                <p className="text-xxs text-gray-500">Trip Secure is non-refundable. By selecting it, I confirm that the age of all travellers is between 6 months and 90 years, and I agree to the T&Cs</p>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="shadow-lg border-gray-200 bg-blue-50">
+                             <CardContent className="p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                 <div>
+                                     <h3 className="font-bold text-blue-800">Say adios to waiting and hello to a seamless journey with Xpress Ahead!</h3>
+                                     <p className="text-xs text-blue-700 mt-1">Enjoy Priority Check-in + Priority Boarding + Bags out first.</p>
+                                 </div>
+                                 <div className="flex items-center gap-2">
+                                     <p className="text-lg font-bold text-blue-800">$6.40</p>
+                                     <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white"><Plus className="w-4 h-4 mr-1"/>ADD</Button>
+                                 </div>
+                             </CardContent>
+                        </Card>
+                        
+                        <Card className="shadow-lg border-gray-200">
+                            <CardHeader className="pb-3 pt-4 px-4 md:px-5">
+                                <CardTitle className="text-base font-bold text-gray-800">Traveller Details</CardTitle>
+                            </CardHeader>
+                            <CardContent className="px-4 md:px-5 pb-4 space-y-4">
+                                <Alert className="bg-blue-50 border-blue-200">
+                                    <AlertDescription className="text-blue-800 text-sm flex justify-between items-center">
+                                        Log in to view your saved traveller list, unlock amazing deals & much more!
+                                        <Button size="sm" className="bg-blue-600 text-white hover:bg-blue-700">LOGIN NOW</Button>
+                                    </AlertDescription>
+                                </Alert>
+
+                                <div className="border border-gray-200 rounded-lg p-3">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h4 className="font-semibold text-gray-700">ADULT (12 yrs+)</h4>
+                                        <Button variant="outline" size="sm" className="text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700"><UserPlus className="w-4 h-4 mr-2"/>ADD NEW ADULT</Button>
+                                    </div>
+                                    <p className="text-xs text-gray-500">Important: Enter name as mentioned on your passport or Government approved IDs.</p>
+                                </div>
+                                
+                                <Separator />
+
+                                <div className="space-y-3">
+                                    <p className="text-xs text-gray-500">Booking details will be sent to:</p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                                            <Label htmlFor="mobile-no">Mobile No</Label>
+                                            <div className="flex">
+                                                 <Select defaultValue="91">
+                                                    <SelectTrigger className="w-[80px] rounded-r-none border-r-0"><SelectValue /></SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="91">IN +91</SelectItem>
+                                                        <SelectItem value="1">US +1</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <Input type="tel" id="mobile-no" placeholder="Mobile Number" className="rounded-l-none" />
+                                            </div>
+                                        </div>
+                                         <div className="grid w-full max-w-sm items-center gap-1.5">
+                                            <Label htmlFor="email">Email</Label>
+                                            <Input type="email" id="email" placeholder="Email" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center space-x-2 mt-2">
+                                    <Checkbox id="gst-check" />
+                                    <label htmlFor="gst-check" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">I have a GST number (Optional)</label>
+                                </div>
+
                             </CardContent>
                         </Card>
                     </div>
