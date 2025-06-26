@@ -44,6 +44,36 @@ const translations: Record<string, { login: string, signup: string }> = {
     HIN: { login: 'लॉग इन करें', signup: 'साइन अप करें' },
 };
 
+const navTranslations: Record<string, Record<string, string>> = {
+  ENG: {
+    'Home': 'Home',
+    'Hotels': 'Hotels',
+    'Flights': 'Flights',
+    'Airbnb': 'Airbnb',
+    'Tours & Cruises': 'Tours & Cruises',
+    'Ultra Lux': 'Ultra Lux',
+    'Inspiration': 'Inspiration',
+  },
+  HIN: {
+    'Home': 'घर',
+    'Hotels': 'होटल',
+    'Flights': 'उड़ानें',
+    'Airbnb': 'एयरबीएनबी',
+    'Tours & Cruises': 'टूर्स और क्रूज़',
+    'Ultra Lux': 'अल्ट्रा लक्स',
+    'Inspiration': 'प्रेरणा',
+  },
+  ARA: {
+    'Home': 'الصفحة الرئيسية',
+    'Hotels': 'الفنادق',
+    'Flights': 'رحلات جوية',
+    'Airbnb': 'إير بي إن بي',
+    'Tours & Cruises': 'جولات ورحلات بحرية',
+    'Ultra Lux': 'الترا لوكس',
+    'Inspiration': 'إلهام',
+  }
+};
+
 
 export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -323,6 +353,7 @@ export function Header() {
             );
           }
           const isActive = activePath === item.to || (item.to !== '/' && activePath.startsWith(item.to));
+          const translatedLabel = navTranslations[settings.language]?.[item.label] || item.label;
           return (
             <Link
               key={item.label}
@@ -334,7 +365,7 @@ export function Header() {
                   : 'text-[#1a1a1a] hover:text-transparent hover:bg-gradient-to-br hover:from-[#031f2d] hover:via-[#0c4d52] hover:to-[#155e63] hover:bg-clip-text'
               )}
             >
-              {item.label}
+              {translatedLabel}
             </Link>
           );
         })}
