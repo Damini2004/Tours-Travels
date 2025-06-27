@@ -7,19 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { HotelIcon, SearchIcon, Loader2, MapIcon, StarIcon } from "lucide-react";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-<<<<<<< HEAD
-import Link from 'next/link';
-import { useState, useEffect, useCallback, Suspense } from 'react';
-import { getHotels } from '@/lib/hotel-data';
-import { HotelSearchForm } from '@/components/forms/hotel-search-form';
-import { Separator } from '@/components/ui/separator';
 
-<<<<<<< HEAD
-function HotelSearchForm() {
-const searchParams = useSearchParams();
-=======
-const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
-=======
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -27,19 +15,14 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { HotelListItem } from '@/components/cards/HotelListItem';
 import { Badge } from '@/components/ui/badge';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { getHotels } from '@/lib/hotel-data';
-<<<<<<< HEAD
->>>>>>> 2e2f781 (After clicking on search button of hotel search bar this type of hotel m)
-=======
 import { HotelSearchForm } from '@/components/forms/hotel-search-form';
->>>>>>> 882a1b1 (Hotel Results in All Locations Showing 4 approved hotels matching your c)
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 
-export default function HotelSearchResultsPage() {
+function HotelSearchResults() {
   const searchParams = useSearchParams();
->>>>>>> 04e13cb (over the place of this color use this color bg-gradient-to-br from-[#031)
   const locationQuery = searchParams.get('location');
   
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
@@ -204,7 +187,7 @@ export default function HotelSearchResultsPage() {
 export default function HotelSearchResultsPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <HotelSearchForm />
+      <HotelSearchResults />
     </Suspense>
   );
 }
