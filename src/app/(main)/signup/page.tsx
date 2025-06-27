@@ -12,13 +12,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-<<<<<<< HEAD
-function SignupForm() { 
-=======
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
 
-export default function SignupPage() {
->>>>>>> 04e13cb (over the place of this color use this color bg-gradient-to-br from-[#031)
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
