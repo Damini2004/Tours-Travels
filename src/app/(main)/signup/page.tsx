@@ -24,6 +24,7 @@ function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("guest"); 
 
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
