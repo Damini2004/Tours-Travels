@@ -137,11 +137,10 @@ const Footer = () => {
       {/* Logos + Copyright */}
       <div className="max-w-7xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center text-xs text-[#c8edf0cc] z-10 relative">
         <div className="flex gap-4 items-center">
-          {/* Ensure these logo paths are correct and images are in public/logos/ */}
-          <Image src="/logos/iata.png" alt="IATA" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
-          <Image src="/logos/atia.png" alt="ATIA" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
-          <Image src="/logos/cato.png" alt="CATO" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
-          <Image src="/logos/award2024.png" alt="Award" width={50} height={24} className="h-6 w-auto" data-ai-hint="award logo" />
+          <Image src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=200" alt="IATA" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
+          <Image src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=200" alt="ATIA" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
+          <Image src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=200" alt="CATO" width={50} height={24} className="h-6 w-auto" data-ai-hint="travel association logo" />
+          <Image src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=200" alt="Award" width={50} height={24} className="h-6 w-auto" data-ai-hint="award logo" />
         </div>
         <div className="mt-4 md:mt-0">
           © 2017 - {new Date().getFullYear()} Hotel&Tour. All rights reserved.

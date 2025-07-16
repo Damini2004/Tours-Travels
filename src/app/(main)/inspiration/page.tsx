@@ -11,46 +11,46 @@ const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#1
 const articles = [
   {
     title: "Disneyland Abu Dhabi: Everything We Know So Far",
-    image: "https://www.holidify.com/images/bgImages/GREECE.jpg",
-    hint: "greece landscape"
+    image: "https://images.unsplash.com/photo-1597034633844-a7de663e6396?q=80&w=800",
+    hint: "abu dhabi architecture"
   },
   {
     title: "The Ultimate 5-Day Malta Itinerary for First-Time Visitors",
-    image: "https://www.holidify.com/images/bgImages/SINGAPORE.jpg",
-    hint: "singapore city"
+    image: "https://images.unsplash.com/photo-1580792229342-36c14c5c2a13?q=80&w=800",
+    hint: "malta coastline"
   },
   {
     title: "5 Things We Love About Merusaka Nusa Dua Bali",
-    image: "https://www.usatoday.com/gcdn/-mm-/b2b05a4ab25f4fca0316459e1c7404c537a89702/c=0-0-1365-768/local/-/media/2019/05/25/USATODAY/usatsports/247WallSt.com-247WS-549930-imageforentry1-pc0.jpg?width=1365&height=768&fit=crop&format=pjpg&auto=webp",
-    hint: "bali resort"
+    image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=800",
+    hint: "bali resort pool"
   },
   {
     title: "The Seafood Frontier: an RV Road Trip Along the Untamed Eyre Peninsula",
-    image: "https://www.holidify.com/images/bgImages/GREECE.jpg", 
-    hint: "greece landscape"
+    image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=800", 
+    hint: "australia road trip"
   },
 ];
 
 const bottomArticles = [
   {
     title: "7 Things You Didn’t Know You Could Do in Hong Kong",
-    image: "https://www.holidify.com/images/bgImages/MALDIVES.jpg",
-    hint: "maldives beach"
+    image: "https://images.unsplash.com/photo-1516306580123-e6e52b1b7b5f?q=80&w=800",
+    hint: "hong kong street"
   },
   {
     title: "You’ve Never Seen Europe Like This: Introducing Luxury Escapes’ Private Charter Tour",
-    image: "https://www.holidify.com/images/bgImages/INDONESIA.jpg",
-    hint: "indonesia landscape"
+    image: "https://images.unsplash.com/photo-1524850011238-e329c0e680c5?q=80&w=800",
+    hint: "europe architecture"
   },
   {
     title: "Ooh La Luxe: The Best Hotels in Paris",
-    image: "https://www.holidify.com/images/bgImages/VIETNAM.jpg",
-    hint: "vietnam scenery"
+    image: "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?q=80&w=800",
+    hint: "paris hotel"
   },
     {
     title: "Ooh La Luxe: The Best Hotels in Paris", 
-    image: "https://www.holidify.com/images/bgImages/VIETNAM.jpg", 
-    hint: "vietnam scenery"
+    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=800", 
+    hint: "paris eiffel tower"
   },
 ];
 
@@ -65,7 +65,7 @@ export default function InspirationPage() {
             <div className="lg:col-span-2">
               <div className="relative w-full h-auto max-h-[400px] mb-4 aspect-video"> {/* Added aspect-video for better image display */}
                 <Image
-                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/bb/1d/60/mint-leaf.jpg?w=600&h=-1&s=1"
+                    src="https://images.unsplash.com/photo-1506781961370-37a89d6b3095?q=80&w=800"
                     alt="Main Article"
                     layout="fill"
                     objectFit="cover"

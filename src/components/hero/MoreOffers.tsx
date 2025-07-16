@@ -19,7 +19,7 @@ const offers = [
     originalPrice: "₹3,50,000",
     discount: "47%",
     rating: 9.6,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/iir8p4tz991yxf4fgnno.jpeg",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800",
     tag: "Top Pick",
     imageHint: "bali jungle villa"
   },
@@ -33,7 +33,7 @@ const offers = [
     originalPrice: "₹3,00,000",
     discount: "30%",
     rating: 9.2,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/q8p992j0wc29l3j5t63z.jpeg",
+    image: "https://images.unsplash.com/photo-1572979691363-c353cde6b3a9?q=80&w=800",
     imageHint: "dubai desert resort"
   },
   {
@@ -46,7 +46,7 @@ const offers = [
     originalPrice: "₹4,00,000",
     discount: "37%",
     rating: 9.0,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/k947jhm1q3b7wsqi4qam.jpeg",
+    image: "https://images.unsplash.com/photo-1502602898657-3e91760c0341?q=80&w=800",
     tag: "Highly Rated",
     imageHint: "paris hotel eiffel"
   },
@@ -60,7 +60,7 @@ const offers = [
     originalPrice: "₹4,50,000",
     discount: "39%",
     rating: 9.8,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/uwq5h0527z0q9z6x8x6q.jpeg",
+    image: "https://images.unsplash.com/photo-1533105079780-52b9be482077?q=80&w=800",
     tag: "Editor's Choice",
     imageHint: "santorini cave hotel"
   },
@@ -74,7 +74,7 @@ const offers = [
     originalPrice: "₹2,80,000",
     discount: "32%",
     rating: 9.5,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/v3j6s8g6j2n0u4w2y1k0.jpeg",
+    image: "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?q=80&w=800",
     imageHint: "costa rica rainforest lodge"
   },
   {
@@ -87,7 +87,7 @@ const offers = [
     originalPrice: "₹3,20,000",
     discount: "31%",
     rating: 9.3,
-    image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/y4u2o7c3w1j0x8s5z9v1.jpeg",
+    image: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800",
     tag: "Authentic",
     imageHint: "kyoto ryokan"
   },
@@ -101,7 +101,7 @@ const offers = [
     originalPrice: "₹6,85,564",
     discount: "52%",
     rating: 9.4,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    image: "https://images.unsplash.com/photo-1515552726023-b1b4b4563a7a?q=80&w=800",
     tag: "Booked 30 times in 3 days",
     imageHint: "maldives overwater villa"
   },
@@ -115,7 +115,7 @@ const offers = [
     originalPrice: "₹3,01,134",
     discount: "64%",
     rating: 8.8,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    image: "https://images.unsplash.com/photo-1543832833-a3c39a117c37?q=80&w=800",
     imageHint: "mauritius beachfront suite"
   },
   {
@@ -128,7 +128,7 @@ const offers = [
     originalPrice: "₹1,05,500",
     discount: "38%",
     rating: 8.2,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=800",
     tag: "Booked 45 times in 3 days",
     imageHint: "singapore hotel city"
   },
