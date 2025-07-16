@@ -28,7 +28,6 @@ const PlacesGallery = () => {
   return (
     <>
       <ExclusiveOffers />
-      <InfiniteCarousel />
       
       <Carousel /> {/* Replaced placeholder with the actual Carousel component */}
 
@@ -70,7 +69,6 @@ const PlacesGallery = () => {
           </section>
         </div>
       </div>
-      <InfiniteCarousel />
     </>
   );
 };
