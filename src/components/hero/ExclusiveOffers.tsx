@@ -198,6 +198,7 @@ const ExclusiveOffers = () => {
       <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-6 mt-5 -mx-4 px-4 pb-4">
         {offers.map((offer) => {
           const ratingLabel = getRatingLabel(offer.rating);
+          const isExceptional = ratingLabel === "Exceptional";
           return (
             <div
               className="w-[85vw] sm:w-[45vw] lg:w-[31%] flex-shrink-0 bg-white border border-gray-200 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
@@ -240,11 +241,17 @@ const ExclusiveOffers = () => {
                 </h3>
 
                 {offer.rating > 0 && (
-                  <div className="rating flex items-center gap-1.5 bg-secondary/60 px-2 py-0.5 rounded-full w-fit my-2 font-semibold text-secondary-foreground">
-                    <span className={`score ${gradientTextClass} text-white font-bold px-1.5 py-0.5 rounded-md text-xs`}>
+                  <div className={cn(
+                    "rating flex items-center gap-1.5 bg-secondary/60 px-2 py-0.5 rounded-full w-fit my-2 font-semibold text-secondary-foreground",
+                    isExceptional && "bg-[#155e63]"
+                  )}>
+                    <span className={cn(
+                        `score ${gradientTextClass} text-white font-bold px-1.5 py-0.5 rounded-md text-xs`,
+                         isExceptional && "bg-white text-black"
+                    )}>
                       {offer.rating.toFixed(1)}
                     </span>
-                    <span className="text-xs">{ratingLabel}</span>
+                    <span className={cn("text-xs", isExceptional && "text-white")}>{ratingLabel}</span>
                   </div>
                 )}
 
