@@ -9,19 +9,19 @@ import { HandpickedCollections } from './HandpickedCollections';
 const places = [
   {
     name: 'Desert',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN1bjQ5yo91-mJ5GH4LkHeyGKPzcLxAvZw4w&s',
+    image: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=800',
   },
   {
     name: 'Mountains',
-    image: 'https://burst.shopifycdn.com/photos/hiker-looks-up-at-vertical-mountain-peaks.jpg?width=1000&format=pjpg&exif=0&iptc=0',
+    image: 'https://images.unsplash.com/photo-1483728642387-6c351b40b3ac?w=800',
   },
   {
     name: 'Countryside',
-    image: 'https://i.pinimg.com/474x/f5/02/cc/f502cc429d47caa0ae617ec346f1a1fe.jpg',
+    image: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800',
   },
   {
     name: 'Beach',
-    image: 'https://media.istockphoto.com/id/520862689/photo/view-of-passage-to-the-beach-at-sunrise.jpg?s=612x612&w=0&k=20&c=mUTK4pMMspg3gwwMulyyAmuk_Lxj0mGTH5aBuZl1EaY=',
+    image: 'https://images.unsplash.com/photo-1473116763249-2faaef8698d5?w=800',
   },
 ];
 
