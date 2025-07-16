@@ -1,4 +1,3 @@
-
 "use client";
 import React from 'react';
 import Image from 'next/image';
@@ -29,6 +28,7 @@ const PlacesGallery = () => {
   return (
     <>
       <ExclusiveOffers />
+      <InfiniteCarousel />
       
       <Carousel /> {/* Replaced placeholder with the actual Carousel component */}
 
