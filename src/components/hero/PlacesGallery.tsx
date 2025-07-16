@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Carousel from './Carousel'; // Ensured Carousel is imported
 import ExclusiveOffers from './ExclusiveOffers';
 import MoreOffers from './MoreOffers'; // Import the new component
-import InfiniteCarousel from './InfiniteCarousel';
+import { HandpickedCollections } from './HandpickedCollections';
 
 const places = [
   {
@@ -30,6 +30,7 @@ const PlacesGallery = () => {
     <>
       <ExclusiveOffers />
       <MoreOffers />
+      <HandpickedCollections />
       
       <Carousel /> {/* Replaced placeholder with the actual Carousel component */}
 
