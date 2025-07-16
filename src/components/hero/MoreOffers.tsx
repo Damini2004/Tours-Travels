@@ -10,47 +10,6 @@ import Link from "next/link";
 
 const offers = [
   {
-    id: 1,
-    title: "Maldives All-Inclusive Overwater Villas with A La Carte Dining, Free-Flow Drinks & Roundtrip Transfers",
-    location: "Gaafu Alifu Atoll, Maldives",
-    hotel: "Pullman Maldives Maamutaa",
-    nights: 5,
-    price: "₹3,28,499",
-    originalPrice: "₹6,85,564",
-    discount: "52%",
-    rating: 9.4,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
-    tag: "Booked 30 times in 3 days",
-    imageHint: "maldives overwater villa"
-  },
-  {
-    id: 2,
-    title: "Secluded Mauritius Beachfront Suites with Daily Breakfast & Nightly Dinner",
-    location: "Bel Ombre, Mauritius",
-    hotel: "SO Sofitel Mauritius",
-    nights: 5,
-    price: "₹1,05,999",
-    originalPrice: "₹3,01,134",
-    discount: "64%",
-    rating: 8.8,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
-    imageHint: "mauritius beachfront suite"
-  },
-  {
-    id: 3,
-    title: "Newly Renovated Singapore Glamour near Chinatown with Club Lounge Access & Nightly Free-Flow Cocktails",
-    location: "Singapore, Singapore",
-    hotel: "Amara Singapore",
-    nights: 3,
-    price: "₹64,799",
-    originalPrice: "₹1,05,500",
-    discount: "38%",
-    rating: 8.2,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
-    tag: "Booked 45 times in 3 days",
-    imageHint: "singapore hotel city"
-  },
-  {
     id: 4,
     title: "Luxury Bali Jungle Retreat with Private Pool Villas & Floating Breakfast",
     location: "Ubud, Bali, Indonesia",
@@ -131,7 +90,48 @@ const offers = [
     image: "https://images.luxuryescapes.com/fl_progressive,q_auto:eco/y4u2o7c3w1j0x8s5z9v1.jpeg",
     tag: "Authentic",
     imageHint: "kyoto ryokan"
-  }
+  },
+   {
+    id: 1,
+    title: "Maldives All-Inclusive Overwater Villas with A La Carte Dining, Free-Flow Drinks & Roundtrip Transfers",
+    location: "Gaafu Alifu Atoll, Maldives",
+    hotel: "Pullman Maldives Maamutaa",
+    nights: 5,
+    price: "₹3,28,499",
+    originalPrice: "₹6,85,564",
+    discount: "52%",
+    rating: 9.4,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    tag: "Booked 30 times in 3 days",
+    imageHint: "maldives overwater villa"
+  },
+  {
+    id: 2,
+    title: "Secluded Mauritius Beachfront Suites with Daily Breakfast & Nightly Dinner",
+    location: "Bel Ombre, Mauritius",
+    hotel: "SO Sofitel Mauritius",
+    nights: 5,
+    price: "₹1,05,999",
+    originalPrice: "₹3,01,134",
+    discount: "64%",
+    rating: 8.8,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    imageHint: "mauritius beachfront suite"
+  },
+  {
+    id: 3,
+    title: "Newly Renovated Singapore Glamour near Chinatown with Club Lounge Access & Nightly Free-Flow Cocktails",
+    location: "Singapore, Singapore",
+    hotel: "Amara Singapore",
+    nights: 3,
+    price: "₹64,799",
+    originalPrice: "₹1,05,500",
+    discount: "38%",
+    rating: 8.2,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoSXz85WC1WVaqgaGG2e2JXHAVaQ0ifCWA4Q&s",
+    tag: "Booked 45 times in 3 days",
+    imageHint: "singapore hotel city"
+  },
 ];
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
@@ -147,8 +147,7 @@ const getRatingLabel = (rating: number): string => {
   return "Not Rated";
 };
 
-
-const ExclusiveOffers = () => {
+const MoreOffers = () => {
   const [savedOffers, setSavedOffers] = useState<Record<number, boolean>>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -170,21 +169,10 @@ const ExclusiveOffers = () => {
     <div className="bg-background text-foreground font-sans px-2.5 md:px-[50px] pt-[30px] pb-12 md:pb-16 min-h-[auto] box-border">
       <div className="header flex flex-col md:flex-row justify-between items-start md:items-center mb-5 md:mb-8 md:mx-0 lg:mx-[50px]">
         <h2 className="text-2xl md:text-3xl lg:text-[45px] text-gray-900 font-semibold">
-          Today's top <em className={`${gradientTextClass} not-italic`}>exclusive offers</em>
+          More amazing <em className={`${gradientTextClass} not-italic`}>offers for you</em>
         </h2>
         <div className="filters flex flex-wrap items-center gap-1 md:gap-2 mt-3 md:mt-0">
-          {["Bonus Dining & Drinks", "Family Friendly", "Sun & Beach"].map((filterName) => (
-            <button
-              key={filterName}
-              className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent rounded-xl text-xs md:text-sm cursor-pointer transition-opacity duration-300 hover:opacity-90"
-            >
-              {filterName}
-            </button>
-          ))}
-          <button className="mx-0.5 md:mx-2 px-2 py-1.5 md:px-3 md:py-1.5 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white border-transparent rounded-xl text-xs md:text-sm cursor-pointer transition-opacity duration-300 hover:opacity-90 font-bold view-all">
-            View all
-          </button>
-           <div className="hidden md:flex items-center gap-2 ml-4">
+          <div className="hidden md:flex items-center gap-2 ml-4">
             <Button variant="outline" size="icon" className="rounded-full border-gray-300 hover:bg-gray-100" onClick={() => scroll('left')}>
                 <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -280,4 +268,4 @@ const ExclusiveOffers = () => {
   );
 };
 
-export default ExclusiveOffers;
+export default MoreOffers;

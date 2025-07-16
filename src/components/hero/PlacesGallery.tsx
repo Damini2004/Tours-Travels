@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import Carousel from './Carousel'; // Ensured Carousel is imported
 import ExclusiveOffers from './ExclusiveOffers';
+import MoreOffers from './MoreOffers'; // Import the new component
 import InfiniteCarousel from './InfiniteCarousel';
 
 const places = [
@@ -28,6 +29,7 @@ const PlacesGallery = () => {
   return (
     <>
       <ExclusiveOffers />
+      <MoreOffers />
       
       <Carousel /> {/* Replaced placeholder with the actual Carousel component */}
 
