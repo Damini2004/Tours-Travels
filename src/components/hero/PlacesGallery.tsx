@@ -31,6 +31,8 @@ const PlacesGallery = () => {
       <ExclusiveOffers />
       <MoreOffers />
       <HandpickedCollections />
+      <HandpickedCollections />
+      <HandpickedCollections />
       
       <Carousel /> {/* Replaced placeholder with the actual Carousel component */}
 
