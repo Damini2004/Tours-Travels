@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useRef } from 'react';
@@ -8,49 +9,49 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const collections = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1619854829649-4a39b72c65a4?q=80&w=400",
-    hint: "lake resort",
+    image: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?q=80&w=400",
+    hint: "delhi monument",
     top: 8,
     title: "Stays in & Around Delhi for a Weekend Getaway",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=400",
-    hint: "resort pool",
+    image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?q=80&w=400",
+    hint: "mumbai sea",
     top: 8,
     title: "Stays in & Around Mumbai for a Weekend Getaway",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=400",
-    hint: "luxury resort",
+    image: "https://images.unsplash.com/photo-1593693411515-c20261bcad6e?q=80&w=400",
+    hint: "bangalore palace",
     top: 9,
     title: "Stays in & Around Bangalore for a Weekend Getaway",
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=400",
+    image: "https://images.unsplash.com/photo-1507525428034-b723a996f329?q=80&w=400",
     hint: "beach destination",
     top: 11,
     title: "Beach Destinations",
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400",
-    hint: "mountain getaway",
+    image: "https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=400",
+    hint: "mountain road",
     top: 11,
     title: "Weekend Getaways",
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1519904245-432863925769?q=80&w=400",
+    image: "https://images.unsplash.com/photo-1588432141548-5450c36f01de?q=80&w=400",
     hint: "snowy mountain",
     top: 11,
     title: "Hill Stations",
   },
   {
     id: 7,
-    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=400",
+    image: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?q=80&w=400",
     hint: "tropical paradise",
     top: 10,
     title: "Tropical Paradise",
