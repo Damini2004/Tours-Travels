@@ -1,11 +1,29 @@
 
 "use client";
 
-import type { Hotel } from './types';
+import type { Hotel, UltraLuxPackage } from './types';
 import { placeholderHotels } from './placeholder-data';
 
 const HOTELS_DB_KEY = 'appHotelsDB';
+const ULTRA_LUX_DB_KEY = 'appUltraLuxDB'; // New key for Ultra Lux packages
 const UNCONFIGURED_HOSTNAME = "dynamic-media-cdn.tripadvisor.com";
+
+
+// Default Ultra Lux Package
+const defaultUltraLuxPackage: UltraLuxPackage[] = [
+    {
+      id: "UL001",
+      title: "Oceanfront Bali Hideaway with Two World-Class Restaurants & Infinity Pool",
+      location: "Tabanan, Bali",
+      brand: "SOORI BALI",
+      imageUrl: "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2070&auto=format&fit=crop",
+      imageHint: "luxury resort bali",
+      nights: 2,
+      price: 296939,
+      originalPrice: 337888,
+    }
+];
+
 
 function filterProblematicHotels(hotels: Hotel[]): Hotel[] {
   return hotels.filter(hotel => {
@@ -122,4 +140,41 @@ export function getHotelById(hotelId: string): Hotel | undefined {
   // getHotels() already applies the filter
   const hotels = getHotels();
   return hotels.find(h => h.id === hotelId);
+}
+
+// --- Ultra Lux Package Functions ---
+
+export function getUltraLuxPackages(): UltraLuxPackage[] {
+  if (typeof window === 'undefined') {
+    return [...defaultUltraLuxPackage];
+  }
+  const storedPackages = localStorage.getItem(ULTRA_LUX_DB_KEY);
+  if (storedPackages) {
+    try {
+      return JSON.parse(storedPackages) as UltraLuxPackage[];
+    } catch (e) {
+      console.error("Error parsing Ultra Lux packages, initializing with default.", e);
+      localStorage.setItem(ULTRA_LUX_DB_KEY, JSON.stringify(defaultUltraLuxPackage));
+      return [...defaultUltraLuxPackage];
+    }
+  }
+  // Initialize with default if nothing is stored
+  localStorage.setItem(ULTRA_LUX_DB_KEY, JSON.stringify(defaultUltraLuxPackage));
+  return [...defaultUltraLuxPackage];
+}
+
+export function saveUltraLuxPackages(packages: UltraLuxPackage[]): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(ULTRA_LUX_DB_KEY, JSON.stringify(packages));
+}
+
+export function addUltraLuxPackage(newPackage: Omit<UltraLuxPackage, 'id'>): UltraLuxPackage {
+  const currentPackages = getUltraLuxPackages();
+  const packageToAdd: UltraLuxPackage = {
+    ...newPackage,
+    id: `ULX_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  };
+  const updatedPackages = [...currentPackages, packageToAdd];
+  saveUltraLuxPackages(updatedPackages);
+  return packageToAdd;
 }

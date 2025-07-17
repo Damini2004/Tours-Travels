@@ -71,6 +71,20 @@ export interface Property {
   isSuperhost?: boolean;
 }
 
+export interface UltraLuxPackage {
+  id: string;
+  title: string;
+  location: string;
+  brand: string; // e.g., "SOORI BALI"
+  imageUrl: string;
+  imageHint: string;
+  nights: number;
+  price: number;
+  originalPrice: number;
+  // No need for a separate discount field, it can be calculated
+}
+
+
 export interface SavedItemContextType {
   savedFlights: Flight[];
   savedHotels: Hotel[];

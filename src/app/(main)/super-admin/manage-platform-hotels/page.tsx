@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon } from "lucide-react";
+import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon, Gem } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
-import type { Hotel } from '@/lib/types';
-import { getHotels, addHotel, saveHotels } from '@/lib/hotel-data';
+import type { Hotel, UltraLuxPackage } from '@/lib/types';
+import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages } from '@/lib/hotel-data';
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 
@@ -29,6 +29,7 @@ export default function ManagePlatformHotelsPage() {
   const router = useRouter(); 
   const [isLoading, setIsLoading] = useState(false);
 
+  // State for Regular Hotels
   const [hotelName, setHotelName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -37,20 +38,32 @@ export default function ManagePlatformHotelsPage() {
   const [rating, setRatingState] = useState("");
   const [ownerEmail, setOwnerEmail] = useState("");
   const [ownerPassword, setOwnerPassword] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState(defaultHotelImage); // Initialize with new default
+  const [thumbnailUrl, setThumbnailUrl] = useState(defaultHotelImage);
   const [thumbnailHint, setThumbnailHint] = useState(defaultHotelHint);
-
   const [allHotels, setAllHotels] = useState<Hotel[]>([]);
 
-  const fetchAllHotels = useCallback(() => {
+  // State for Ultra Lux Packages
+  const [luxTitle, setLuxTitle] = useState("");
+  const [luxLocation, setLuxLocation] = useState("");
+  const [luxBrand, setLuxBrand] = useState("");
+  const [luxImageUrl, setLuxImageUrl] = useState("");
+  const [luxImageHint, setLuxImageHint] = useState("");
+  const [luxNights, setLuxNights] = useState("");
+  const [luxPrice, setLuxPrice] = useState("");
+  const [luxOriginalPrice, setLuxOriginalPrice] = useState("");
+  const [allUltraLux, setAllUltraLux] = useState<UltraLuxPackage[]>([]);
+
+
+  const fetchAllData = useCallback(() => {
     setIsLoading(true);
     setAllHotels(getHotels());
+    setAllUltraLux(getUltraLuxPackages());
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchAllHotels();
-  }, [fetchAllHotels]);
+    fetchAllData();
+  }, [fetchAllData]);
 
   const handleAddHotelSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +96,7 @@ export default function ManagePlatformHotelsPage() {
     
     const currentThumbnailUrl = thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultHotelImage;
     const currentImageUrls = [thumbnailUrl && thumbnailUrl.trim() !== "" ? thumbnailUrl : defaultHotelImage];
-    const isCustomImage = currentThumbnailUrl !== defaultHotelImage; // Check if it's still the default placeholder
+    const isCustomImage = currentThumbnailUrl !== defaultHotelImage;
 
     const newHotelData: Omit<Hotel, 'id'> = {
       name: hotelName,
@@ -95,9 +108,9 @@ export default function ManagePlatformHotelsPage() {
       ownerEmail: ownerEmail.trim(),
       isApproved: true, 
       thumbnailUrl: currentThumbnailUrl,
-      thumbnailHint: isCustomImage ? "hotel building" : defaultHotelHint, // Use default hint if default image
+      thumbnailHint: isCustomImage ? "hotel building" : defaultHotelHint,
       images: currentImageUrls,
-      imageHints: [isCustomImage ? "hotel main view" : defaultHotelHint], // Use default hint if default image
+      imageHints: [isCustomImage ? "hotel main view" : defaultHotelHint],
       checkInTime: "15:00", 
       checkOutTime: "11:00", 
     };
@@ -109,9 +122,33 @@ export default function ManagePlatformHotelsPage() {
     });
     setHotelName(""); setLocation(""); setDescription(""); setAmenitiesState("");
     setPricePerNight(""); setRatingState(""); setOwnerEmail(""); setOwnerPassword("");
-    setThumbnailUrl(defaultHotelImage); setThumbnailHint(defaultHotelHint); // Reset to new default
-    fetchAllHotels(); 
-    router.push('/hotels/search'); 
+    setThumbnailUrl(defaultHotelImage); setThumbnailHint(defaultHotelHint);
+    fetchAllData(); 
+  };
+  
+  const handleAddUltraLuxSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!luxTitle || !luxLocation || !luxBrand || !luxImageUrl || !luxNights || !luxPrice || !luxOriginalPrice) {
+        toast({ variant: "destructive", title: "Missing Information", description: "Please fill all required fields for the Ultra Lux package." });
+        return;
+    }
+    
+    const newPackage: Omit<UltraLuxPackage, 'id'> = {
+        title: luxTitle,
+        location: luxLocation,
+        brand: luxBrand,
+        imageUrl: luxImageUrl,
+        imageHint: luxImageHint || 'luxury travel',
+        nights: parseInt(luxNights),
+        price: parseFloat(luxPrice),
+        originalPrice: parseFloat(luxOriginalPrice),
+    };
+
+    addUltraLuxPackage(newPackage);
+    toast({ title: "Ultra Lux Package Added!", description: `${luxTitle} is now live.` });
+    setLuxTitle(""); setLuxLocation(""); setLuxBrand(""); setLuxImageUrl(""); setLuxImageHint("");
+    setLuxNights(""); setLuxPrice(""); setLuxOriginalPrice("");
+    fetchAllData();
   };
 
   const handleDeleteHotel = (hotelId: string) => {
@@ -121,7 +158,7 @@ export default function ManagePlatformHotelsPage() {
         const updatedHotels = currentHotels.filter(h => h.id !== hotelId);
         saveHotels(updatedHotels);
         toast({ title: "Hotel Deleted", description: `${hotelToDelete.name} has been removed.` });
-        fetchAllHotels();
+        fetchAllData();
     } else {
         toast({ variant: "destructive", title: "Deletion Failed", description: "Could not find the hotel to delete." });
     }
@@ -137,10 +174,61 @@ export default function ManagePlatformHotelsPage() {
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
         <h1 className="font-headline text-3xl md:text-4xl font-bold flex items-center text-white">
-          <HotelBuildingIcon className="mr-3 h-8 w-8 text-sky-400" /> Manage Platform Hotels
+          <HotelBuildingIcon className="mr-3 h-8 w-8 text-sky-400" /> Manage Platform Listings
         </h1>
-        <p className="text-gray-300">Add new hotels, view, and manage existing hotel listings.</p>
+        <p className="text-gray-300">Add, view, and manage regular hotels and Ultra Lux packages.</p>
       </div>
+
+      {/* Add Ultra Lux Package Form */}
+       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white text-xl font-semibold"><Gem className="mr-2 h-6 w-6 text-sky-400" />Add New Ultra Lux Package</CardTitle>
+          <CardDescription className="text-gray-300">Add a new exclusive Ultra Lux package to the platform.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleAddUltraLuxSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Title *</Label>
+                <Input placeholder="Oceanfront Bali Hideaway..." required value={luxTitle} onChange={(e) => setLuxTitle(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Brand *</Label>
+                <Input placeholder="SOORI BALI" required value={luxBrand} onChange={(e) => setLuxBrand(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+            </div>
+            <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Location *</Label>
+                <Input placeholder="Tabanan, Bali" required value={luxLocation} onChange={(e) => setLuxLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Image URL *</Label>
+                <Input type="url" placeholder="https://example.com/image.jpg" required value={luxImageUrl} onChange={(e) => setLuxImageUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+               <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Image Hint</Label>
+                <Input placeholder="luxury resort bali" value={luxImageHint} onChange={(e) => setLuxImageHint(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Nights *</Label>
+                <Input type="number" placeholder="2" required value={luxNights} onChange={(e) => setLuxNights(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Price (INR) *</Label>
+                <Input type="number" placeholder="296939" required value={luxPrice} onChange={(e) => setLuxPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+               <div className="space-y-1">
+                <Label className="text-gray-300 text-xs">Original Price (INR) *</Label>
+                <Input type="number" placeholder="337888" required value={luxOriginalPrice} onChange={(e) => setLuxOriginalPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+              </div>
+            </div>
+            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white mt-4">Add Ultra Lux Package</Button>
+          </form>
+        </CardContent>
+      </Card>
 
       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
         <CardHeader>
