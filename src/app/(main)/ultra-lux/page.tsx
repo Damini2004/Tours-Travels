@@ -103,58 +103,6 @@ export default function UltraLuxPage() {
           <div className="space-y-8">
             {isLoading ? (
                 <p>Loading packages...</p>
-            ) : packages.length > 0 ? (
-              packages.map((pkg) => (
-                <Card key={pkg.id} className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden shadow-xl border-stone-200/80">
-                  <div className="relative min-h-[300px] group">
-                    <Image
-                      src={pkg.imageUrl}
-                      alt={pkg.title}
-                      layout="fill"
-                      objectFit="cover"
-                      data-ai-hint={pkg.imageHint}
-                    />
-                    <div className="absolute inset-0 bg-black/10"></div>
-                     <div className="absolute bottom-4 left-4 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                        1/10
-                    </div>
-                     <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="outline" size="icon" className="rounded-full bg-white/70 hover:bg-white"><ChevronLeft/></Button>
-                        <Button variant="outline" size="icon" className="rounded-full bg-white/70 hover:bg-white"><ChevronRight/></Button>
-                    </div>
-                  </div>
-                  <div className="p-8 flex flex-col">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <Badge variant="outline" className="border-stone-400 text-stone-500 font-light tracking-widest text-xs">ULTRA-LUX</Badge>
-                        <h3 className="text-3xl font-semibold text-stone-800 mt-4">{pkg.brand}</h3>
-                        <p className="text-stone-500">{pkg.location}</p>
-                      </div>
-                      <Button variant="ghost" size="icon" className="text-stone-500 hover:text-red-500">
-                        <Heart className="h-5 w-5" />
-                      </Button>
-                    </div>
-                    <p className="mt-4 text-stone-600 text-sm flex-grow">{pkg.title}</p>
-                    <div className="mt-6 text-right">
-                      <p className="text-sm text-stone-500">{pkg.nights} nights from (room only)</p>
-                      <p className={`text-4xl font-bold ${gradientTextClass}`}>
-                        ₹{pkg.price.toLocaleString()}
-                      </p>
-                      <div className="text-xs text-stone-400 mt-1">
-                        Valued up to <s className="text-stone-400">₹{pkg.originalPrice.toLocaleString()}</s> 
-                        <Badge variant="destructive" className="ml-2 bg-red-100 text-red-600 border border-red-200">
-                           {(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100).toFixed(0)}%
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-stone-500 hover:underline cursor-pointer mt-1">Price details</p>
-                    </div>
-                    <Button asChild size="lg" className="mt-6 w-full bg-stone-800 hover:bg-stone-700 text-white text-base py-6">
-                        <Link href="#">View Offer</Link>
-                    </Button>
-                    <p className="text-center text-xs text-stone-500 mt-2">Hotel + flights packages available</p>
-                  </div>
-                </Card>
-              ))
             ) : (
                 <div className="text-center py-16">
                     <h3 className="text-xl font-semibold text-stone-700">No Ultra Lux Packages Available</h3>
