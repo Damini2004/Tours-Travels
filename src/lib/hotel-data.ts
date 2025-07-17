@@ -178,3 +178,14 @@ export function addUltraLuxPackage(newPackage: Omit<UltraLuxPackage, 'id'>): Ult
   saveUltraLuxPackages(updatedPackages);
   return packageToAdd;
 }
+
+export function deleteUltraLuxPackage(packageId: string): UltraLuxPackage | undefined {
+    const currentPackages = getUltraLuxPackages();
+    const packageToDelete = currentPackages.find(p => p.id === packageId);
+    if (packageToDelete) {
+        const remainingPackages = currentPackages.filter(p => p.id !== packageId);
+        saveUltraLuxPackages(remainingPackages);
+        return packageToDelete;
+    }
+    return undefined;
+}

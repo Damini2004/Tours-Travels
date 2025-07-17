@@ -10,7 +10,7 @@ import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, Tra
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import type { Hotel, UltraLuxPackage } from '@/lib/types';
-import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages } from '@/lib/hotel-data';
+import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages, deleteUltraLuxPackage } from '@/lib/hotel-data';
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
@@ -195,6 +195,16 @@ export default function ManagePlatformHotelsPage() {
     }
   };
 
+  const handleDeleteUltraLuxPackage = (packageId: string) => {
+    const deletedPackage = deleteUltraLuxPackage(packageId);
+    if (deletedPackage) {
+        toast({ title: "Package Deleted", description: `${deletedPackage.title} has been removed.` });
+        fetchAllData();
+    } else {
+        toast({ variant: "destructive", title: "Deletion Failed", description: "Could not find the package to delete." });
+    }
+  };
+
   useEffect(() => {
     const isCustom = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultHotelImage;
     setThumbnailHint(isCustom ? "hotel building" : defaultHotelHint);
@@ -270,6 +280,43 @@ export default function ManagePlatformHotelsPage() {
             </div>
             <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white mt-4">Add Ultra Lux Package</Button>
           </form>
+        </CardContent>
+      </Card>
+      
+      {/* List Ultra Lux Packages */}
+      <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+        <CardHeader>
+            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-sky-400" />All Ultra Lux Packages</CardTitle>
+            <CardDescription className="text-gray-300">Total packages: {allUltraLux.length}</CardDescription>
+        </CardHeader>
+        <CardContent>
+            {isLoading ? (
+                 <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
+            ) : allUltraLux.length === 0 ? (
+                <p className="text-gray-400">No Ultra Lux packages found.</p>
+            ) : (
+                <div className="space-y-3">
+                    {allUltraLux.map(pkg => (
+                        <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
+                            <div className="flex items-center gap-4 flex-grow">
+                                <Image src={pkg.imageUrl} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
+                                <div>
+                                    <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
+                                    <p className="text-xs text-gray-400">{pkg.brand} - {pkg.location}</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
+                                <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900 opacity-50">
+                                    <EditIcon className="mr-1 h-3 w-3"/>Edit
+                                </Button>
+                                <Button variant="destructive" size="sm" onClick={() => handleDeleteUltraLuxPackage(pkg.id)}>
+                                    <TrashIcon className="mr-1 h-3 w-3"/>Delete
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </CardContent>
       </Card>
 
