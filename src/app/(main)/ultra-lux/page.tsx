@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -5,24 +6,56 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Heart, Map, SlidersHorizontal, ChevronDown, Hotel, Ship, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { UltraLuxPackage } from '@/lib/types';
-import { getUltraLuxPackages } from '@/lib/hotel-data'; // Assuming this function will be created
+import { getUltraLuxPackages } from '@/lib/hotel-data';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const gradientTextClass = "bg-gradient-to-br from-stone-800 via-stone-600 to-stone-500 bg-clip-text text-transparent";
+const defaultHotelImage = 'https://media.istockphoto.com/id/1197480605/photo/3d-render-of-luxury-hotel-lobby-and-reception.jpg?s=612x612&w=0&k=20&c=h2DMumrFFZDGqPypcK4Whx8mM1EdCKWh8PLY2saLIzo=';
+const defaultHotelHint = 'hotel lobby';
+
+const getRatingLabel = (rating: number): string => {
+  if (rating >= 9.5) return "Exceptional";
+  if (rating >= 9.0) return "Excellent";
+  if (rating >= 8.5) return "Very Good";
+  if (rating >= 8.0) return "Good";
+  if (rating > 0) return "Okay";
+  return "Not Rated";
+};
 
 export default function UltraLuxPage() {
   const [packages, setPackages] = useState<UltraLuxPackage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [savedOffers, setSavedOffers] = useState<Record<string, boolean>>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // In a real app, you would fetch this data. For now, we'll use local data.
     const fetchedPackages = getUltraLuxPackages();
     setPackages(fetchedPackages);
     setIsLoading(false);
   }, []);
+
+  const toggleSaveOffer = (offerId: string) => {
+    setSavedOffers(prev => ({ ...prev, [offerId]: !prev[offerId] }));
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const calculateDiscount = (price: number, originalPrice: number) => {
+      if (originalPrice <= price) return 0;
+      return Math.round(((originalPrice - price) / originalPrice) * 100);
+  }
 
   return (
     <div className="bg-white text-stone-800">
@@ -100,16 +133,70 @@ export default function UltraLuxPage() {
             </div>
           </div>
 
-          <div className="space-y-8">
-            {isLoading ? (
+           <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-6 -mx-4 px-4 pb-4">
+             {isLoading ? (
                 <p>Loading packages...</p>
+            ) : packages.length > 0 ? (
+                packages.map((pkg) => {
+                   const discount = calculateDiscount(pkg.price, pkg.originalPrice);
+                   return (
+                    <Card
+                      key={pkg.id}
+                      className="group/card w-[85vw] sm:w-[45vw] lg:w-[31%] flex-shrink-0 bg-white border-gray-200 flex flex-col justify-between h-full rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1"
+                    >
+                      <div className="relative">
+                        <Badge variant="default" className="absolute top-3 left-3 z-10 bg-black/60 text-white border-none rounded-full">
+                           ULTRA-LUX
+                        </Badge>
+                        <button
+                            onClick={() => toggleSaveOffer(pkg.id)}
+                            aria-label={savedOffers[pkg.id] ? "Unsave offer" : "Save offer"}
+                            className="absolute top-2.5 right-2.5 z-10 text-white bg-black/50 backdrop-blur-sm border-none rounded-full p-1.5 cursor-pointer transition-colors duration-300 hover:text-red-400"
+                        >
+                            <Heart className={cn("h-5 w-5", savedOffers[pkg.id] && "fill-red-500 text-red-500")} />
+                        </button>
+                        <div className="w-full h-56 relative rounded-t-lg overflow-hidden">
+                          <Image
+                            src={pkg.imageUrl || defaultHotelImage}
+                            alt={pkg.title}
+                            layout="fill"
+                            objectFit="cover"
+                            className="group-hover/card:scale-105 transition-transform duration-300"
+                            data-ai-hint={pkg.imageHint || defaultHotelHint}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-4 flex flex-col flex-grow">
+                          <p className="uppercase text-xs font-semibold text-gray-500">{pkg.brand}</p>
+                          <p className="text-xs text-gray-400 mb-1">{pkg.location}</p>
+                          <h3 className="font-semibold text-sm leading-snug text-gray-800 h-16 line-clamp-3">
+                              {pkg.title}
+                          </h3>
+                          
+                          <div className="mt-auto pt-2">
+                              <p className="text-xs text-gray-500 mb-2">{pkg.nights} nights from (room only)</p>
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold text-gray-800">₹{pkg.price.toLocaleString('en-IN')}</span>
+                                <s className="text-sm text-gray-400">₹{pkg.originalPrice.toLocaleString('en-IN')}</s>
+                                {discount > 0 && <span className="text-xs font-bold text-green-600">{discount}% OFF</span>}
+                              </div>
+                              <Button asChild className="mt-4 w-full h-11 bg-stone-800 hover:bg-stone-700 text-white text-base py-6">
+                                  <Link href="#">View Offer</Link>
+                              </Button>
+                          </div>
+                      </div>
+                    </Card>
+                );
+            })
             ) : (
-                <div className="text-center py-16">
+                <div className="text-center py-16 w-full">
                     <h3 className="text-xl font-semibold text-stone-700">No Ultra Lux Packages Available</h3>
                     <p className="text-stone-500">Please check back later for exclusive deals.</p>
                 </div>
             )}
           </div>
+
         </div>
       </div>
     </div>
