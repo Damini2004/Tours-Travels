@@ -14,6 +14,8 @@ import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackage
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 
 interface User {
   fullName: string;
@@ -210,7 +212,6 @@ export default function ManagePlatformHotelsPage() {
     setThumbnailHint(isCustom ? "hotel building" : defaultHotelHint);
   }, [thumbnailUrl]);
 
-
   return (
     <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-var(--header-height,0px)-var(--footer-height,0px))]">
       <div className="mb-8">
@@ -219,207 +220,215 @@ export default function ManagePlatformHotelsPage() {
         </h1>
         <p className="text-gray-300">Add, view, and manage regular hotels and Ultra Lux packages.</p>
       </div>
-
-      {/* Add Ultra Lux Package Form */}
-       <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center text-white text-xl font-semibold"><Gem className="mr-2 h-6 w-6 text-sky-400" />Add New Ultra Lux Package</CardTitle>
-          <CardDescription className="text-gray-300">Add a new exclusive Ultra Lux package to the platform.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleAddUltraLuxSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Title *</Label>
-                <Input placeholder="Oceanfront Bali Hideaway..." required value={luxTitle} onChange={(e) => setLuxTitle(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Brand *</Label>
-                <Input placeholder="SOORI BALI" required value={luxBrand} onChange={(e) => setLuxBrand(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-              </div>
-            </div>
-            <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Location *</Label>
-                <Input placeholder="Tabanan, Bali" required value={luxLocation} onChange={(e) => setLuxLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-            </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label className="text-gray-300 text-xs">Image *</Label>
-                    <Label htmlFor="lux-image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <UploadIcon className="w-8 h-8 mb-2 text-gray-400" />
-                            <p className="mb-1 text-sm text-gray-400"><span className="font-semibold text-sky-400">Click to upload</span> or drag</p>
-                            <p className="text-xs text-gray-500">PNG, JPG, WEBP (Max 5MB)</p>
-                        </div>
-                        <Input id="lux-image-upload" type="file" className="hidden" accept="image/*" onChange={handleLuxImageChange} />
-                    </Label>
-                </div>
-               <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Image Hint</Label>
-                <Input placeholder="luxury resort bali" value={luxImageHint} onChange={(e) => setLuxImageHint(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                {luxImagePreview && (
-                    <div className="mt-2 relative w-full aspect-video">
-                        <Image src={luxImagePreview} alt="Image Preview" layout="fill" objectFit="cover" className="rounded-md" />
-                    </div>
-                )}
-              </div>
-            </div>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Nights *</Label>
-                <Input type="number" placeholder="2" required value={luxNights} onChange={(e) => setLuxNights(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Price (INR) *</Label>
-                <Input type="number" placeholder="296939" required value={luxPrice} onChange={(e) => setLuxPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-              </div>
-               <div className="space-y-1">
-                <Label className="text-gray-300 text-xs">Original Price (INR) *</Label>
-                <Input type="number" placeholder="337888" required value={luxOriginalPrice} onChange={(e) => setLuxOriginalPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-              </div>
-            </div>
-            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white mt-4">Add Ultra Lux Package</Button>
-          </form>
-        </CardContent>
-      </Card>
       
-      {/* List Ultra Lux Packages */}
-      <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
-        <CardHeader>
-            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-sky-400" />All Ultra Lux Packages</CardTitle>
-            <CardDescription className="text-gray-300">Total packages: {allUltraLux.length}</CardDescription>
-        </CardHeader>
-        <CardContent>
-            {isLoading ? (
-                 <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
-            ) : allUltraLux.length === 0 ? (
-                <p className="text-gray-400">No Ultra Lux packages found.</p>
-            ) : (
-                <div className="space-y-3">
-                    {allUltraLux.map(pkg => (
-                        <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
-                            <div className="flex items-center gap-4 flex-grow">
-                                <Image src={pkg.imageUrl} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
-                                <div>
-                                    <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
-                                    <p className="text-xs text-gray-400">{pkg.brand} - {pkg.location}</p>
+      <div className="space-y-12">
+
+        {/* Ultra Lux Section */}
+        <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+            <CardHeader>
+              <CardTitle className="flex items-center text-white text-2xl font-bold"><Gem className="mr-3 h-7 w-7 text-sky-400" />Ultra Lux Packages</CardTitle>
+              <CardDescription className="text-gray-300">Manage exclusive, high-end travel packages.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="add-ultra-lux" className="border-b-0">
+                    <AccordionTrigger className="text-lg font-semibold text-white hover:no-underline rounded-md px-4 hover:bg-slate-700/50">
+                        <div className="flex items-center gap-2"><PlusCircleIcon className="h-5 w-5"/> Add New Ultra Lux Package</div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4">
+                        <form onSubmit={handleAddUltraLuxSubmit} className="space-y-4 p-4 border border-slate-700 rounded-b-md bg-slate-800">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Title *</Label>
+                              <Input placeholder="Oceanfront Bali Hideaway..." required value={luxTitle} onChange={(e) => setLuxTitle(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Brand *</Label>
+                              <Input placeholder="SOORI BALI" required value={luxBrand} onChange={(e) => setLuxBrand(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Location *</Label>
+                              <Input placeholder="Tabanan, Bali" required value={luxLocation} onChange={(e) => setLuxLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                  <Label className="text-gray-300 text-xs">Image *</Label>
+                                  <Label htmlFor="lux-image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
+                                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                          <UploadIcon className="w-8 h-8 mb-2 text-gray-400" />
+                                          <p className="mb-1 text-sm text-gray-400"><span className="font-semibold text-sky-400">Click to upload</span> or drag</p>
+                                          <p className="text-xs text-gray-500">PNG, JPG, WEBP (Max 5MB)</p>
+                                      </div>
+                                      <Input id="lux-image-upload" type="file" className="hidden" accept="image/*" onChange={handleLuxImageChange} />
+                                  </Label>
+                              </div>
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Image Hint</Label>
+                              <Input placeholder="luxury resort bali" value={luxImageHint} onChange={(e) => setLuxImageHint(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                              {luxImagePreview && (
+                                  <div className="mt-2 relative w-full aspect-video">
+                                      <Image src={luxImagePreview} alt="Image Preview" layout="fill" objectFit="cover" className="rounded-md" />
+                                  </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Nights *</Label>
+                              <Input type="number" placeholder="2" required value={luxNights} onChange={(e) => setLuxNights(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Price (INR) *</Label>
+                              <Input type="number" placeholder="296939" required value={luxPrice} onChange={(e) => setLuxPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-gray-300 text-xs">Original Price (INR) *</Label>
+                              <Input type="number" placeholder="337888" required value={luxOriginalPrice} onChange={(e) => setLuxOriginalPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                          </div>
+                          <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white mt-4">Add Ultra Lux Package</Button>
+                        </form>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <Separator className="my-4 bg-slate-700" />
+                <h4 className="text-lg font-semibold text-white flex items-center mb-4"><ListIcon className="mr-2 h-5 w-5"/>All Ultra Lux Packages ({allUltraLux.length})</h4>
+                 {isLoading ? (
+                    <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
+                ) : allUltraLux.length === 0 ? (
+                    <p className="text-gray-400 text-center py-4">No Ultra Lux packages found.</p>
+                ) : (
+                    <div className="space-y-3">
+                        {allUltraLux.map(pkg => (
+                            <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
+                                <div className="flex items-center gap-4 flex-grow">
+                                    <Image src={pkg.imageUrl} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
+                                    <div>
+                                        <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
+                                        <p className="text-xs text-gray-400">{pkg.brand} - {pkg.location}</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
+                                    <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900 opacity-50">
+                                        <EditIcon className="mr-1 h-3 w-3"/>Edit
+                                    </Button>
+                                    <Button variant="destructive" size="sm" onClick={() => handleDeleteUltraLuxPackage(pkg.id)}>
+                                        <TrashIcon className="mr-1 h-3 w-3"/>Delete
+                                    </Button>
                                 </div>
                             </div>
-                            <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
-                                <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900 opacity-50">
-                                    <EditIcon className="mr-1 h-3 w-3"/>Edit
-                                </Button>
-                                <Button variant="destructive" size="sm" onClick={() => handleDeleteUltraLuxPackage(pkg.id)}>
-                                    <TrashIcon className="mr-1 h-3 w-3"/>Delete
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </CardContent>
-      </Card>
-
-      <Card className="w-full max-w-3xl mx-auto mb-12 bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center text-white text-xl font-semibold"><PlusCircleIcon className="mr-2 h-6 w-6 text-sky-400" />Add New Hotel (Super Admin)</CardTitle>
-          <CardDescription className="text-gray-300">Hotels added here are automatically approved. If owner email is new, an owner account will be created.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleAddHotelSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="saHotelName" className="text-gray-300">Hotel Name *</Label>
-                    <Input id="saHotelName" placeholder="Luxury Palace" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="saLocation" className="text-gray-300">Location (Full Address) *</Label>
-                    <Input id="saLocation" placeholder="1 Royal Way, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="saPricePerNight" className="text-gray-300">Price Per Night (USD) *</Label>
-                    <Input id="saPricePerNight" type="number" placeholder="200" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="saRating" className="text-gray-300">Rating (1-5) *</Label>
-                    <Input id="saRating" type="number" placeholder="5" min="1" max="5" required value={rating} onChange={(e) => setRatingState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-            </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="saOwnerEmail" className="flex items-center text-gray-300"><KeyRoundIcon className="mr-1.5 h-4 w-4 text-gray-400"/>Owner's Email *</Label>
-                    <Input id="saOwnerEmail" type="email" placeholder="owner@example.com" required value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="saOwnerPassword" className="text-gray-300">Owner's Password *</Label>
-                    <Input id="saOwnerPassword" type="password" placeholder="Set a password for the owner" required value={ownerPassword} onChange={(e) => setOwnerPassword(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="saDescription" className="text-gray-300">Description</Label>
-              <Textarea id="saDescription" placeholder="A brief description of the hotel..." value={description} onChange={(e) => setDescription(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="saAmenities" className="text-gray-300">Amenities (comma-separated)</Label>
-              <Input id="saAmenities" placeholder="Pool, Gym, Spa" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="saThumbnailUrl" className="text-gray-300">Thumbnail URL (leave for default placeholder)</Label>
-                <Input id="saThumbnailUrl" placeholder={defaultHotelImage} value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                {thumbnailUrl && (
-                    <div className="mt-2">
-                        <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
-                             onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400.png/CCCCCC/FFFFFF?text=Invalid+URL"; }} 
-                        />
+                        ))}
                     </div>
                 )}
-            </div>
-            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white">
-              Add Hotel to Platform
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            </CardContent>
+        </Card>
 
-      <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
-        <CardHeader>
-            <CardTitle className="flex items-center text-white text-xl font-semibold"><ListIcon className="mr-2 h-6 w-6 text-sky-400" />All Listed Hotels</CardTitle>
-            <CardDescription className="text-gray-300">Total hotels on platform: {allHotels.length}. Approved: {allHotels.filter(h=>h.isApproved).length}. Pending: {allHotels.filter(h=>!h.isApproved).length}</CardDescription>
-        </CardHeader>
-        <CardContent>
-            {isLoading ? (
-                 <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
-            ) : allHotels.length === 0 ? (
-                <p className="text-gray-400">No hotels found on the platform yet.</p>
-            ) : (
-                <div className="space-y-3">
-                    {allHotels.map(hotel => (
-                        <div key={hotel.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
-                            <div className="flex-grow">
-                                <h3 className="font-semibold text-base text-gray-100">{hotel.name} 
-                                    <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${hotel.isApproved ? 'bg-green-600/30 text-green-300 border border-green-500/70' : 'bg-yellow-600/30 text-yellow-300 border border-yellow-500/70'}`}>
-                                        {hotel.isApproved ? 'Approved' : 'Pending'}
-                                    </span>
-                                </h3>
-                                <p className="text-xs text-gray-400">{hotel.location}</p>
-                                <p className="text-xs text-gray-400">Owner: {hotel.ownerEmail || 'N/A'}</p>
+        {/* Regular Hotels Section */}
+        <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+            <CardHeader>
+              <CardTitle className="flex items-center text-white text-2xl font-bold"><HotelBuildingIcon className="mr-3 h-7 w-7 text-sky-400" />Regular Hotels</CardTitle>
+              <CardDescription className="text-gray-300">Manage standard hotel listings on the platform.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="add-regular-hotel" className="border-b-0">
+                     <AccordionTrigger className="text-lg font-semibold text-white hover:no-underline rounded-md px-4 hover:bg-slate-700/50">
+                        <div className="flex items-center gap-2"><PlusCircleIcon className="h-5 w-5"/> Add New Hotel</div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4">
+                        <form onSubmit={handleAddHotelSubmit} className="space-y-6 p-4 border border-slate-700 rounded-b-md bg-slate-800">
+                           <p className="text-sm text-gray-400">Hotels added here are automatically approved. If the owner's email is new, an owner account will be created.</p>
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="saHotelName" className="text-gray-300">Hotel Name *</Label>
+                                    <Input id="saHotelName" placeholder="Luxury Palace" required value={hotelName} onChange={(e) => setHotelName(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="saLocation" className="text-gray-300">Location (Full Address) *</Label>
+                                    <Input id="saLocation" placeholder="1 Royal Way, City, Country" required value={location} onChange={(e) => setLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
                             </div>
-                            <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
-                                <Button variant="outline" size="sm" asChild className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900">
-                                    <Link href={`/hotels/${hotel.id}`} target="_blank"><EditIcon className="mr-1 h-3 w-3"/>View/Edit</Link>
-                                </Button>
-                                <Button variant="destructive" size="sm" onClick={() => handleDeleteHotel(hotel.id)}>
-                                    <TrashIcon className="mr-1 h-3 w-3"/>Delete
-                                </Button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="saPricePerNight" className="text-gray-300">Price Per Night (USD) *</Label>
+                                    <Input id="saPricePerNight" type="number" placeholder="200" required value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="saRating" className="text-gray-300">Rating (1-5) *</Label>
+                                    <Input id="saRating" type="number" placeholder="5" min="1" max="5" required value={rating} onChange={(e) => setRatingState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </CardContent>
-      </Card>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="saOwnerEmail" className="flex items-center text-gray-300"><KeyRoundIcon className="mr-1.5 h-4 w-4 text-gray-400"/>Owner's Email *</Label>
+                                    <Input id="saOwnerEmail" type="email" placeholder="owner@example.com" required value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="saOwnerPassword" className="text-gray-300">Owner's Password *</Label>
+                                    <Input id="saOwnerPassword" type="password" placeholder="Set a password for the owner" required value={ownerPassword} onChange={(e) => setOwnerPassword(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                            <Label htmlFor="saDescription" className="text-gray-300">Description</Label>
+                            <Textarea id="saDescription" placeholder="A brief description of the hotel..." value={description} onChange={(e) => setDescription(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                            <div className="space-y-2">
+                            <Label htmlFor="saAmenities" className="text-gray-300">Amenities (comma-separated)</Label>
+                            <Input id="saAmenities" placeholder="Pool, Gym, Spa" value={amenities} onChange={(e) => setAmenitiesState(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="saThumbnailUrl" className="text-gray-300">Thumbnail URL (leave for default placeholder)</Label>
+                                <Input id="saThumbnailUrl" placeholder={defaultHotelImage} value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                {thumbnailUrl && (
+                                    <div className="mt-2">
+                                        <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
+                                            onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400.png/CCCCCC/FFFFFF?text=Invalid+URL"; }} 
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white">
+                            Add Hotel to Platform
+                            </Button>
+                        </form>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <Separator className="my-4 bg-slate-700" />
+                <h4 className="text-lg font-semibold text-white flex items-center mb-4"><ListIcon className="mr-2 h-5 w-5"/>All Listed Hotels ({allHotels.length})</h4>
+                 {isLoading ? (
+                    <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
+                ) : allHotels.length === 0 ? (
+                    <p className="text-gray-400 text-center py-4">No hotels found on the platform yet.</p>
+                ) : (
+                    <div className="space-y-3">
+                        {allHotels.map(hotel => (
+                            <div key={hotel.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
+                                <div className="flex-grow">
+                                    <h3 className="font-semibold text-base text-gray-100">{hotel.name} 
+                                        <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${hotel.isApproved ? 'bg-green-600/30 text-green-300 border border-green-500/70' : 'bg-yellow-600/30 text-yellow-300 border border-yellow-500/70'}`}>
+                                            {hotel.isApproved ? 'Approved' : 'Pending'}
+                                        </span>
+                                    </h3>
+                                    <p className="text-xs text-gray-400">{hotel.location}</p>
+                                    <p className="text-xs text-gray-400">Owner: {hotel.ownerEmail || 'N/A'}</p>
+                                </div>
+                                <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
+                                    <Button variant="outline" size="sm" asChild className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900">
+                                        <Link href={`/hotels/${hotel.id}`} target="_blank"><EditIcon className="mr-1 h-3 w-3"/>View/Edit</Link>
+                                    </Button>
+                                    <Button variant="destructive" size="sm" onClick={() => handleDeleteHotel(hotel.id)}>
+                                        <TrashIcon className="mr-1 h-3 w-3"/>Delete
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
