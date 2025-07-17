@@ -12,7 +12,7 @@ import { HotelIcon as HotelBuildingIcon, MapPinIcon, StarIcon, CheckCircleIcon, 
 import { useSavedItems } from '@/hooks/use-saved-items';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { getHotelById, getHotels } from '@/lib/hotel-data';
 import { format, addDays } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
@@ -53,8 +53,8 @@ const getAmenityIcon = (amenityName: string): React.ElementType => {
 
 export default function HotelDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const hotelId = params.hotelId as string;
+  const router = useRouter();
   const { addHotelToSaved, removeHotelFromSaved, isHotelSaved, isLoading: isLoadingSaved } = useSavedItems();
   const { toast } = useToast();
   
@@ -476,3 +476,5 @@ export default function HotelDetailPage() {
     </div>
   );
 }
+
+      
