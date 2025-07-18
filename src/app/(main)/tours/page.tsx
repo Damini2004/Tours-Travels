@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -16,18 +17,18 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 const trendingDestinations = [
-  { name: 'Thailand', image: 'https://placehold.co/200x250.png', hint: 'thailand city night', price: 35200 },
-  { name: 'Dubai', image: 'https://placehold.co/200x250.png', hint: 'dubai skyline', price: 10600 },
-  { name: 'Vietnam', image: 'https://placehold.co/200x250.png', hint: 'vietnam landscape', price: 12600 },
-  { name: 'Malaysia', image: 'https://placehold.co/200x250.png', hint: 'malaysia petronas towers', price: 39600 },
-  { name: 'Maldives', image: 'https://placehold.co/200x250.png', hint: 'maldives overwater villas', price: 28500 },
-  { name: 'Singapore', image: 'https://placehold.co/200x250.png', hint: 'singapore marina bay', price: 50200 },
-  { name: 'Bali', image: 'https://placehold.co/200x250.png', hint: 'bali rice terraces', price: 63800 },
-  { name: 'Turkey', image: 'https://placehold.co/200x250.png', hint: 'turkey architecture', price: 45000 },
-  { name: 'Egypt', image: 'https://placehold.co/200x250.png', hint: 'egypt pyramids', price: 55000 },
-  { name: 'Greece', image: 'https://placehold.co/200x250.png', hint: 'greece santorini', price: 62000 },
-  { name: 'Italy', image: 'https://placehold.co/200x250.png', hint: 'italy colosseum', price: 58000 },
-  { name: 'Mexico', image: 'https://placehold.co/200x250.png', hint: 'mexico beach', price: 48000 },
+  { name: 'Thailand', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=2070&auto=format&fit=crop', hint: 'thailand temple', price: 35200 },
+  { name: 'Dubai', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop', hint: 'dubai skyline', price: 10600 },
+  { name: 'Vietnam', image: 'https://images.unsplash.com/photo-1526481280643-33c3366ab42f?q=80&w=2070&auto=format&fit=crop', hint: 'vietnam town', price: 12600 },
+  { name: 'Malaysia', image: 'https://images.unsplash.com/photo-1596422846543-75c611474343?q=80&w=1974&auto=format&fit=crop', hint: 'malaysia petronas towers', price: 39600 },
+  { name: 'Maldives', image: 'https://images.unsplash.com/photo-1516406742384-26c71f3917a8?q=80&w=2070&auto=format&fit=crop', hint: 'maldives overwater villas', price: 28500 },
+  { name: 'Singapore', image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=1974&auto=format&fit=crop', hint: 'singapore marina bay', price: 50200 },
+  { name: 'Bali', image: 'https://images.unsplash.com/photo-1537996194471-e657df97525d?q=80&w=1935&auto=format&fit=crop', hint: 'bali rice terraces', price: 63800 },
+  { name: 'Turkey', image: 'https://images.unsplash.com/photo-1569383971294-f15598836371?q=80&w=1964&auto=format&fit=crop', hint: 'turkey hot air balloons', price: 45000 },
+  { name: 'Egypt', image: 'https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?q=80&w=1935&auto=format&fit=crop', hint: 'egypt pyramids', price: 55000 },
+  { name: 'Greece', image: 'https://images.unsplash.com/photo-1533105079780-52b9be4ac20c?q=80&w=1974&auto=format&fit=crop', hint: 'greece santorini', price: 62000 },
+  { name: 'Italy', image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1966&auto=format&fit=crop', hint: 'italy coast town', price: 58000 },
+  { name: 'Mexico', image: 'https://images.unsplash.com/photo-1518638150340-f706e8665191?q=80&w=2070&auto=format&fit=crop', hint: 'mexico beach', price: 48000 },
 ];
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
@@ -95,29 +96,29 @@ export default function ToursPage() {
   return (
     <div className="bg-white text-[#155e63]">
       {/* Hero Section */}
-      <div className="relative h-[50vh] flex flex-col items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://placehold.co/1920x1080.png')" }} data-ai-hint="ancient library scrolls">
+      <div className="relative h-[50vh] flex flex-col items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop')" }} data-ai-hint="italy coast travel">
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white">Tour the world with us</h1>
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-8 bg-white p-2 rounded-lg shadow-lg flex flex-col sm:flex-row items-center gap-2 max-w-2xl mx-auto border">
-            <div className="flex-grow p-2">
-                <label className="text-xs font-bold text-gray-600 block text-left">Where</label>
+          <div className="mt-8 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg flex flex-col sm:flex-row items-center gap-2 max-w-2xl mx-auto border">
+            <div className="flex-grow p-2 w-full text-left">
+                <label className="text-xs font-bold text-gray-600 block pl-2">Where</label>
                 <Input 
                     type="text" 
                     placeholder="Search destination or place" 
-                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0 text-base"
+                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0 text-base bg-transparent pl-2"
                     value={searchDestination}
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
             </div>
             <div className="w-px h-10 bg-gray-200 hidden sm:block"></div>
-            <div className="flex-grow p-2">
+            <div className="flex-grow p-2 w-full">
                  <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
-                        <button className="w-full text-left">
+                        <button className="w-full text-left pl-2">
                             <label className="text-xs font-bold text-gray-600 block">When?</label>
                             <span className="text-gray-800 text-base">{displayWhen}</span>
                         </button>
@@ -208,7 +209,7 @@ export default function ToursPage() {
                   <div className="p-4 flex-grow flex flex-col">
                     <p className="text-xs text-[#155e63]/80">{tour.location}</p>
                     <p className="text-xs text-[#155e63] font-semibold">{tour.tourType}</p>
-                    <h3 className="text-sm font-semibold mt-1 flex-grow text-[#155e63] group-hover:text-[#155e63]/80 transition-colors">{tour.title}</h3>
+                    <h3 className="text-sm font-semibold mt-1 flex-grow text-[#155e63] group-hover:text-[#155e63]/80 transition-colors h-12 overflow-hidden">{tour.title}</h3>
                     <div className="mt-auto pt-4">
                       <div className="mb-4">
                         <p className="text-xs text-[#155e63]/80">{tour.durationDays} days from</p>
@@ -219,7 +220,7 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-[#155e63]/70">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-[#155e63]/80 text-[#155e63] hover:bg-[#155e63] hover:text-white">
+                      <Button variant="outline" className="w-full border-[#155e63] text-[#155e63] hover:bg-white">
                         View offer
                       </Button>
                     </div>
@@ -230,7 +231,7 @@ export default function ToursPage() {
           </div>
 
           {/* Tours Catalogue */}
-          <div className="my-16 bg-white border border-[#155e63] p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
+          <div className="my-16 bg-[#eaf4f4] p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
             <div className="flex items-center gap-4">
               <Image src="https://placehold.co/100x100/155e63/FFFFFF.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
               <div>
@@ -238,13 +239,13 @@ export default function ToursPage() {
                 <p className="text-gray-600">Go beyond the ordinary and discover the difference.</p>
               </div>
             </div>
-            <Button variant="secondary" className="mt-4 sm:mt-0 bg-gray-200 text-gray-800 hover:bg-white">View Now</Button>
+            <Button variant="secondary" className="mt-4 sm:mt-0 bg-white text-[#155e63] border border-[#155e63] hover:bg-gray-100">View Now</Button>
           </div>
 
           {/* Trending Destinations - New Design */}
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">International Destinations!</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Immerse yourself in trending destinations</h2>
                 <div className="hidden md:flex items-center gap-2">
                     <Button variant="outline" size="icon" className="rounded-full bg-white shadow-sm" onClick={() => scroll('left', trendingScrollRef)}>
                         <ChevronLeft className="h-4 w-4 text-gray-600" />
