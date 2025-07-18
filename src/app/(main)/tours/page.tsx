@@ -103,23 +103,24 @@ export default function ToursPage() {
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-6 bg-white p-2 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-5 gap-0.5 max-w-lg mx-auto border">
-            <div className="sm:col-span-2 p-2">
+          <div className="mt-8 bg-white p-2 rounded-lg shadow-lg flex flex-col sm:flex-row items-center gap-2 max-w-2xl mx-auto border">
+            <div className="flex-grow p-2">
                 <label className="text-xs font-bold text-gray-600 block text-left">Where</label>
                 <Input 
                     type="text" 
                     placeholder="Search destination or place" 
-                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0"
+                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0 text-base"
                     value={searchDestination}
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
             </div>
-            <div className="sm:col-span-2 p-2">
+            <div className="w-px h-10 bg-gray-200 hidden sm:block"></div>
+            <div className="flex-grow p-2">
                  <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
                         <button className="w-full text-left">
                             <label className="text-xs font-bold text-gray-600 block">When?</label>
-                            <span className="text-gray-800">{displayWhen}</span>
+                            <span className="text-gray-800 text-base">{displayWhen}</span>
                         </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[500px] p-4 mt-2" align="start">
@@ -172,8 +173,8 @@ export default function ToursPage() {
                     </PopoverContent>
                 </Popover>
             </div>
-            <Button className="bg-gray-800 text-white w-full sm:w-auto sm:col-span-1" onClick={handleSearch}>
-              Search
+            <Button className="bg-gray-800 text-white rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
+              <Search className="w-5 h-5" />
             </Button>
           </div>
         </div>
@@ -197,7 +198,7 @@ export default function ToursPage() {
             {tours.map((tour) => {
               const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
               return (
-                <div key={tour.id} className="bg-white border border-[#155e63]/20 rounded-lg flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[28vw] flex-shrink-0">
+                <div key={tour.id} className="bg-white border border-[#155e63]/20 rounded-lg flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[30vw] flex-shrink-0">
                   <div className="relative">
                     <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-72 object-cover rounded-t-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
                     <Button size="sm" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-lg h-8 w-auto px-3 backdrop-blur-sm text-gray-700 font-semibold text-xs">
