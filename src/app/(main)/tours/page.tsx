@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -107,8 +108,8 @@ export default function ToursPage() {
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-8 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg flex flex-col sm:flex-row items-stretch gap-2 max-w-2xl mx-auto border">
-            <div className="flex-grow p-2 w-full text-left">
+          <div className="mt-8 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg flex items-center gap-2 max-w-2xl mx-auto border">
+            <div className="flex-grow p-2 w-full text-left rounded-lg hover:bg-gray-100/50 transition-colors">
                 <label className="text-xs font-bold text-gray-600 block pl-2">Where</label>
                 <Input 
                     type="text" 
@@ -118,8 +119,8 @@ export default function ToursPage() {
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
             </div>
-            <div className="w-px h-10 bg-gray-200 self-center hidden sm:block"></div>
-            <div className="flex-grow p-2 w-full">
+            <div className="w-px h-10 bg-gray-200 self-center"></div>
+            <div className="flex-grow p-2 w-full rounded-lg hover:bg-gray-100/50 transition-colors">
                  <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
                         <button className="w-full text-left pl-2">
@@ -177,7 +178,7 @@ export default function ToursPage() {
                     </PopoverContent>
                 </Popover>
             </div>
-            <Button variant="outline" className="bg-white text-[#155e63] border-[#155e63] hover:bg-gray-100 rounded-lg h-full px-6" onClick={handleSearch}>
+            <Button className="bg-white text-[#155e63] border border-[#155e63]/50 hover:bg-gray-100 rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
               <Search className="w-5 h-5" />
             </Button>
           </div>
@@ -188,12 +189,12 @@ export default function ToursPage() {
         <div className="container mx-auto px-4 py-12">
           {/* Today's top exclusive offers */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#155e63]">Today's top <i className="font-serif">exclusive</i> offers</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">Today's top <i className="font-serif">exclusive</i> offers</h2>
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('left', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('left', scrollContainerRef)}>
                   <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('right', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('right', scrollContainerRef)}>
                   <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
