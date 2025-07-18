@@ -135,7 +135,7 @@ export default function ToursPage() {
                                         <h4 className="font-semibold text-gray-800 mb-2">How long?</h4>
                                         <div className="grid grid-cols-4 gap-2">
                                             {[{id: 'any', label: 'Any duration', sub: 'I\'ll decide later'}, {id: 'short', label: 'Short tour', sub: '1 to 7 days'}, {id: 'medium', label: 'Medium tour', sub: '8 to 14 days'}, {id: 'long', label: 'Long tour', sub: '15+ days'}].map(d => (
-                                                <Button key={d.id} variant={selectedDuration === d.id ? 'default' : 'outline'} onClick={() => setSelectedDuration(d.id)} className={cn("flex-col h-auto py-2", selectedDuration === d.id && "bg-gray-800 text-white")}>
+                                                <Button key={d.id} variant={selectedDuration === d.id ? 'default' : 'outline'} onClick={() => setSelectedDuration(d.id)} className={cn("flex-col h-auto py-2", selectedDuration === d.id && "bg-[#155e63] text-white")}>
                                                     <span className="text-sm font-semibold">{d.label}</span>
                                                     <span className="text-xs font-normal">{d.sub}</span>
                                                 </Button>
@@ -168,12 +168,12 @@ export default function ToursPage() {
                         </Tabs>
                         <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
                             <Button variant="ghost" onClick={() => setIsWhenPopoverOpen(false)}>Cancel</Button>
-                            <Button className="bg-gray-800 text-white hover:bg-gray-700" onClick={handleApplyWhen}>Apply</Button>
+                            <Button className="bg-[#155e63] text-white hover:bg-[#155e63]/90" onClick={handleApplyWhen}>Apply</Button>
                         </div>
                     </PopoverContent>
                 </Popover>
             </div>
-            <Button className="bg-gray-800 text-white rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
+            <Button variant="outline" className="bg-white text-[#155e63] border-[#155e63] hover:bg-gray-100 rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
               <Search className="w-5 h-5" />
             </Button>
           </div>
