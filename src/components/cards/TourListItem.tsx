@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -57,7 +58,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
             <div className="flex-grow pr-4 flex flex-col">
                <p className="text-xs text-gray-500 mb-1">Starts in {tour.location.split(',')[0]}, ends in {tour.location.split(',').pop()}</p>
               <h3 className="font-bold text-lg text-gray-800 hover:text-gray-600">
-                <Link href="#">{tour.title}</Link>
+                <Link href={`/tours/${tour.id}`}>{tour.title}</Link>
               </h3>
               <p className="text-sm text-gray-600 mt-1">{tour.tourType}</p>
               <p className="text-sm text-gray-600">{tour.durationDays} days</p>
@@ -89,7 +90,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                 <p className="text-xs text-gray-500 mt-1">Includes taxes & fees</p>
               </div>
               <Button asChild className="w-full mt-4 bg-gray-800 text-white hover:bg-gray-700">
-                <Link href="/tours/search">View offer</Link>
+                <Link href={`/tours/${tour.id}`}>View offer</Link>
               </Button>
             </div>
           </div>

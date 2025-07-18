@@ -108,8 +108,8 @@ export default function ToursPage() {
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-8 bg-white/95 backdrop-blur-sm p-2 rounded-full shadow-lg flex items-center gap-2 max-w-xl mx-auto border border-gray-300">
-              <div className="flex-grow flex items-center gap-2 pl-4">
+          <div className="mt-8 bg-white/95 backdrop-blur-sm p-2 rounded-lg shadow-lg flex flex-col sm:flex-row items-center gap-2 max-w-2xl mx-auto border border-gray-300">
+              <div className="flex-grow flex items-center gap-2 pl-4 w-full">
                  <Search className="w-5 h-5 text-gray-500" />
                 <Input 
                     type="text" 
@@ -119,10 +119,10 @@ export default function ToursPage() {
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
               </div>
-              <div className="w-px h-6 bg-gray-300 self-center"></div>
+              <div className="w-full sm:w-px sm:h-6 bg-gray-300 self-center my-2 sm:my-0"></div>
                <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
-                        <button className="text-left px-4 py-1.5 rounded-full hover:bg-gray-100/80 transition-colors">
+                        <button className="text-left px-4 py-1.5 rounded-lg hover:bg-gray-100/80 transition-colors w-full sm:w-auto">
                             <label className="text-xs font-bold text-gray-600 block">When?</label>
                             <span className="text-gray-800 text-sm">{displayWhen}</span>
                         </button>
@@ -176,7 +176,7 @@ export default function ToursPage() {
                         </div>
                     </PopoverContent>
                 </Popover>
-            <Button className="bg-white text-[#155e63] border border-[#155e63]/50 hover:bg-gray-100 rounded-full w-11 h-11 flex-shrink-0" size="icon" onClick={handleSearch}>
+            <Button className="bg-white text-[#155e63] border border-[#155e63]/50 hover:bg-gray-100 rounded-lg w-full sm:w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
               <Search className="w-5 h-5" />
             </Button>
           </div>
@@ -189,10 +189,10 @@ export default function ToursPage() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl md:text-3xl font-bold text-[#155e63]">Today's top <i className="font-serif">exclusive</i> offers</h2>
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('left', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('left', scrollContainerRef)}>
                   <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('right', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('right', scrollContainerRef)}>
                   <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -223,8 +223,8 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-[#155e63]/70">Twin room</p>
                       </div>
-                      <Button asChild variant="outline" className="w-full border-[#155e63] text-[#155e63] hover:bg-white">
-                        <Link href="/tours/search">View offer</Link>
+                      <Button asChild variant="outline" className="w-full border-[#155e63] text-[#155e63] hover:bg-gray-100 hover:text-[#155e63]">
+                        <Link href={`/tours/${tour.id}`}>View offer</Link>
                       </Button>
                     </div>
                   </div>

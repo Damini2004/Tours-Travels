@@ -84,6 +84,11 @@ export function getTourPackages(): TourPackage[] {
   return [...placeholderTours];
 }
 
+export function getTourPackageById(id: string): TourPackage | undefined {
+    const packages = getTourPackages();
+    return packages.find(pkg => pkg.id === id);
+}
+
 export function saveTourPackages(packages: TourPackage[]): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem(TOURS_DB_KEY, JSON.stringify(packages));
