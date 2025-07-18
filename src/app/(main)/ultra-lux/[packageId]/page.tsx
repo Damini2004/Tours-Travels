@@ -1,13 +1,13 @@
 
 "use client";
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { MapPin, Share2, Heart, PlayCircle, ImageIcon as GalleryIcon, Info, Eye, Phone, Star } from 'lucide-react';
+import { MapPin, Share2, Heart, PlayCircle, ImageIcon as GalleryIcon, Info, Eye, Phone, Star, VideoIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import type { UltraLuxPackage } from '@/lib/types';
 import { getUltraLuxPackages } from '@/lib/hotel-data';
@@ -56,6 +56,11 @@ export default function UltraLuxPackagePage() {
   }
   
   const discount = calculateDiscount(pkg.price, pkg.originalPrice);
+  const mainImage = pkg.imageUrls?.[0] || defaultImage;
+  const mainImageHint = pkg.imageHints?.[0] || defaultHint;
+  const secondaryImage = pkg.imageUrls?.[1] || "https://placehold.co/600x400/a7a29a/ffffff.png";
+  const secondaryImageHint = pkg.imageHints?.[1] || "resort pool";
+
 
   return (
     <div className="bg-white text-stone-800 min-h-screen">
@@ -63,7 +68,7 @@ export default function UltraLuxPackagePage() {
         {/* Image Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[300px] md:h-[500px] mb-6">
           <div className="relative h-full w-full rounded-lg overflow-hidden group">
-            <Image src={pkg.imageUrl || defaultImage} alt={pkg.title} layout="fill" objectFit="cover" data-ai-hint={pkg.imageHint || defaultHint} />
+            <Image src={mainImage} alt={pkg.title} layout="fill" objectFit="cover" data-ai-hint={mainImageHint} />
             <div className="absolute top-4 left-4 z-10">
                 <Badge variant="default" className="bg-black/60 text-white border-none rounded-md text-sm tracking-widest py-1.5 px-3 shadow-lg">
                     ULTRA<span className='font-bold'>LUX</span>
@@ -72,18 +77,24 @@ export default function UltraLuxPackagePage() {
           </div>
           <div className="hidden lg:flex flex-col gap-2 h-full w-full">
             <div className="relative h-1/2 w-full rounded-lg overflow-hidden group">
-               <Image src="https://placehold.co/600x400/a7a29a/ffffff.png" alt={`${pkg.title} view 2`} layout="fill" objectFit="cover" data-ai-hint="resort pool" />
-               <div className="absolute bottom-4 right-4 flex gap-2">
+               <Image src={secondaryImage} alt={`${pkg.title} view 2`} layout="fill" objectFit="cover" data-ai-hint={secondaryImageHint} />
+            </div>
+            <div className="relative h-1/2 w-full rounded-lg overflow-hidden group bg-stone-900 flex items-center justify-center">
+               {pkg.videoUrl ? (
+                 <video src={pkg.videoUrl} className="w-full h-full object-cover" controls autoPlay muted loop playsInline>
+                    Your browser does not support the video tag.
+                 </video>
+               ) : (
+                 <div className="text-white/50 flex flex-col items-center">
+                    <VideoIcon className="h-10 w-10 mb-2"/>
+                    <p className="text-sm">Video not available</p>
+                 </div>
+               )}
+                <div className="absolute bottom-4 right-4 flex gap-2">
                     <Button variant="outline" size="sm" className="bg-white/80 backdrop-blur-sm border-gray-300 hover:bg-white text-stone-800">
-                        <PlayCircle className="mr-2 h-4 w-4"/> Play video
-                    </Button>
-                     <Button variant="outline" size="sm" className="bg-white/80 backdrop-blur-sm border-gray-300 hover:bg-white text-stone-800">
                         <GalleryIcon className="mr-2 h-4 w-4"/> View gallery
                     </Button>
                </div>
-            </div>
-            <div className="relative h-1/2 w-full rounded-lg overflow-hidden group">
-               <Image src="https://placehold.co/600x400/c7c2ba/ffffff.png" alt={`${pkg.title} view 3`} layout="fill" objectFit="cover" data-ai-hint="resort aerial" />
             </div>
           </div>
         </div>

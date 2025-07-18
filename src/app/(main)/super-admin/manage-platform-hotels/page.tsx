@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon, Gem, UploadIcon } from "lucide-react";
+import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon, Gem, UploadIcon, VideoIcon } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import type { Hotel, UltraLuxPackage } from '@/lib/types';
@@ -51,9 +51,13 @@ export default function ManagePlatformHotelsPage() {
   const [luxTitle, setLuxTitle] = useState("");
   const [luxLocation, setLuxLocation] = useState("");
   const [luxBrand, setLuxBrand] = useState("");
-  const [luxImageFile, setLuxImageFile] = useState<File | null>(null);
-  const [luxImagePreview, setLuxImagePreview] = useState<string | null>(null);
-  const [luxImageHint, setLuxImageHint] = useState("");
+  const [luxImageFile1, setLuxImageFile1] = useState<File | null>(null);
+  const [luxImagePreview1, setLuxImagePreview1] = useState<string | null>(null);
+  const [luxImageHint1, setLuxImageHint1] = useState("");
+  const [luxImageFile2, setLuxImageFile2] = useState<File | null>(null);
+  const [luxImagePreview2, setLuxImagePreview2] = useState<string | null>(null);
+  const [luxImageHint2, setLuxImageHint2] = useState("");
+  const [luxVideoUrl, setLuxVideoUrl] = useState("");
   const [luxNights, setLuxNights] = useState("");
   const [luxPrice, setLuxPrice] = useState("");
   const [luxOriginalPrice, setLuxOriginalPrice] = useState("");
@@ -71,14 +75,19 @@ export default function ManagePlatformHotelsPage() {
     fetchAllData();
   }, [fetchAllData]);
 
-  const handleLuxImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLuxImageChange = (e: React.ChangeEvent<HTMLInputElement>, imageNumber: 1 | 2) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setLuxImageFile(file);
-      if (luxImagePreview) {
-          URL.revokeObjectURL(luxImagePreview);
+      const previewUrl = URL.createObjectURL(file);
+      if (imageNumber === 1) {
+        setLuxImageFile1(file);
+        if (luxImagePreview1) URL.revokeObjectURL(luxImagePreview1);
+        setLuxImagePreview1(previewUrl);
+      } else {
+        setLuxImageFile2(file);
+        if (luxImagePreview2) URL.revokeObjectURL(luxImagePreview2);
+        setLuxImagePreview2(previewUrl);
       }
-      setLuxImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -153,16 +162,20 @@ export default function ManagePlatformHotelsPage() {
   
   const handleAddUltraLuxSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!luxTitle || !luxLocation || !luxBrand || !luxImageFile || !luxNights || !luxPrice || !luxOriginalPrice) {
-        toast({ variant: "destructive", title: "Missing Information", description: "Please fill all required fields for the Ultra Lux package, including the image." });
+    if (!luxTitle || !luxLocation || !luxBrand || !luxImageFile1 || !luxImageFile2 || !luxNights || !luxPrice || !luxOriginalPrice) {
+        toast({ variant: "destructive", title: "Missing Information", description: "Please fill all required fields for the Ultra Lux package, including two images." });
         return;
     }
     
-    let imageUrl = '';
+    let imageUrls: string[] = [];
     try {
-        imageUrl = await fileToDataUri(luxImageFile);
+        const [url1, url2] = await Promise.all([
+            fileToDataUri(luxImageFile1),
+            fileToDataUri(luxImageFile2),
+        ]);
+        imageUrls.push(url1, url2);
     } catch (error) {
-        toast({ variant: "destructive", title: "Image Error", description: "Could not process image file." });
+        toast({ variant: "destructive", title: "Image Error", description: "Could not process image files." });
         return;
     }
 
@@ -170,8 +183,9 @@ export default function ManagePlatformHotelsPage() {
         title: luxTitle,
         location: luxLocation,
         brand: luxBrand,
-        imageUrl: imageUrl,
-        imageHint: luxImageHint || 'luxury travel',
+        imageUrls: imageUrls,
+        imageHints: [luxImageHint1 || 'luxury travel', luxImageHint2 || 'resort interior'],
+        videoUrl: luxVideoUrl,
         nights: parseInt(luxNights),
         price: parseFloat(luxPrice),
         originalPrice: parseFloat(luxOriginalPrice),
@@ -180,8 +194,9 @@ export default function ManagePlatformHotelsPage() {
     addUltraLuxPackage(newPackage);
     toast({ title: "Ultra Lux Package Added!", description: `${luxTitle} is now live.` });
     setLuxTitle(""); setLuxLocation(""); setLuxBrand(""); 
-    setLuxImageFile(null); setLuxImagePreview(null);
-    setLuxImageHint("");
+    setLuxImageFile1(null); setLuxImagePreview1(null); setLuxImageHint1("");
+    setLuxImageFile2(null); setLuxImagePreview2(null); setLuxImageHint2("");
+    setLuxVideoUrl("");
     setLuxNights(""); setLuxPrice(""); setLuxOriginalPrice("");
     fetchAllData();
   };
@@ -261,27 +276,42 @@ export default function ManagePlatformHotelsPage() {
                                   <Label className="text-gray-300 text-xs">Location *</Label>
                                   <Input placeholder="Tabanan, Bali" required value={luxLocation} onChange={(e) => setLuxLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                               </div>
+                              
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {/* Image 1 Upload */}
                                   <div className="space-y-2">
-                                      <Label className="text-gray-300 text-xs">Image *</Label>
-                                      <Label htmlFor="lux-image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
-                                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <Label className="text-gray-300 text-xs">Image 1 *</Label>
+                                      <Label htmlFor="lux-image-upload-1" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
+                                          {luxImagePreview1 ? 
+                                            <Image src={luxImagePreview1} alt="Preview 1" layout="fill" objectFit="cover" className="rounded-lg" /> :
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                               <UploadIcon className="w-8 h-8 mb-2 text-gray-400" />
-                                              <p className="mb-1 text-sm text-gray-400"><span className="font-semibold text-sky-400">Click to upload</span> or drag</p>
-                                              <p className="text-xs text-gray-500">PNG, JPG, WEBP (Max 5MB)</p>
-                                          </div>
-                                          <Input id="lux-image-upload" type="file" className="hidden" accept="image/*" onChange={handleLuxImageChange} />
+                                              <p className="text-xs text-gray-400">Main Image</p>
+                                            </div>
+                                          }
+                                          <Input id="lux-image-upload-1" type="file" className="hidden" accept="image/*" onChange={(e) => handleLuxImageChange(e, 1)} />
                                       </Label>
+                                      <Input placeholder="Image 1 hint (e.g., luxury resort)" value={luxImageHint1} onChange={(e) => setLuxImageHint1(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400 text-xs h-8" />
                                   </div>
-                                <div className="space-y-1">
-                                  <Label className="text-gray-300 text-xs">Image Hint</Label>
-                                  <Input placeholder="luxury resort bali" value={luxImageHint} onChange={(e) => setLuxImageHint(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
-                                  {luxImagePreview && (
-                                      <div className="mt-2 relative w-full aspect-video">
-                                          <Image src={luxImagePreview} alt="Image Preview" layout="fill" objectFit="cover" className="rounded-md" />
-                                      </div>
-                                  )}
-                                </div>
+                                  {/* Image 2 Upload */}
+                                  <div className="space-y-2">
+                                      <Label className="text-gray-300 text-xs">Image 2 *</Label>
+                                      <Label htmlFor="lux-image-upload-2" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
+                                          {luxImagePreview2 ? 
+                                            <Image src={luxImagePreview2} alt="Preview 2" layout="fill" objectFit="cover" className="rounded-lg" /> :
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <UploadIcon className="w-8 h-8 mb-2 text-gray-400" />
+                                                <p className="text-xs text-gray-400">Secondary Image</p>
+                                            </div>
+                                          }
+                                          <Input id="lux-image-upload-2" type="file" className="hidden" accept="image/*" onChange={(e) => handleLuxImageChange(e, 2)} />
+                                      </Label>
+                                      <Input placeholder="Image 2 hint (e.g., resort pool)" value={luxImageHint2} onChange={(e) => setLuxImageHint2(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400 text-xs h-8" />
+                                  </div>
+                              </div>
+                              <div className="space-y-1">
+                                  <Label className="text-gray-300 text-xs flex items-center gap-1.5"><VideoIcon className="h-4 w-4"/>Video URL (Optional)</Label>
+                                  <Input type="url" placeholder="https://example.com/video.mp4" value={luxVideoUrl} onChange={(e) => setLuxVideoUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="space-y-1">
@@ -313,7 +343,7 @@ export default function ManagePlatformHotelsPage() {
                             {allUltraLux.map(pkg => (
                                 <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
                                     <div className="flex items-center gap-4 flex-grow">
-                                        <Image src={pkg.imageUrl} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
+                                        <Image src={pkg.imageUrls[0] || ''} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
                                         <div>
                                             <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
                                             <p className="text-xs text-gray-400">{pkg.brand} - {pkg.location}</p>

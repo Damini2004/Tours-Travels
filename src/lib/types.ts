@@ -76,12 +76,12 @@ export interface UltraLuxPackage {
   title: string;
   location: string;
   brand: string; // e.g., "SOORI BALI"
-  imageUrl: string;
-  imageHint: string;
+  imageUrls: string[]; // Changed from imageUrl to imageUrls array
+  imageHints: string[]; // Changed from imageHint to imageHints array
+  videoUrl?: string; // Added optional videoUrl
   nights: number;
   price: number;
   originalPrice: number;
-  // No need for a separate discount field, it can be calculated
 }
 
 
