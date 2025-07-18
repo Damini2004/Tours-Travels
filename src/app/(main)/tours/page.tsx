@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -17,18 +16,18 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 const trendingDestinations = [
-  { name: 'Africa', image: 'https://placehold.co/150x200.png', hint: 'africa wildlife' },
-  { name: 'Australia', image: 'https://placehold.co/150x200.png', hint: 'australia landmark' },
-  { name: 'Vietnam', image: 'https://placehold.co/150x200.png', hint: 'vietnam landscape' },
-  { name: 'India', image: 'https://placehold.co/150x200.png', hint: 'india monument' },
-  { name: 'Japan', image: 'https://placehold.co/150x200.png', hint: 'japan temple' },
-  { name: 'Spain', image: 'https://placehold.co/150x200.png', hint: 'spain city' },
-  { name: 'Sri Lanka', image: 'https://placehold.co/150x200.png', hint: 'sri lanka beach' },
-  { name: 'Turkey', image: 'https://placehold.co/150x200.png', hint: 'turkey architecture' },
-  { name: 'Egypt', image: 'https://placehold.co/150x200.png', hint: 'egypt pyramids' },
-  { name: 'Greece', image: 'https://placehold.co/150x200.png', hint: 'greece santorini' },
-  { name: 'Italy', image: 'https://placehold.co/150x200.png', hint: 'italy colosseum' },
-  { name: 'Mexico', image: 'https://placehold.co/150x200.png', hint: 'mexico beach' },
+  { name: 'Thailand', image: 'https://placehold.co/200x250.png', hint: 'thailand city night', price: 35200 },
+  { name: 'Dubai', image: 'https://placehold.co/200x250.png', hint: 'dubai skyline', price: 10600 },
+  { name: 'Vietnam', image: 'https://placehold.co/200x250.png', hint: 'vietnam landscape', price: 12600 },
+  { name: 'Malaysia', image: 'https://placehold.co/200x250.png', hint: 'malaysia petronas towers', price: 39600 },
+  { name: 'Maldives', image: 'https://placehold.co/200x250.png', hint: 'maldives overwater villas', price: 28500 },
+  { name: 'Singapore', image: 'https://placehold.co/200x250.png', hint: 'singapore marina bay', price: 50200 },
+  { name: 'Bali', image: 'https://placehold.co/200x250.png', hint: 'bali rice terraces', price: 63800 },
+  { name: 'Turkey', image: 'https://placehold.co/200x250.png', hint: 'turkey architecture', price: 45000 },
+  { name: 'Egypt', image: 'https://placehold.co/200x250.png', hint: 'egypt pyramids', price: 55000 },
+  { name: 'Greece', image: 'https://placehold.co/200x250.png', hint: 'greece santorini', price: 62000 },
+  { name: 'Italy', image: 'https://placehold.co/200x250.png', hint: 'italy colosseum', price: 58000 },
+  { name: 'Mexico', image: 'https://placehold.co/200x250.png', hint: 'mexico beach', price: 48000 },
 ];
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
@@ -231,37 +230,38 @@ export default function ToursPage() {
           </div>
 
           {/* Tours Catalogue */}
-          <div className="my-16 bg-[#155e63] border border-[#155e63] p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
+          <div className="my-16 bg-white border border-[#155e63] p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
             <div className="flex items-center gap-4">
               <Image src="https://placehold.co/100x100/155e63/FFFFFF.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
               <div>
-                <h3 className="text-xl font-bold text-white">Tours Catalogue</h3>
-                <p className="text-gray-300">Go beyond the ordinary and discover the difference.</p>
+                <h3 className="text-xl font-bold text-[#155e63]">Tours Catalogue</h3>
+                <p className="text-gray-600">Go beyond the ordinary and discover the difference.</p>
               </div>
             </div>
             <Button variant="secondary" className="mt-4 sm:mt-0 bg-gray-200 text-gray-800 hover:bg-white">View Now</Button>
           </div>
 
-          {/* Trending Destinations */}
-          <div>
+          {/* Trending Destinations - New Design */}
+          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-[#155e63]">Immerse yourself in trending destinations</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">International Destinations!</h2>
                 <div className="hidden md:flex items-center gap-2">
-                    <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('left', trendingScrollRef)}>
-                        <ChevronLeft className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full bg-white shadow-sm" onClick={() => scroll('left', trendingScrollRef)}>
+                        <ChevronLeft className="h-4 w-4 text-gray-600" />
                     </Button>
-                    <Button variant="outline" size="icon" className="rounded-full border-[#155e63]/30 text-[#155e63]" onClick={() => scroll('right', trendingScrollRef)}>
-                        <ChevronRight className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full bg-white shadow-sm" onClick={() => scroll('right', trendingScrollRef)}>
+                        <ChevronRight className="h-4 w-4 text-gray-600" />
                     </Button>
                 </div>
             </div>
             <div ref={trendingScrollRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-4 -mx-4 px-4 pb-2">
               {trendingDestinations.map(dest => (
-                <Link href="#" key={dest.name} className="block group text-center flex-shrink-0 w-28 sm:w-32">
-                  <div className="relative w-full aspect-square rounded-full overflow-hidden mb-2 transform group-hover:scale-105 transition-transform">
-                    <Image src={dest.image} alt={dest.name} layout="fill" objectFit="cover" data-ai-hint={dest.hint} />
+                <Link href="#" key={dest.name} className="block group text-left flex-shrink-0 w-48">
+                  <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden mb-2 shadow-md">
+                    <Image src={dest.image} alt={dest.name} layout="fill" objectFit="cover" data-ai-hint={dest.hint} className="group-hover:scale-105 transition-transform" />
                   </div>
-                  <p className="text-sm font-semibold group-hover:underline text-[#155e63]">{dest.name}</p>
+                  <p className="text-base font-bold text-gray-800 group-hover:text-[#155e63]">{dest.name}</p>
+                  <p className="text-sm text-gray-500">Starting at ₹{dest.price.toLocaleString('en-IN')} Per person</p>
                 </Link>
               ))}
             </div>
