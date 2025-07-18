@@ -343,7 +343,7 @@ export default function ManagePlatformHotelsPage() {
                             {allUltraLux.map(pkg => (
                                 <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
                                     <div className="flex items-center gap-4 flex-grow">
-                                        <Image src={pkg.imageUrls[0] || ''} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
+                                        <Image src={pkg.imageUrls?.[0] || 'https://placehold.co/80x60.png/27272a/FFFFFF?text=No+Image'} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
                                         <div>
                                             <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
                                             <p className="text-xs text-gray-400">{pkg.brand} - {pkg.location}</p>
