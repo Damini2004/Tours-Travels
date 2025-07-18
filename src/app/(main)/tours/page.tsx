@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -15,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
 
 const trendingDestinations = [
   { name: 'Thailand', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?q=80&w=2070&auto=format&fit=crop', hint: 'thailand temple', price: 35200 },
@@ -38,6 +38,7 @@ export default function ToursPage() {
   const [savedTours, setSavedTours] = useState<Record<string, boolean>>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const trendingScrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // State for the new search bar
   const [searchDestination, setSearchDestination] = useState('');
@@ -87,8 +88,11 @@ export default function ToursPage() {
   };
 
   const handleSearch = () => {
-    // In a real app, you would use searchDestination, selectedDuration, selectedYear, selectedMonth to filter results.
-    alert(`Searching for:\nDestination: ${searchDestination}\nWhen: ${displayWhen}\nDuration: ${selectedDuration}`);
+    const params = new URLSearchParams();
+    if (searchDestination) {
+      params.set('destination', searchDestination);
+    }
+    router.push(`/tours/search?${params.toString()}`);
   }
 
   const months = ["July", "August", "September", "October", "November", "December"];
@@ -103,7 +107,7 @@ export default function ToursPage() {
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-8 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg flex flex-col sm:flex-row items-center gap-2 max-w-2xl mx-auto border">
+          <div className="mt-8 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg flex flex-col sm:flex-row items-stretch gap-2 max-w-2xl mx-auto border">
             <div className="flex-grow p-2 w-full text-left">
                 <label className="text-xs font-bold text-gray-600 block pl-2">Where</label>
                 <Input 
@@ -114,7 +118,7 @@ export default function ToursPage() {
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
             </div>
-            <div className="w-px h-10 bg-gray-200 hidden sm:block"></div>
+            <div className="w-px h-10 bg-gray-200 self-center hidden sm:block"></div>
             <div className="flex-grow p-2 w-full">
                  <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
@@ -173,7 +177,7 @@ export default function ToursPage() {
                     </PopoverContent>
                 </Popover>
             </div>
-            <Button variant="outline" className="bg-white text-[#155e63] border-[#155e63] hover:bg-gray-100 rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
+            <Button variant="outline" className="bg-white text-[#155e63] border-[#155e63] hover:bg-gray-100 rounded-lg h-full px-6" onClick={handleSearch}>
               <Search className="w-5 h-5" />
             </Button>
           </div>
@@ -198,9 +202,9 @@ export default function ToursPage() {
             {tours.map((tour) => {
               const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
               return (
-                <div key={tour.id} className="bg-white border border-[#155e63]/20 rounded-lg flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[30vw] flex-shrink-0">
+                <div key={tour.id} className="bg-white border border-[#155e63]/20 rounded-lg flex flex-col group w-[300px] h-[450px] flex-shrink-0">
                   <div className="relative">
-                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-72 object-cover rounded-t-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
+                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-48 object-cover rounded-t-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
                     <Button size="sm" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-lg h-8 w-auto px-3 backdrop-blur-sm text-gray-700 font-semibold text-xs">
                       <Heart className={cn("h-4 w-4 mr-1.5", savedTours[tour.id] && 'text-red-500 fill-current')} />
                       Save
