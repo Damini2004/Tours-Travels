@@ -27,12 +27,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { useSettings, currencySymbols } from '@/context/SettingsContext';
 
 
-const CLIENT_ID = "vprUAkpZepjHvwh6EG9eabPzjAJgYgml";
-const CLIENT_SECRET = "wREmJOtkAw1TElA7";
+const CLIENT_ID = process.env.NEXT_PUBLIC_AMADEUS_CLIENT_ID;
+const CLIENT_SECRET = process.env.NEXT_PUBLIC_AMADEUS_CLIENT_SECRET;
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent font-medium";
 
 const getAccessToken = async (): Promise<string> => {
+  if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new Error("Amadeus API credentials are not configured in environment variables.");
+  }
   const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
   const body = new URLSearchParams({
     grant_type: "client_credentials",
