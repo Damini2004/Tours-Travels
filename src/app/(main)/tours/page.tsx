@@ -84,10 +84,10 @@ export default function ToursPage() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl md:text-3xl font-bold">Today's top <i className="font-serif">exclusive</i> offers</h2>
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('left', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('left', scrollContainerRef)}>
                   <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('right', scrollContainerRef)}>
+              <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('right', scrollContainerRef)}>
                   <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -118,7 +118,7 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-gray-400">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-white/80 text-white hover:bg-white/10">
+                      <Button variant="outline" className="w-full border-white/80 text-white">
                         View offer
                       </Button>
                     </div>
@@ -145,10 +145,10 @@ export default function ToursPage() {
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl md:text-3xl font-bold">Immerse yourself in trending destinations</h2>
                 <div className="hidden md:flex items-center gap-2">
-                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('left', trendingScrollRef)}>
+                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('left', trendingScrollRef)}>
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('right', trendingScrollRef)}>
+                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('right', trendingScrollRef)}>
                         <ChevronRight className="h-4 w-4" />
                     </Button>
                 </div>
