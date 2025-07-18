@@ -1,4 +1,5 @@
 
+
 export interface Review {
   reviewerName: string;
   reviewerAvatarUrl?: string;
@@ -76,12 +77,24 @@ export interface UltraLuxPackage {
   title: string;
   location: string;
   brand: string; // e.g., "SOORI BALI"
-  imageUrls: string[]; // Changed from imageUrl to imageUrls array
-  imageHints: string[]; // Changed from imageHint to imageHints array
-  videoUrl?: string; // Added optional videoUrl
+  imageUrls: string[]; 
+  imageHints: string[]; 
+  videoUrl?: string;
   nights: number;
   price: number;
   originalPrice: number;
+}
+
+export interface TourPackage {
+  id: string;
+  title: string;
+  location: string; // e.g., "Stays in Prague, Ends in Istanbul"
+  tourType: string; // e.g., "Luxury Escapes Tours"
+  durationDays: number;
+  price: number;
+  originalPrice: number;
+  imageUrl: string;
+  imageHint: string;
 }
 
 

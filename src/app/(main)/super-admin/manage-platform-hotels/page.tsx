@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon, Gem, UploadIcon, VideoIcon } from "lucide-react";
+import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, TrashIcon, Loader2, KeyRoundIcon, Gem, UploadIcon, VideoIcon, Ship } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
-import type { Hotel, UltraLuxPackage } from '@/lib/types';
+import type { Hotel, UltraLuxPackage, TourPackage } from '@/lib/types';
 import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages, deleteUltraLuxPackage } from '@/lib/hotel-data';
+import { getTourPackages, addTourPackage, deleteTourPackage } from '@/lib/tour-data';
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
@@ -63,11 +64,24 @@ export default function ManagePlatformHotelsPage() {
   const [luxOriginalPrice, setLuxOriginalPrice] = useState("");
   const [allUltraLux, setAllUltraLux] = useState<UltraLuxPackage[]>([]);
 
+  // State for Tour Packages
+  const [tourTitle, setTourTitle] = useState("");
+  const [tourLocation, setTourLocation] = useState("");
+  const [tourType, setTourType] = useState("");
+  const [tourDuration, setTourDuration] = useState("");
+  const [tourPrice, setTourPrice] = useState("");
+  const [tourOriginalPrice, setTourOriginalPrice] = useState("");
+  const [tourImageFile, setTourImageFile] = useState<File | null>(null);
+  const [tourImagePreview, setTourImagePreview] = useState<string | null>(null);
+  const [tourImageHint, setTourImageHint] = useState("");
+  const [allTours, setAllTours] = useState<TourPackage[]>([]);
+
 
   const fetchAllData = useCallback(() => {
     setIsLoading(true);
     setAllHotels(getHotels());
     setAllUltraLux(getUltraLuxPackages());
+    setAllTours(getTourPackages());
     setIsLoading(false);
   }, []);
 
@@ -88,6 +102,16 @@ export default function ManagePlatformHotelsPage() {
         if (luxImagePreview2) URL.revokeObjectURL(luxImagePreview2);
         setLuxImagePreview2(previewUrl);
       }
+    }
+  };
+
+  const handleTourImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        const previewUrl = URL.createObjectURL(file);
+        setTourImageFile(file);
+        if (tourImagePreview) URL.revokeObjectURL(tourImagePreview);
+        setTourImagePreview(previewUrl);
     }
   };
 
@@ -200,6 +224,41 @@ export default function ManagePlatformHotelsPage() {
     setLuxNights(""); setLuxPrice(""); setLuxOriginalPrice("");
     fetchAllData();
   };
+  
+  const handleAddTourSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tourTitle || !tourLocation || !tourType || !tourDuration || !tourPrice || !tourOriginalPrice || !tourImageFile) {
+        toast({ variant: "destructive", title: "Missing Information", description: "Please fill all required fields for the tour package." });
+        return;
+    }
+
+    let imageUrl: string;
+    try {
+        imageUrl = await fileToDataUri(tourImageFile);
+    } catch (error) {
+        toast({ variant: "destructive", title: "Image Error", description: "Could not process the tour image." });
+        return;
+    }
+    
+    const newTour: Omit<TourPackage, 'id'> = {
+        title: tourTitle,
+        location: tourLocation,
+        tourType: tourType,
+        durationDays: parseInt(tourDuration),
+        price: parseFloat(tourPrice),
+        originalPrice: parseFloat(tourOriginalPrice),
+        imageUrl: imageUrl,
+        imageHint: tourImageHint || 'tour destination',
+    };
+
+    addTourPackage(newTour);
+    toast({ title: "Tour Package Added!", description: `${tourTitle} is now live.` });
+    setTourTitle(""); setTourLocation(""); setTourType(""); setTourDuration("");
+    setTourPrice(""); setTourOriginalPrice(""); setTourImageFile(null);
+    setTourImagePreview(null); setTourImageHint("");
+    fetchAllData();
+  };
+
 
   const handleDeleteHotel = (hotelId: string) => {
     const currentHotels = getHotels();
@@ -224,6 +283,16 @@ export default function ManagePlatformHotelsPage() {
     }
   };
 
+  const handleDeleteTourPackage = (packageId: string) => {
+    const deletedPackage = deleteTourPackage(packageId);
+    if (deletedPackage) {
+        toast({ title: "Tour Package Deleted", description: `${deletedPackage.title} has been removed.` });
+        fetchAllData();
+    } else {
+        toast({ variant: "destructive", title: "Deletion Failed", description: "Could not find the tour to delete." });
+    }
+  };
+
   useEffect(() => {
     const isCustom = thumbnailUrl && thumbnailUrl.trim() !== "" && thumbnailUrl !== defaultHotelImage;
     setThumbnailHint(isCustom ? "hotel building" : defaultHotelHint);
@@ -239,9 +308,12 @@ export default function ManagePlatformHotelsPage() {
       </div>
       
       <Tabs defaultValue="ultra-lux" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-slate-800/50 p-1 rounded-md border border-slate-700 mb-6">
+        <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 p-1 rounded-md border border-slate-700 mb-6">
             <TabsTrigger value="ultra-lux" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2">
-                <Gem className="mr-2 h-4 w-4" /> Ultra Lux Packages
+                <Gem className="mr-2 h-4 w-4" /> Ultra Lux
+            </TabsTrigger>
+            <TabsTrigger value="tours-cruises" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2">
+                <Ship className="mr-2 h-4 w-4" /> Tours & Cruises
             </TabsTrigger>
             <TabsTrigger value="regular-hotels" className="text-gray-300 data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-md py-2">
                 <HotelBuildingIcon className="mr-2 h-4 w-4" /> Regular Hotels
@@ -281,7 +353,7 @@ export default function ManagePlatformHotelsPage() {
                                   {/* Image 1 Upload */}
                                   <div className="space-y-2">
                                       <Label className="text-gray-300 text-xs">Image 1 *</Label>
-                                      <Label htmlFor="lux-image-upload-1" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
+                                      <Label htmlFor="lux-image-upload-1" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80 relative">
                                           {luxImagePreview1 ? 
                                             <Image src={luxImagePreview1} alt="Preview 1" layout="fill" objectFit="cover" className="rounded-lg" /> :
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -296,7 +368,7 @@ export default function ManagePlatformHotelsPage() {
                                   {/* Image 2 Upload */}
                                   <div className="space-y-2">
                                       <Label className="text-gray-300 text-xs">Image 2 *</Label>
-                                      <Label htmlFor="lux-image-upload-2" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80">
+                                      <Label htmlFor="lux-image-upload-2" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80 relative">
                                           {luxImagePreview2 ? 
                                             <Image src={luxImagePreview2} alt="Preview 2" layout="fill" objectFit="cover" className="rounded-lg" /> :
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -354,6 +426,102 @@ export default function ManagePlatformHotelsPage() {
                                             <EditIcon className="mr-1 h-3 w-3"/>Edit
                                         </Button>
                                         <Button variant="destructive" size="sm" onClick={() => handleDeleteUltraLuxPackage(pkg.id)}>
+                                            <TrashIcon className="mr-1 h-3 w-3"/>Delete
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </TabsContent>
+
+        <TabsContent value="tours-cruises">
+             <Card className="bg-slate-800/60 backdrop-blur-md border border-slate-700/80 rounded-lg shadow-xl">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-white text-2xl font-bold"><Ship className="mr-3 h-7 w-7 text-sky-400" />Tours & Cruises</CardTitle>
+                  <CardDescription className="text-gray-300">Manage tour packages for various destinations.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="add-tour" className="border-b-0">
+                        <AccordionTrigger className="text-lg font-semibold text-white hover:no-underline rounded-md px-4 hover:bg-slate-700/50">
+                            <div className="flex items-center gap-2"><PlusCircleIcon className="h-5 w-5"/> Add New Tour Package</div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-4">
+                            <form onSubmit={handleAddTourSubmit} className="space-y-4 p-4 border border-slate-700 rounded-b-md bg-slate-800">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                  <Label className="text-gray-300 text-xs">Title *</Label>
+                                  <Input placeholder="Ultimate Europe by Private Charter..." required value={tourTitle} onChange={(e) => setTourTitle(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-1">
+                                  <Label className="text-gray-300 text-xs">Location / Route *</Label>
+                                  <Input placeholder="Stays in Prague, Ends in Istanbul" required value={tourLocation} onChange={(e) => setTourLocation(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <Label className="text-gray-300 text-xs">Tour Type / Series *</Label>
+                                    <Input placeholder="Luxury Escapes Tours - Premium" required value={tourType} onChange={(e) => setTourType(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-1">
+                                    <Label className="text-gray-300 text-xs">Duration (Days) *</Label>
+                                    <Input type="number" placeholder="25" required value={tourDuration} onChange={(e) => setTourDuration(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                              </div>
+                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                  <Label className="text-gray-300 text-xs">Price (INR) *</Label>
+                                  <Input type="number" placeholder="1741524" required value={tourPrice} onChange={(e) => setTourPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                                <div className="space-y-1">
+                                  <Label className="text-gray-300 text-xs">Original Price (INR) *</Label>
+                                  <Input type="number" placeholder="1850000" required value={tourOriginalPrice} onChange={(e) => setTourOriginalPrice(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
+                                </div>
+                              </div>
+                               <div className="space-y-2">
+                                  <Label className="text-gray-300 text-xs">Image *</Label>
+                                  <Label htmlFor="tour-image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-600 border-dashed rounded-lg cursor-pointer bg-slate-700/50 hover:bg-slate-700/80 relative">
+                                      {tourImagePreview ? 
+                                        <Image src={tourImagePreview} alt="Tour Preview" layout="fill" objectFit="cover" className="rounded-lg" /> :
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                          <UploadIcon className="w-8 h-8 mb-2 text-gray-400" />
+                                          <p className="text-xs text-gray-400">Upload Tour Image</p>
+                                        </div>
+                                      }
+                                      <Input id="tour-image-upload" type="file" className="hidden" accept="image/*" onChange={handleTourImageChange} />
+                                  </Label>
+                                  <Input placeholder="Image hint (e.g., safari lion)" value={tourImageHint} onChange={(e) => setTourImageHint(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400 text-xs h-8" />
+                              </div>
+                              <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white mt-4">Add Tour Package</Button>
+                            </form>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    <Separator className="my-4 bg-slate-700" />
+                    <h4 className="text-lg font-semibold text-white flex items-center mb-4"><ListIcon className="mr-2 h-5 w-5"/>All Tour Packages ({allTours.length})</h4>
+                     {isLoading ? (
+                        <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-sky-400" /></div>
+                    ) : allTours.length === 0 ? (
+                        <p className="text-gray-400 text-center py-4">No tour packages found.</p>
+                    ) : (
+                        <div className="space-y-3">
+                            {allTours.map(pkg => (
+                                <div key={pkg.id} className="p-3 border border-slate-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-slate-700/50 transition-colors">
+                                    <div className="flex items-center gap-4 flex-grow">
+                                        <Image src={pkg.imageUrl || 'https://placehold.co/80x60.png'} alt={pkg.title} width={80} height={60} className="rounded-md object-cover" />
+                                        <div>
+                                            <h3 className="font-semibold text-base text-gray-100">{pkg.title}</h3>
+                                            <p className="text-xs text-gray-400">{pkg.tourType} - {pkg.location}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
+                                        <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 opacity-50">
+                                            <EditIcon className="mr-1 h-3 w-3"/>Edit
+                                        </Button>
+                                        <Button variant="destructive" size="sm" onClick={() => handleDeleteTourPackage(pkg.id)}>
                                             <TrashIcon className="mr-1 h-3 w-3"/>Delete
                                         </Button>
                                     </div>
@@ -423,7 +591,7 @@ export default function ManagePlatformHotelsPage() {
                                     <Input id="saThumbnailUrl" placeholder={defaultHotelImage} value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)} className="bg-slate-700/50 border-slate-600 text-gray-100 placeholder:text-gray-400 focus:bg-slate-700 focus:border-sky-400" />
                                     {thumbnailUrl && (
                                         <div className="mt-2">
-                                            <img src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
+                                            <Image src={thumbnailUrl} alt="Thumbnail Preview" className="h-20 w-auto rounded-md border border-slate-600" 
                                                 onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400.png/CCCCCC/FFFFFF?text=Invalid+URL"; }} 
                                             />
                                         </div>
