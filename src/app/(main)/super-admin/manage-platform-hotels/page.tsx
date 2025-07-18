@@ -422,7 +422,7 @@ export default function ManagePlatformHotelsPage() {
                                         </div>
                                     </div>
                                     <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
-                                        <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900 opacity-50">
+                                        <Button variant="outline" size="sm" className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900">
                                             <EditIcon className="mr-1 h-3 w-3"/>Edit
                                         </Button>
                                         <Button variant="destructive" size="sm" onClick={() => handleDeleteUltraLuxPackage(pkg.id)}>
@@ -518,7 +518,7 @@ export default function ManagePlatformHotelsPage() {
                                         </div>
                                     </div>
                                     <div className="flex gap-2 mt-2 sm:mt-0 flex-shrink-0">
-                                        <Button variant="outline" size="sm" disabled className="bg-slate-100 text-slate-900 border border-slate-300 opacity-50">
+                                        <Button variant="outline" size="sm" className="bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200 hover:text-slate-900">
                                             <EditIcon className="mr-1 h-3 w-3"/>Edit
                                         </Button>
                                         <Button variant="destructive" size="sm" onClick={() => handleDeleteTourPackage(pkg.id)}>
