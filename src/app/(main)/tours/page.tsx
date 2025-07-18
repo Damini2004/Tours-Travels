@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Heart, Search, Ship } from 'lucide-react';
+import { Heart, Search, Ship, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { TourPackage } from '@/lib/types';
 import { getTourPackages } from '@/lib/tour-data';
 import Link from 'next/link';
@@ -22,6 +22,9 @@ const trendingDestinations = [
   { name: 'Sri Lanka', image: 'https://placehold.co/150x200.png', hint: 'sri lanka beach' },
   { name: 'Turkey', image: 'https://placehold.co/150x200.png', hint: 'turkey architecture' },
   { name: 'Egypt', image: 'https://placehold.co/150x200.png', hint: 'egypt pyramids' },
+  { name: 'Greece', image: 'https://placehold.co/150x200.png', hint: 'greece santorini' },
+  { name: 'Italy', image: 'https://placehold.co/150x200.png', hint: 'italy colosseum' },
+  { name: 'Mexico', image: 'https://placehold.co/150x200.png', hint: 'mexico beach' },
 ];
 
 const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] bg-clip-text text-transparent";
@@ -29,6 +32,7 @@ const gradientTextClass = "bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#1
 export default function ToursPage() {
   const [tours, setTours] = useState<TourPackage[]>([]);
   const [savedTours, setSavedTours] = useState<Record<string, boolean>>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadedTours = getTourPackages();
@@ -42,6 +46,16 @@ export default function ToursPage() {
   const calculateDiscountPercent = (price: number, originalPrice: number) => {
     if (originalPrice <= 0 || originalPrice <= price) return 0;
     return Math.round(((originalPrice - price) / originalPrice) * 100);
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
@@ -120,10 +134,20 @@ export default function ToursPage() {
 
           {/* Trending Destinations */}
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">Immerse yourself in trending destinations</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-4">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold">Immerse yourself in trending destinations</h2>
+                <div className="hidden md:flex items-center gap-2">
+                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('left')}>
+                        <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white hover:bg-white/10" onClick={() => scroll('right')}>
+                        <ChevronRight className="h-4 w-4" />
+                    </Button>
+                </div>
+            </div>
+            <div ref={scrollContainerRef} className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-4 -mx-4 px-4 pb-2">
               {trendingDestinations.map(dest => (
-                <Link href="#" key={dest.name} className="block group text-center">
+                <Link href="#" key={dest.name} className="block group text-center flex-shrink-0 w-28 sm:w-32">
                   <div className="relative w-full aspect-square rounded-full overflow-hidden mb-2 transform group-hover:scale-105 transition-transform">
                     <Image src={dest.image} alt={dest.name} layout="fill" objectFit="cover" data-ai-hint={dest.hint} />
                   </div>
