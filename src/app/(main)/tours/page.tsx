@@ -96,9 +96,9 @@ export default function ToursPage() {
             {tours.map((tour) => {
               const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
               return (
-                <div key={tour.id} className="bg-transparent flex flex-col group w-[85vw] sm:w-[45vw] md:w-[32vw] lg:w-[25vw] flex-shrink-0">
+                <div key={tour.id} className="bg-transparent flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[28vw] flex-shrink-0">
                   <div className="relative">
-                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-56 object-cover rounded-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
+                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-64 object-cover rounded-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
                     <Button size="sm" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-lg h-8 w-auto px-3 backdrop-blur-sm text-gray-700 font-semibold text-xs">
                       <Heart className={cn("h-4 w-4 mr-1.5", savedTours[tour.id] && 'text-red-500 fill-current')} />
                       Save
