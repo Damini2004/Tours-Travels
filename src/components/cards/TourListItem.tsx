@@ -88,8 +88,8 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                 {discount > 0 && <Badge variant="destructive" className="bg-green-600 text-white mt-1">SAVE {discount}%</Badge>}
                 <p className="text-xs text-gray-500 mt-1">Includes taxes & fees</p>
               </div>
-              <Button className="w-full mt-4 bg-gray-800 text-white hover:bg-gray-700">
-                View offer
+              <Button asChild className="w-full mt-4 bg-gray-800 text-white hover:bg-gray-700">
+                <Link href="/tours/search">View offer</Link>
               </Button>
             </div>
           </div>

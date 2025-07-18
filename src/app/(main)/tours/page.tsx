@@ -108,24 +108,23 @@ export default function ToursPage() {
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
           
            {/* New Search Bar */}
-          <div className="mt-8 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg flex items-center gap-2 max-w-2xl mx-auto border">
-            <div className="flex-grow p-2 w-full text-left rounded-lg hover:bg-gray-100/50 transition-colors">
-                <label className="text-xs font-bold text-gray-600 block pl-2">Where</label>
+          <div className="mt-8 bg-white/95 backdrop-blur-sm p-2 rounded-full shadow-lg flex items-center gap-2 max-w-xl mx-auto border border-gray-300">
+              <div className="flex-grow flex items-center gap-2 pl-4">
+                 <Search className="w-5 h-5 text-gray-500" />
                 <Input 
                     type="text" 
                     placeholder="Search destination or place" 
-                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0 text-base bg-transparent pl-2"
+                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0 text-base bg-transparent"
                     value={searchDestination}
                     onChange={(e) => setSearchDestination(e.target.value)}
                 />
-            </div>
-            <div className="w-px h-10 bg-gray-200 self-center"></div>
-            <div className="flex-grow p-2 w-full rounded-lg hover:bg-gray-100/50 transition-colors">
-                 <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
+              </div>
+              <div className="w-px h-6 bg-gray-300 self-center"></div>
+               <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
                     <PopoverTrigger asChild>
-                        <button className="w-full text-left pl-2">
+                        <button className="text-left px-4 py-1.5 rounded-full hover:bg-gray-100/80 transition-colors">
                             <label className="text-xs font-bold text-gray-600 block">When?</label>
-                            <span className="text-gray-800 text-base">{displayWhen}</span>
+                            <span className="text-gray-800 text-sm">{displayWhen}</span>
                         </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[500px] p-4 mt-2" align="start">
@@ -177,8 +176,7 @@ export default function ToursPage() {
                         </div>
                     </PopoverContent>
                 </Popover>
-            </div>
-            <Button className="bg-white text-[#155e63] border border-[#155e63]/50 hover:bg-gray-100 rounded-full w-12 h-12 flex-shrink-0" size="icon" onClick={handleSearch}>
+            <Button className="bg-white text-[#155e63] border border-[#155e63]/50 hover:bg-gray-100 rounded-full w-11 h-11 flex-shrink-0" size="icon" onClick={handleSearch}>
               <Search className="w-5 h-5" />
             </Button>
           </div>
@@ -189,7 +187,7 @@ export default function ToursPage() {
         <div className="container mx-auto px-4 py-12">
           {/* Today's top exclusive offers */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">Today's top <i className="font-serif">exclusive</i> offers</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#155e63]">Today's top <i className="font-serif">exclusive</i> offers</h2>
             <div className="hidden md:flex items-center gap-2">
               <Button variant="outline" size="icon" className="rounded-full border-white/30 text-white" onClick={() => scroll('left', scrollContainerRef)}>
                   <ChevronLeft className="h-4 w-4" />
@@ -225,8 +223,8 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-[#155e63]/70">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-[#155e63] text-[#155e63] hover:bg-white">
-                        View offer
+                      <Button asChild variant="outline" className="w-full border-[#155e63] text-[#155e63] hover:bg-white">
+                        <Link href="/tours/search">View offer</Link>
                       </Button>
                     </div>
                   </div>
