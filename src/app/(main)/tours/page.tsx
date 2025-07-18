@@ -70,7 +70,7 @@ export default function ToursPage() {
           <div className="mt-6 bg-white p-2 rounded-lg shadow-lg flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
             <Input type="text" placeholder="Search destination or place" className="flex-grow text-gray-800" />
             <Input type="text" placeholder="When?" className="w-full sm:w-auto text-gray-800" />
-            <Button className="bg-[#155e63] hover:bg-[#155e63]/90 text-white w-full sm:w-auto">
+            <Button className="bg-[#155e63] text-white w-full sm:w-auto">
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
@@ -96,20 +96,20 @@ export default function ToursPage() {
             {tours.map((tour) => {
               const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
               return (
-                <div key={tour.id} className="bg-white border border-white flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[28vw] flex-shrink-0">
+                <div key={tour.id} className="bg-white border border-[#155e63]/20 rounded-lg flex flex-col group w-[90vw] sm:w-[50vw] md:w-[35vw] lg:w-[28vw] flex-shrink-0">
                   <div className="relative">
-                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-72 object-cover rounded-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
+                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={224} className="w-full h-72 object-cover rounded-t-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
                     <Button size="sm" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-lg h-8 w-auto px-3 backdrop-blur-sm text-gray-700 font-semibold text-xs">
                       <Heart className={cn("h-4 w-4 mr-1.5", savedTours[tour.id] && 'text-red-500 fill-current')} />
                       Save
                     </Button>
                   </div>
-                  <div className="pt-4 flex-grow flex flex-col">
+                  <div className="p-4 flex-grow flex flex-col">
                     <p className="text-xs text-[#155e63]/80">{tour.location}</p>
                     <p className="text-xs text-[#155e63] font-semibold">{tour.tourType}</p>
                     <h3 className="text-sm font-semibold mt-1 flex-grow text-[#155e63] group-hover:text-[#155e63]/80 transition-colors">{tour.title}</h3>
-                    <div className="mt-4 grid grid-cols-2 items-end">
-                      <div>
+                    <div className="mt-auto pt-4">
+                      <div className="mb-4">
                         <p className="text-xs text-[#155e63]/80">{tour.durationDays} days from</p>
                         <p className="text-lg font-bold text-[#155e63]">₹{tour.price.toLocaleString('en-IN')}<span className="text-xs font-normal text-[#155e63]/80"> /person</span></p>
                         <div className="flex items-center text-xs text-[#155e63]/70">
@@ -118,7 +118,7 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-[#155e63]/70">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-[#155e63]/80 text-[#155e63]">
+                      <Button variant="outline" className="w-full border-[#155e63]/80 text-[#155e63] hover:bg-[#155e63] hover:text-white">
                         View offer
                       </Button>
                     </div>
