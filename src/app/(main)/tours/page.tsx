@@ -110,7 +110,7 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-gray-400">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-white/80 text-white hover:bg-white/10 hover:text-white">
+                      <Button variant="outline" className="w-full border-white/80 text-white">
                         View offer
                       </Button>
                     </div>
