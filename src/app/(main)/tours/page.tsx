@@ -63,69 +63,74 @@ export default function ToursPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Today's top exclusive offers */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold">Today's top exclusive offers</h2>
-          <Button variant="link" className="text-primary hover:text-primary/80">View all</Button>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tours.map((tour) => {
-            const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
-            return (
-              <Card key={tour.id} className="bg-card border border-border rounded-lg overflow-hidden flex flex-col group shadow-md hover:shadow-xl transition-shadow duration-300">
-                <div className="relative">
-                  <Image src={tour.imageUrl} alt={tour.title} width={300} height={200} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" data-ai-hint={tour.imageHint} />
-                  <Button size="icon" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full h-8 w-8 backdrop-blur-sm">
-                    <Heart className={cn("h-4 w-4 text-gray-600", savedTours[tour.id] && 'text-red-500 fill-current')} />
-                  </Button>
-                </div>
-                <div className="p-4 flex-grow flex flex-col">
-                  <p className="text-xs text-muted-foreground">{tour.location}</p>
-                  <p className="text-xs text-secondary-foreground font-semibold">{tour.tourType}</p>
-                  <h3 className="text-sm font-semibold mt-1 flex-grow text-foreground group-hover:text-primary transition-colors">{tour.title}</h3>
-                  <div className="mt-4">
-                    <p className="text-xs text-muted-foreground">{tour.durationDays} days from</p>
-                    <p className="text-lg font-bold text-foreground">₹{tour.price.toLocaleString('en-IN')}<span className="text-xs font-normal"> person</span></p>
-                    <div className="flex items-center text-xs text-muted-foreground">
-                      <span>Valued up to ₹{tour.originalPrice.toLocaleString('en-IN')}</span>
-                      {discount > 0 && <span className="ml-2 bg-green-100 text-green-700 text-xxs font-bold px-1.5 py-0.5 rounded-full border border-green-200">{discount}% OFF</span>}
+      <div className="bg-[#2d3748] text-white">
+        <div className="container mx-auto px-4 py-12">
+          {/* Today's top exclusive offers */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold">Today's top <i className="font-serif">exclusive</i> offers</h2>
+            <Button variant="link" className="text-white hover:text-gray-300">View all</Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-8">
+            {tours.map((tour) => {
+              const discount = calculateDiscountPercent(tour.price, tour.originalPrice);
+              return (
+                <div key={tour.id} className="bg-transparent flex flex-col group">
+                  <div className="relative">
+                    <Image src={tour.imageUrl} alt={tour.title} width={300} height={200} className="w-full h-48 object-cover rounded-lg group-hover:opacity-90 transition-opacity" data-ai-hint={tour.imageHint} />
+                    <Button size="sm" onClick={() => toggleSave(tour.id)} className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-lg h-8 w-auto px-3 backdrop-blur-sm text-gray-700 font-semibold text-xs">
+                      <Heart className={cn("h-4 w-4 mr-1.5", savedTours[tour.id] && 'text-red-500 fill-current')} />
+                      Save
+                    </Button>
+                  </div>
+                  <div className="pt-4 flex-grow flex flex-col">
+                    <p className="text-xs text-gray-300">{tour.location}</p>
+                    <p className="text-xs text-white font-semibold">{tour.tourType}</p>
+                    <h3 className="text-sm font-semibold mt-1 flex-grow text-white group-hover:text-gray-200 transition-colors">{tour.title}</h3>
+                    <div className="mt-4 grid grid-cols-2 items-end">
+                      <div>
+                        <p className="text-xs text-gray-300">{tour.durationDays} days from</p>
+                        <p className="text-lg font-bold text-white">₹{tour.price.toLocaleString('en-IN')}<span className="text-xs font-normal text-gray-300"> /person</span></p>
+                        <div className="flex items-center text-xs text-gray-400">
+                          <span>Valued up to ₹{tour.originalPrice.toLocaleString('en-IN')}</span>
+                          {discount > 0 && <span className="ml-2 bg-teal-500 text-white text-xxs font-bold px-1.5 py-0.5 rounded-sm">{discount}%</span>}
+                        </div>
+                        <p className="text-xs text-gray-400">Twin room</p>
+                      </div>
+                      <Button variant="outline" className="w-full border-gray-500 text-gray-200 hover:bg-gray-700 hover:text-white">
+                        View offer
+                      </Button>
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full mt-4 bg-background border-input hover:bg-accent hover:text-accent-foreground">
-                    <Ship className="mr-2 h-4 w-4"/>
-                    View offer
-                  </Button>
                 </div>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Tours Catalogue */}
-        <div className="my-16 bg-card border border-border p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
-          <div className="flex items-center gap-4">
-            <Image src="https://placehold.co/100x100.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
-            <div>
-              <h3 className={`text-xl font-bold ${gradientTextClass}`}>Tours Catalogue</h3>
-              <p className="text-muted-foreground">Go beyond the ordinary and discover the difference.</p>
-            </div>
+              );
+            })}
           </div>
-          <Button variant="secondary" className="mt-4 sm:mt-0">View Now</Button>
-        </div>
 
-        {/* Trending Destinations */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">Immerse yourself in trending destinations</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-4">
-            {trendingDestinations.map(dest => (
-              <Link href="#" key={dest.name} className="block group text-center">
-                <div className="relative w-full aspect-square rounded-full overflow-hidden mb-2 transform group-hover:scale-105 transition-transform">
-                  <Image src={dest.image} alt={dest.name} layout="fill" objectFit="cover" data-ai-hint={dest.hint} />
-                </div>
-                <p className="text-sm font-semibold group-hover:underline text-foreground">{dest.name}</p>
-              </Link>
-            ))}
+          {/* Tours Catalogue */}
+          <div className="my-16 bg-gray-700/50 border border-gray-600 p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
+            <div className="flex items-center gap-4">
+              <Image src="https://placehold.co/100x100.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
+              <div>
+                <h3 className="text-xl font-bold text-white">Tours Catalogue</h3>
+                <p className="text-gray-300">Go beyond the ordinary and discover the difference.</p>
+              </div>
+            </div>
+            <Button variant="secondary" className="mt-4 sm:mt-0 bg-gray-200 text-gray-800 hover:bg-white">View Now</Button>
+          </div>
+
+          {/* Trending Destinations */}
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6">Immerse yourself in trending destinations</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-4">
+              {trendingDestinations.map(dest => (
+                <Link href="#" key={dest.name} className="block group text-center">
+                  <div className="relative w-full aspect-square rounded-full overflow-hidden mb-2 transform group-hover:scale-105 transition-transform">
+                    <Image src={dest.image} alt={dest.name} layout="fill" objectFit="cover" data-ai-hint={dest.hint} />
+                  </div>
+                  <p className="text-sm font-semibold group-hover:underline text-white">{dest.name}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
