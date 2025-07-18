@@ -6,11 +6,15 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Heart, Search, Ship, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Search, Ship, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import type { TourPackage } from '@/lib/types';
 import { getTourPackages } from '@/lib/tour-data';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 const trendingDestinations = [
   { name: 'Africa', image: 'https://placehold.co/150x200.png', hint: 'africa wildlife' },
@@ -35,6 +39,16 @@ export default function ToursPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const trendingScrollRef = useRef<HTMLDivElement>(null);
 
+  // State for the new search bar
+  const [searchDestination, setSearchDestination] = useState('');
+  const [isWhenPopoverOpen, setIsWhenPopoverOpen] = useState(false);
+  const [activeDateTab, setActiveDateTab] = useState('flexible');
+  const [selectedDuration, setSelectedDuration] = useState('any');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [displayWhen, setDisplayWhen] = useState("I'm flexible");
+
+
   useEffect(() => {
     const loadedTours = getTourPackages();
     setTours(loadedTours);
@@ -58,6 +72,26 @@ export default function ToursPage() {
       });
     }
   };
+  
+  const handleApplyWhen = () => {
+    if (activeDateTab === 'anytime') {
+      setDisplayWhen('Anytime');
+    } else {
+      if (selectedMonth) {
+        setDisplayWhen(`${selectedMonth} ${selectedYear}`);
+      } else {
+        setDisplayWhen("I'm flexible");
+      }
+    }
+    setIsWhenPopoverOpen(false);
+  };
+
+  const handleSearch = () => {
+    // In a real app, you would use searchDestination, selectedDuration, selectedYear, selectedMonth to filter results.
+    alert(`Searching for:\nDestination: ${searchDestination}\nWhen: ${displayWhen}\nDuration: ${selectedDuration}`);
+  }
+
+  const months = ["July", "August", "September", "October", "November", "December"];
 
   return (
     <div className="bg-white text-[#155e63]">
@@ -67,11 +101,78 @@ export default function ToursPage() {
         <div className="relative z-10 px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white">Tour the world with us</h1>
           <p className="mt-2 text-lg text-gray-200">Wander more with curated small-group adventures to destinations across the globe.</p>
-          <div className="mt-6 bg-white p-2 rounded-lg shadow-lg flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
-            <Input type="text" placeholder="Search destination or place" className="flex-grow text-gray-800" />
-            <Input type="text" placeholder="When?" className="w-full sm:w-auto text-gray-800" />
-            <Button className="bg-[#155e63] text-white w-full sm:w-auto">
-              <Search className="h-4 w-4 mr-2" />
+          
+           {/* New Search Bar */}
+          <div className="mt-6 bg-white p-2 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-5 gap-0.5 max-w-lg mx-auto border">
+            <div className="sm:col-span-2 p-2">
+                <label className="text-xs font-bold text-gray-600 block text-left">Where</label>
+                <Input 
+                    type="text" 
+                    placeholder="Search destination or place" 
+                    className="w-full border-none p-0 h-auto text-gray-800 focus-visible:ring-0"
+                    value={searchDestination}
+                    onChange={(e) => setSearchDestination(e.target.value)}
+                />
+            </div>
+            <div className="sm:col-span-2 p-2">
+                 <Popover open={isWhenPopoverOpen} onOpenChange={setIsWhenPopoverOpen}>
+                    <PopoverTrigger asChild>
+                        <button className="w-full text-left">
+                            <label className="text-xs font-bold text-gray-600 block">When?</label>
+                            <span className="text-gray-800">{displayWhen}</span>
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[500px] p-4 mt-2" align="start">
+                        <Tabs value={activeDateTab} onValueChange={setActiveDateTab} className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="flexible">Flexible dates</TabsTrigger>
+                                <TabsTrigger value="anytime">Anytime</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="flexible" className="mt-4">
+                                <div className="space-y-4">
+                                    <div>
+                                        <h4 className="font-semibold text-gray-800 mb-2">How long?</h4>
+                                        <div className="grid grid-cols-4 gap-2">
+                                            {[{id: 'any', label: 'Any duration', sub: 'I\'ll decide later'}, {id: 'short', label: 'Short tour', sub: '1 to 7 days'}, {id: 'medium', label: 'Medium tour', sub: '8 to 14 days'}, {id: 'long', label: 'Long tour', sub: '15+ days'}].map(d => (
+                                                <Button key={d.id} variant={selectedDuration === d.id ? 'default' : 'outline'} onClick={() => setSelectedDuration(d.id)} className={cn("flex-col h-auto py-2", selectedDuration === d.id && "bg-gray-800 text-white")}>
+                                                    <span className="text-sm font-semibold">{d.label}</span>
+                                                    <span className="text-xs font-normal">{d.sub}</span>
+                                                </Button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                     <div>
+                                        <h4 className="font-semibold text-gray-800 mb-2">When?</h4>
+                                        <div className="flex justify-center items-center gap-4 mb-2">
+                                            <Button variant="ghost" size="icon" onClick={() => setSelectedYear(y => y - 1)}><ChevronLeft className="w-4 h-4"/></Button>
+                                            <span className="font-semibold">{selectedYear}</span>
+                                            <Button variant="ghost" size="icon" onClick={() => setSelectedYear(y => y + 1)}><ChevronRight className="w-4 h-4"/></Button>
+                                        </div>
+                                        <RadioGroup value={selectedMonth} onValueChange={setSelectedMonth} className="grid grid-cols-6 gap-2">
+                                            {months.map(month => (
+                                                <div key={month} className="flex items-center justify-center">
+                                                    <RadioGroupItem value={month} id={`month-${month}`} className="sr-only peer" />
+                                                    <Label htmlFor={`month-${month}`} className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-2 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer w-full">
+                                                        {month}
+                                                    </Label>
+                                                </div>
+                                            ))}
+                                        </RadioGroup>
+                                    </div>
+                                </div>
+                            </TabsContent>
+                             <TabsContent value="anytime" className="mt-4 text-center text-gray-600">
+                                <p>Search for tours happening anytime.</p>
+                            </TabsContent>
+                        </Tabs>
+                        <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
+                            <Button variant="ghost" onClick={() => setIsWhenPopoverOpen(false)}>Cancel</Button>
+                            <Button className="bg-gray-800 text-white hover:bg-gray-700" onClick={handleApplyWhen}>Apply</Button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
+            <Button className="bg-gray-800 text-white w-full sm:w-auto sm:col-span-1" onClick={handleSearch}>
               Search
             </Button>
           </div>
