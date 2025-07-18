@@ -63,7 +63,7 @@ export default function ToursPage() {
         </div>
       </div>
 
-      <div className="bg-[#2d3748] text-white">
+      <div className="bg-[#155e63] text-white">
         <div className="container mx-auto px-4 py-12">
           {/* Today's top exclusive offers */}
           <div className="flex justify-between items-center mb-6">
@@ -96,7 +96,7 @@ export default function ToursPage() {
                         </div>
                         <p className="text-xs text-gray-400">Twin room</p>
                       </div>
-                      <Button variant="outline" className="w-full border-gray-500 text-gray-200 hover:bg-gray-700 hover:text-white">
+                      <Button variant="outline" className="w-full border-white/80 text-white hover:bg-white/10 hover:text-white">
                         View offer
                       </Button>
                     </div>
@@ -107,9 +107,9 @@ export default function ToursPage() {
           </div>
 
           {/* Tours Catalogue */}
-          <div className="my-16 bg-gray-700/50 border border-gray-600 p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
+          <div className="my-16 bg-white/10 border border-white/20 p-6 rounded-lg flex flex-col sm:flex-row justify-between items-center shadow-lg">
             <div className="flex items-center gap-4">
-              <Image src="https://placehold.co/100x100.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
+              <Image src="https://placehold.co/100x100/ffffff/155e63.png" alt="Catalogue" width={80} height={80} className="rounded-md" data-ai-hint="travel magazine cover" />
               <div>
                 <h3 className="text-xl font-bold text-white">Tours Catalogue</h3>
                 <p className="text-gray-300">Go beyond the ordinary and discover the difference.</p>
