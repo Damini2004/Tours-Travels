@@ -10,8 +10,8 @@ import { HotelIcon as HotelBuildingIcon, PlusCircleIcon, ListIcon, EditIcon, Tra
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import type { Hotel, UltraLuxPackage, TourPackage } from '@/lib/types';
-import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages, deleteUltraLuxPackage, saveUltraLuxPackages, saveTourPackages } from '@/lib/hotel-data';
-import { getTourPackages, addTourPackage, deleteTourPackage } from '@/lib/tour-data';
+import { getHotels, addHotel, saveHotels, addUltraLuxPackage, getUltraLuxPackages, deleteUltraLuxPackage, saveUltraLuxPackages } from '@/lib/hotel-data';
+import { getTourPackages, addTourPackage, deleteTourPackage, saveTourPackages } from '@/lib/tour-data';
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
