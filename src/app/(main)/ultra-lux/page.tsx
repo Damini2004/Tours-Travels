@@ -172,7 +172,7 @@ export default function UltraLuxPage() {
                             <Button variant="link" className="p-0 h-auto text-sm text-gray-600 hover:text-gray-800">Price details</Button>
 
                             <Button asChild className="mt-4 w-full h-11 bg-stone-800 hover:bg-stone-700 text-white text-base py-3">
-                                <Link href="#">View Offer</Link>
+                                <Link href={`/ultra-lux/${pkg.id}`}>View Offer</Link>
                             </Button>
                             <p className="text-xs text-center text-gray-500 mt-2 flex items-center justify-center gap-1"><Check className="h-3 w-3 text-green-600" /> Hotel + flights packages available</p>
                         </div>
@@ -193,4 +193,3 @@ export default function UltraLuxPage() {
     </div>
   );
 }
-
