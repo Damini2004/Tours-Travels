@@ -57,7 +57,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
             {/* Left side of details */}
             <div className="flex-grow pr-4 flex flex-col">
                <p className="text-xs text-gray-500 mb-1">Starts in {tour.location.split(',')[0]}, ends in {tour.location.split(',').pop()}</p>
-              <h3 className="font-bold text-lg text-[#155e63] hover:text-gray-600">
+              <h3 className="font-bold text-lg text-[#155e63] hover:text-[#155e63]/80">
                 <Link href={`/tours/${tour.id}`}>{tour.title}</Link>
               </h3>
               <p className="text-sm text-gray-600 mt-1">{tour.tourType}</p>
