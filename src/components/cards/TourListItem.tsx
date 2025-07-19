@@ -71,7 +71,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                 </div>
                 <div className="flex items-center gap-1 mt-2 text-xs">
                     <Star className="w-3 h-3 text-yellow-400 fill-yellow-400"/>
-                    <span className="font-semibold text-gray-700">4.5/5</span>
+                    <span className="font-semibold text-[#155e63]">4.5/5</span>
                     <span className="text-gray-500">(120 Reviews)</span>
                 </div>
               </div>
@@ -86,10 +86,10 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                   <span className="text-sm font-normal text-gray-600"> /person</span>
                 </p>
                 <p className="text-xs text-gray-500">Valued up to <s>{currencySymbol}{tour.originalPrice.toLocaleString('en-IN')}</s></p>
-                {discount > 0 && <Badge variant="destructive" className="bg-green-600 text-white mt-1">SAVE {discount}%</Badge>}
+                {discount > 0 && <Badge variant="destructive" className="bg-accent text-accent-foreground mt-1">SAVE {discount}%</Badge>}
                 <p className="text-xs text-gray-500 mt-1">Includes taxes & fees</p>
               </div>
-              <Button asChild className="w-full mt-4 bg-[#155e63] text-white hover:bg-gray-700">
+              <Button asChild className="w-full mt-4 bg-[#155e63] text-white hover:bg-[#155e63]/90">
                 <Link href={`/tours/${tour.id}`}>View offer</Link>
               </Button>
             </div>
