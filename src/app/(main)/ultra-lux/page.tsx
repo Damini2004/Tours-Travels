@@ -124,12 +124,12 @@ export default function UltraLuxPage() {
                       {/* Left: Image */}
                       <div className="relative w-full md:w-5/12 h-64 md:h-auto flex-shrink-0 group">
                         <Image
-                          src={pkg.imageUrl || defaultHotelImage}
+                          src={pkg.imageUrls[0] || defaultHotelImage}
                           alt={pkg.title}
                           layout="fill"
                           objectFit="cover"
                           className="group-hover:scale-105 transition-transform duration-300"
-                          data-ai-hint={pkg.imageHint || defaultHotelHint}
+                          data-ai-hint={pkg.imageHints[0] || defaultHotelHint}
                         />
                         <div className="absolute top-4 left-4 z-10">
                           <Badge variant="default" className="bg-black/60 text-white border-none rounded-md text-xs tracking-wider">
@@ -171,7 +171,7 @@ export default function UltraLuxPage() {
                             )}
                             <Button variant="link" className="p-0 h-auto text-sm text-gray-600 hover:text-gray-800">Price details</Button>
 
-                            <Button asChild className="mt-4 w-full h-11 bg-stone-800 hover:bg-stone-700 text-white text-base py-3">
+                            <Button asChild className="mt-4 w-full h-11 bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] hover:opacity-90 text-white text-base py-3">
                                 <Link href={`/ultra-lux/${pkg.id}`}>View Offer</Link>
                             </Button>
                             <p className="text-xs text-center text-gray-500 mt-2 flex items-center justify-center gap-1"><Check className="h-3 w-3 text-green-600" /> Hotel + flights packages available</p>
