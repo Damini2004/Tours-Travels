@@ -62,8 +62,8 @@ export default function UltraLuxPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <Tabs defaultValue="hotels" className="w-full max-w-sm mx-auto">
           <TabsList className="grid w-full grid-cols-2 bg-white/80 backdrop-blur-sm shadow-lg rounded-full border">
-            <TabsTrigger value="hotels" className="rounded-full data-[state=active]:bg-stone-800 data-[state=active]:text-white"><Hotel className="mr-2 h-4 w-4" /> Ultra Lux Hotels</TabsTrigger>
-            <TabsTrigger value="tours" className="rounded-full data-[state=active]:bg-stone-800 data-[state=active]:text-white"><Ship className="mr-2 h-4 w-4"/> Ultra Lux Tours</TabsTrigger>
+            <TabsTrigger value="hotels" className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Hotel className="mr-2 h-4 w-4" /> Ultra Lux Hotels</TabsTrigger>
+            <TabsTrigger value="tours" className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><Ship className="mr-2 h-4 w-4"/> Ultra Lux Tours</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
