@@ -174,6 +174,8 @@ export function addUltraLuxPackage(newPackage: Omit<UltraLuxPackage, 'id'>): Ult
   const packageToAdd: UltraLuxPackage = {
     ...newPackage,
     id: `ULX_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    imageUrls: newPackage.imageUrls && newPackage.imageUrls.length > 0 ? newPackage.imageUrls : ['https://placehold.co/800x600.png/a7a29a/ffffff?text=Luxury+Stay'],
+    imageHints: newPackage.imageHints && newPackage.imageHints.length > 0 ? newPackage.imageHints : ['luxury stay placeholder'],
   };
   const updatedPackages = [...currentPackages, packageToAdd];
   saveUltraLuxPackages(updatedPackages);

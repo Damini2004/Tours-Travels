@@ -119,17 +119,19 @@ export default function UltraLuxPage() {
             ) : packages.length > 0 ? (
                 packages.map((pkg) => {
                    const discount = calculateDiscount(pkg.price, pkg.originalPrice);
+                   const imageUrls = pkg.imageUrls || [];
+                   const imageHints = pkg.imageHints || [];
                    return (
                     <Card key={pkg.id} className="w-full flex flex-col md:flex-row shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden border">
                       {/* Left: Image */}
                       <div className="relative w-full md:w-5/12 h-64 md:h-auto flex-shrink-0 group">
                         <Image
-                          src={pkg.imageUrls[0] || defaultHotelImage}
+                          src={imageUrls[0] || defaultHotelImage}
                           alt={pkg.title}
                           layout="fill"
                           objectFit="cover"
                           className="group-hover:scale-105 transition-transform duration-300"
-                          data-ai-hint={pkg.imageHints[0] || defaultHotelHint}
+                          data-ai-hint={imageHints[0] || defaultHotelHint}
                         />
                         <div className="absolute top-4 left-4 z-10">
                           <Badge variant="default" className="bg-black/60 text-white border-none rounded-md text-xs tracking-wider">
