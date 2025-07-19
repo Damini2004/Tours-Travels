@@ -56,10 +56,10 @@ export default function UltraLuxPackagePage() {
   }
   
   const discount = calculateDiscount(pkg.price, pkg.originalPrice);
-  const mainImage = pkg.imageUrls?.[0] || defaultImage;
-  const mainImageHint = pkg.imageHints?.[0] || defaultHint;
-  const secondaryImage = pkg.imageUrls?.[1] || "https://placehold.co/600x400/a7a29a/ffffff.png";
-  const secondaryImageHint = pkg.imageHints?.[1] || "resort pool";
+  const mainImage = (pkg.imageUrls && pkg.imageUrls[0]) || defaultImage;
+  const mainImageHint = (pkg.imageHints && pkg.imageHints[0]) || defaultHint;
+  const secondaryImage = (pkg.imageUrls && pkg.imageUrls[1]) || "https://placehold.co/600x400/a7a29a/ffffff.png";
+  const secondaryImageHint = (pkg.imageHints && pkg.imageHints[1]) || "resort pool";
 
 
   return (
@@ -161,7 +161,7 @@ export default function UltraLuxPackagePage() {
                         </div>
                     </div>
                     <p className="text-xs text-stone-600 px-1">Add flights to the hotel package. Select from all major airlines at the next step.</p>
-                    <Button size="lg" className="w-full bg-stone-700 hover:bg-stone-800 text-white h-12 text-base">
+                    <Button size="lg" className="w-full bg-primary hover:bg-primary/90 text-white h-12 text-base">
                         View package options
                     </Button>
                 </CardContent>
