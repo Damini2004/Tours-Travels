@@ -86,7 +86,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                   <span className="text-sm font-normal text-gray-600"> /person</span>
                 </p>
                 <p className="text-xs text-gray-500">Valued up to <s>{currencySymbol}{tour.originalPrice.toLocaleString('en-IN')}</s></p>
-                {discount > 0 && <Badge variant="destructive" className="bg-accent text-accent-foreground mt-1">SAVE {discount}%</Badge>}
+                {discount > 0 && <Badge variant="default" className="bg-accent text-accent-foreground mt-1">SAVE {discount}%</Badge>}
                 <p className="text-xs text-gray-500 mt-1">Includes taxes & fees</p>
               </div>
               <Button asChild className="w-full mt-4 bg-[#155e63] text-white hover:bg-[#155e63]/90">
