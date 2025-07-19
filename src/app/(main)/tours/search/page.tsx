@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Suspense, useMemo, useEffect, useState } from "react";
@@ -157,7 +158,7 @@ function TourSearchResultsContent() {
               <h3 className="text-gray-700">Showing {filteredTours.length} tours</h3>
               <div className="flex items-center gap-2 mt-2 sm:mt-0">
                   <div className="flex items-center rounded-full border border-gray-300">
-                      <Button variant="ghost" className="rounded-l-full bg-gray-800 text-white h-9 px-4 hover:bg-gray-700">Total price</Button>
+                      <Button variant="ghost" className="rounded-l-full bg-gradient-to-br from-[#031f2d] via-[#0c4d52] to-[#155e63] text-white h-9 px-4 hover:opacity-90">Total price</Button>
                       <Button variant="ghost" className="rounded-r-full h-9 px-4 text-gray-600 hover:bg-gray-100">Price per day</Button>
                   </div>
                   <Select defaultValue="recommended">
