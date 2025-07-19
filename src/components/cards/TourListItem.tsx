@@ -57,7 +57,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
             {/* Left side of details */}
             <div className="flex-grow pr-4 flex flex-col">
                <p className="text-xs text-gray-500 mb-1">Starts in {tour.location.split(',')[0]}, ends in {tour.location.split(',').pop()}</p>
-              <h3 className="font-bold text-lg text-gray-800 hover:text-gray-600">
+              <h3 className="font-bold text-lg text-[#155e63] hover:text-gray-600">
                 <Link href={`/tours/${tour.id}`}>{tour.title}</Link>
               </h3>
               <p className="text-sm text-gray-600 mt-1">{tour.tourType}</p>
@@ -81,7 +81,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
             <div className="text-left md:text-right mt-4 md:mt-0 flex-shrink-0 md:w-48 flex flex-col justify-between">
               <div>
                 <p className="text-xs text-gray-500">{tour.durationDays} days from</p>
-                <p className="text-2xl font-bold text-gray-800">
+                <p className="text-2xl font-bold text-[#155e63]">
                   {currencySymbol}{tour.price.toLocaleString('en-IN')}
                   <span className="text-sm font-normal text-gray-600"> /person</span>
                 </p>
@@ -89,7 +89,7 @@ export function TourListItem({ tour, currencySymbol }: TourListItemProps) {
                 {discount > 0 && <Badge variant="destructive" className="bg-green-600 text-white mt-1">SAVE {discount}%</Badge>}
                 <p className="text-xs text-gray-500 mt-1">Includes taxes & fees</p>
               </div>
-              <Button asChild className="w-full mt-4 bg-gray-800 text-white hover:bg-gray-700">
+              <Button asChild className="w-full mt-4 bg-[#155e63] text-white hover:bg-gray-700">
                 <Link href={`/tours/${tour.id}`}>View offer</Link>
               </Button>
             </div>
